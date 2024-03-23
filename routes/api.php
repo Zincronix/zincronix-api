@@ -1,8 +1,8 @@
 <?php
 
-use App\Http\Controllers\DocenteController;
-use App\Http\Controllers\GrupoController;
-use App\Http\Controllers\MateriaController;
+use App\Http\Controllers\GroupController;
+use App\Http\Controllers\SubjectController;
+use App\Http\Controllers\TeacherController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -21,6 +21,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::resource('docentes', DocenteController::class);
-Route::resource('materias', MateriaController::class);
-Route::resource('grupos', GrupoController::class);
+Route::resource('docentes', TeacherController::class);
+Route::resource('materias', SubjectController::class);
+Route::resource('grupos', GroupController::class);
