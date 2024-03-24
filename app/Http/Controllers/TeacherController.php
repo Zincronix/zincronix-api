@@ -15,7 +15,7 @@ class TeacherController extends Controller
      */
     public function index()
     {
-        return Teacher::all();
+        return TeacherResource::collection(Teacher::latest()->paginate());
     }
 
     /**
@@ -35,9 +35,9 @@ class TeacherController extends Controller
      * @param  \App\Models\Teacher  $teacher
      * @return \Illuminate\Http\Response
      */
-    public function show(Teacher $teacher)
+    public function show(Teacher $docente)
     {
-        return new TeacherResource($teacher);
+        return new TeacherResource($docente);
     }
 
     /**

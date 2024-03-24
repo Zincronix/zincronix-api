@@ -9,10 +9,6 @@ class Teacher extends Model
 {
     use HasFactory;
 
-    protected $attributes = [
-        'active' => true,
-    ];
-
     protected $fillable=[
         'name',
         'email',
