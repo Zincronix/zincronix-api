@@ -15,6 +15,9 @@ class CreateDocMatGrusTable extends Migration
     {
         Schema::create('doc_mat_grus', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('teacher_id')->constrained();
+            $table->foreignId('subject_id')->constrained();
+            $table->foreignId('group_id')->constrained();
             $table->timestamps();
         });
     }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\TeacherResource;
+use App\Models\DocMatGru;
 use App\Models\Teacher;
 use Illuminate\Http\Request;
 
@@ -26,7 +27,39 @@ class TeacherController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'name' => 'required|string|max:15',
+            'email' => 'required|email|unique:teachers,email',
+            'subject_id' => 'required',
+            'group_id' => 'required'
+        ]);
+
+        $teacher = new Teacher();
+        $teacher->name = $request->name;
+        $teacher->email = $request->email;
+        $teacher->password = '12345678';
+        $teacher->active = true;
+
+        $teacher->save();
+
+        $docMatGru = new DocMatGru();
+        $docMatGru->teacher_id = $teacher->id;
+        $docMatGru->subject_id = $request->subject_id;
+        $docMatGru->group_id = $request->group_id;
+
+        $res = $docMatGru->save();
+
+        if($res){
+            return response()->json([
+                'status' => true,
+                'message' => 'Teacher creado satisfactoriamente',
+                'Teacher' => $teacher
+            ],201);
+        }
+        return response()->json([
+            'status' => false,
+            'message' => 'Error al crear el teacher'
+        ], 500);
     }
 
     /**
