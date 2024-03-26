@@ -15,6 +15,7 @@ class CreateCondSpecialsTable extends Migration
     {
         Schema::create('cond_specials', function (Blueprint $table) {
             $table->id();
+            $table->string('condition');
             $table->timestamps();
         });
     }
