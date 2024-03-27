@@ -15,7 +15,7 @@ class CreateReservationRequestsTable extends Migration
     {
         Schema::create('reservation_requests', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('status_request_id')->constrained();
+            $table->foreignId('status_request_id')->constrained()->default(2);
             $table->foreignId('period_id')->constrained();
             $table->string('reason_reservation');
             $table->date('date_reservation');
