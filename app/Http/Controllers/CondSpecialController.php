@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\CondSpecialResource;
 use App\Models\CondSpecial;
 use Illuminate\Http\Request;
 
@@ -14,7 +15,7 @@ class CondSpecialController extends Controller
      */
     public function index()
     {
-        //
+        return CondSpecialResource::collection(CondSpecial::latest()->paginate());
     }
 
     /**

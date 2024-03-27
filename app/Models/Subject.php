@@ -16,4 +16,11 @@ class Subject extends Model
         'created_at',
         'updated_at'
     ];
+
+    public function Departament(){
+        return $this->belongsTo(Departament::class);
+    }
+    public function DocMatGrus(){
+        return $this->hasMany(DocMatGru::class);
+    }
 }
