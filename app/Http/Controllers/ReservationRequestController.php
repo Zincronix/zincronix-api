@@ -36,21 +36,26 @@ class ReservationRequestController extends Controller
         ]);
 
         $solicitud = new ReservationRequest;
+        $solicitud->status_request_id = 2;
         $solicitud->period_id = $request->period_id;
         $solicitud->reason_reservation = $request->reason_reservation;
         $solicitud->date_reservation = $request->date_reservation;
         $solicitud->save();
 
+        
+
         foreach ($request->classrooms as $classrom_id){
             foreach ($request->teachers as $teacher){
                 foreach ($teacher['subjects'] as $subject){
+                    
                     foreach ($subject['groups'] as $group){
+                        // dd($teacher['teacher_id']);
                         $docMatGrup = DocMatGru::firstOrFail([
                             'teacher_id' => $teacher['teacher_id'],
                             'subject_id' => $subject['subject_id'],
                             'group_id' => $group
                         ]);
-
+                        
                         $reservation = new Reservation();
                         $reservation->reservation_request_id = $solicitud->id;
                         $reservation->classrom_id = $classrom_id;
