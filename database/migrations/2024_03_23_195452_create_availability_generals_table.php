@@ -15,6 +15,8 @@ class CreateAvailabilityGeneralsTable extends Migration
     {
         Schema::create('availability_generals', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('day_id')->constrained('days')->onDelete('cascade');
+            $table->foreignId('period_id')->constrained('periods')->onDelete('cascade');
             $table->timestamps();
         });
     }
