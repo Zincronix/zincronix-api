@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\GroupResource;
 use App\Models\Group;
 use Illuminate\Http\Request;
 
@@ -14,7 +15,7 @@ class GroupController extends Controller
      */
     public function index()
     {
-        return Group::all();
+        return GroupResource::collection(Group::latest()->paginate());
     }
 
     /**
