@@ -8,4 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 class Day extends Model
 {
     use HasFactory;
+
+    public function Availabilities(){
+        return $this->hasMany(Availability::class);
+    }
+    public function AvailabilityGenerals(){
+        return $this->hasMany(AvailabilityGeneral::class);
+    }
 }

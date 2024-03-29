@@ -16,4 +16,8 @@ class Group extends Model
         'created_at',
         'updated_at'
     ];
+
+    public function DocMatGrus(){
+        return $this->hasMany(DocMatGru::class);
+    }
 }

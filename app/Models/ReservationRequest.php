@@ -19,4 +19,14 @@ class ReservationRequest extends Model
         'created_at',
         'updated_at'
     ];
+
+    public function Reservations(){
+        return $this->hasMany(Reservation::class);
+    }
+    public function StatusRequest(){
+        return $this->belongsTo(StatusRequest::class);
+    }
+    public function Period(){
+        return $this->belongsTo(Period::class);
+    }
 }

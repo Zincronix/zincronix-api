@@ -19,4 +19,14 @@ class Reservation extends Model
         'created_at',
         'updated_at'
     ];
+
+    public function DocMatGru(){
+        return $this->belongsTo(DocMatGru::class);
+    }
+    public function ReservationRequest(){
+        return $this->belongsTo(ReservationRequest::class);
+    }
+    public function Classroom(){
+        return $this->belongsTo(Classroom::class);
+    }
 }
