@@ -3,6 +3,7 @@
 use App\Http\Controllers\ClassroomController;
 use App\Http\Controllers\CondSpecialController;
 use App\Http\Controllers\GroupController;
+use App\Http\Controllers\ReservationRequestController;
 use App\Http\Controllers\SubjectController;
 use App\Http\Controllers\TeacherController;
 use App\Models\Classroom;
@@ -29,5 +30,8 @@ use Illuminate\Support\Facades\Route;
 Route::resource('docentes', TeacherController::class);
 Route::resource('materias', SubjectController::class);
 Route::resource('grupos', GroupController::class);
-Route::resource('classroom', ClassroomController::class);
-Route::resource('condSpecial',CondSpecialController::class);
+
+Route::resource('classrooms', ClassroomController::class);
+Route::resource('condSpecials',CondSpecialController::class);
+
+Route::resource('solicitudes', ReservationRequestController::class);

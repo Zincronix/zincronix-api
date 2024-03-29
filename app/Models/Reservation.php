@@ -9,6 +9,17 @@ class Reservation extends Model
 {
     use HasFactory;
 
+    protected $fillable=[
+        'doc_mat_gru_id',
+        'classromm_id',
+        'reservation_request_id',
+    ];
+
+    protected $hidden=[
+        'created_at',
+        'updated_at'
+    ];
+
     public function DocMatGru(){
         return $this->belongsTo(DocMatGru::class);
     }

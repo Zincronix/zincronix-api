@@ -8,7 +8,20 @@ use Illuminate\Database\Eloquent\Model;
 class DocMatGru extends Model
 {
     use HasFactory;
+    
 
+    protected $fillable=[
+        'teacher_id',
+        'subject_id',
+        'group_id',
+    ];
+
+    protected $hidden=[
+        'created_at',
+        'updated_at'
+    ];
+
+  
     public function Teacher(){
         return $this->belongsTo(Teacher::class);
     }
@@ -19,3 +32,5 @@ class DocMatGru extends Model
         return $this->belongsTo(Group::class);
     }
 }
+
+

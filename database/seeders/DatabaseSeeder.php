@@ -17,5 +17,10 @@ class DatabaseSeeder extends Seeder
         $this->call(SubjectSeeder::class);
         $this->call(GroupSeeder::class);
         $this->call(TeacherSeeder::class);
+        $this->call(StatusRequestSeeder::class);
+        $this->call(PeriodSeeder::class);
+        $this->call(CondSpecialSeeder::class);
+        $this->call(ClassroomSeeder::class);
+        $this->call(DocMatGruSeeder::class);
     }
 }

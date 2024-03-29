@@ -9,6 +9,17 @@ class ReservationRequest extends Model
 {
     use HasFactory;
 
+    protected $fillable=[
+        'period_id',
+        'reason_reservation',
+        'date_reservation',
+    ];
+
+    protected $hidden=[
+        'created_at',
+        'updated_at'
+    ];
+
     public function Reservations(){
         return $this->hasMany(Reservation::class);
     }
