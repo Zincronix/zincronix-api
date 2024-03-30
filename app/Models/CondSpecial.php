@@ -9,6 +9,11 @@ class CondSpecial extends Model
 {
     use HasFactory;
 
+    protected $fillable=[
+        'id',
+        'name'
+    ];
+
     public function Classroom(){
         return $this->hasMany(Classroom::class);
     }
