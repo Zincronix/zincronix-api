@@ -23,7 +23,7 @@ class Teacher extends Model
     ];
 
 
-    public function docMatGrus(){
-        return $this->hasMany(DocMatGru::class);
+    public function docenteMateriaGrupos(){
+        return $this->hasMany(DocenteMateriaGrupo::class);
     }
 }

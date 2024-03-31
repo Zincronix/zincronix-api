@@ -20,7 +20,7 @@ class Subject extends Model
     public function departament(){
         return $this->belongsTo(Departament::class);
     }
-    public function docMatGrus(){
-        return $this->hasMany(DocMatGru::class);
+    public function docenteMateriaGrupos(){
+        return $this->hasMany(DocenteMateriaGrupo::class);
     }
 }

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateDocMatGrusTable extends Migration
+class CreateDocenteMateriaGrupoReservationTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,10 @@ class CreateDocMatGrusTable extends Migration
      */
     public function up()
     {
-        Schema::create('doc_mat_grus', function (Blueprint $table) {
+        Schema::create('docente_materia_grupo_reservation', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('teacher_id')->constrained();
-            $table->foreignId('subject_id')->constrained();
-            $table->foreignId('group_id')->constrained();
+            $table->foreignId('reservation_id')->constrained();
+            $table->foreignId('docente_materia_grupo_id')->constrained();
             $table->timestamps();
         });
     }
@@ -29,6 +28,6 @@ class CreateDocMatGrusTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('doc_mat_grus');
+        Schema::dropIfExists('docente_materia_grupo_reservation');
     }
 }

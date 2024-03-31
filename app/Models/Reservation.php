@@ -20,8 +20,8 @@ class Reservation extends Model
         'updated_at'
     ];
 
-    public function docMatGrus(){
-        return $this->belongsToMany(DocMatGru::class);
+    public function docenteMateriaGrupos(){
+        return $this->belongsToMany(DocenteMateriaGrupo::class);
     }
     public function classrooms(){
         return $this->belongsToMany(Classroom::class);
