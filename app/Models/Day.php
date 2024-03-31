@@ -9,10 +9,7 @@ class Day extends Model
 {
     use HasFactory;
 
-    public function Availabilities(){
+    public function availabilities(){
         return $this->hasMany(Availability::class);
-    }
-    public function AvailabilityGenerals(){
-        return $this->hasMany(AvailabilityGeneral::class);
     }
 }

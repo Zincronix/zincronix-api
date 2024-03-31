@@ -5,11 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class StatusRequest extends Model
+class StatusReservation extends Model
 {
     use HasFactory;
 
-    public function ReservationRequests(){
-        return $this->hasMany(ReservationRequest::class);
+    public function reservations(){
+        return $this->hasMany(Reservation::class);
     }
 }

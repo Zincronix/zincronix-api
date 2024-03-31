@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\StatusRequest;
+use App\Models\StatusReservation;
 use Illuminate\Http\Request;
 
-class StatusRequestController extends Controller
+class StatusReservationController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -34,7 +34,7 @@ class StatusRequestController extends Controller
      * @param  \App\Models\StatusRequest  $statusRequest
      * @return \Illuminate\Http\Response
      */
-    public function show(StatusRequest $statusRequest)
+    public function show(StatusReservation $statusReservation)
     {
         //
     }
@@ -46,7 +46,7 @@ class StatusRequestController extends Controller
      * @param  \App\Models\StatusRequest  $statusRequest
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, StatusRequest $statusRequest)
+    public function update(Request $request, StatusReservation $statusReservation)
     {
         //
     }
@@ -57,7 +57,7 @@ class StatusRequestController extends Controller
      * @param  \App\Models\StatusRequest  $statusRequest
      * @return \Illuminate\Http\Response
      */
-    public function destroy(StatusRequest $statusRequest)
+    public function destroy(StatusReservation $statusReservation)
     {
         //
     }

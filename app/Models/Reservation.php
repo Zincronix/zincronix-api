@@ -20,13 +20,16 @@ class Reservation extends Model
         'updated_at'
     ];
 
-    public function DocMatGru(){
-        return $this->belongsTo(DocMatGru::class);
+    public function docMatGrus(){
+        return $this->belongsToMany(DocMatGru::class);
     }
-    public function ReservationRequest(){
-        return $this->belongsTo(ReservationRequest::class);
+    public function classrooms(){
+        return $this->belongsToMany(Classroom::class);
     }
-    public function Classroom(){
-        return $this->belongsTo(Classroom::class);
+    public function period(){
+        return $this->belongsTo(Period::class);
+    }
+    public function statusReservation(){
+        return $this->belongsTo(StatusReservation::class);
     }
 }

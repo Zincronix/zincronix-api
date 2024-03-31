@@ -9,13 +9,13 @@ class Period extends Model
 {
     use HasFactory;
 
-    public function Availabilities(){
-        return $this->hasMany(Availability::class);
+    public function availabilities(){
+        return $this->belongsToMany(Availability::class);
     }
-    public function ReservationRequests(){
-        return $this->hasMany(ReservationRequest::class);
+    public function range(){
+        return $this->belongsTo(Range::class);
     }
-    public function AvailabilityGenerals(){
-        return $this->hasMany(AvailabilityGeneral::class);
+    public function reservations(){
+        return $this->hasMany(Reservation::class);
     }
 }

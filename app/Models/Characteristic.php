@@ -9,7 +9,7 @@ class Characteristic extends Model
 {
     use HasFactory;
 
-    public function Classroom(){
-        return $this->hasMany(Classroom::class);
+    public function classrooms(){
+        return $this->belongsToMany(Classroom::class);
     }
 }
