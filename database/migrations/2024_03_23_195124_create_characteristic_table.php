@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateReservationRequestsTable extends Migration
+class CreateCharacteristicTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,9 @@ class CreateReservationRequestsTable extends Migration
      */
     public function up()
     {
-        Schema::create('reservation_requests', function (Blueprint $table) {
+        Schema::create('characteristics', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('status_request_id')->constrained()->default(2);
-            $table->foreignId('period_id')->constrained();
-            $table->string('reason_reservation');
-            $table->date('date_reservation');
+            $table->string('characteristic');
             $table->timestamps();
         });
     }
@@ -30,6 +27,6 @@ class CreateReservationRequestsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('reservation_requests');
+        Schema::dropIfExists('characteristics');
     }
 }

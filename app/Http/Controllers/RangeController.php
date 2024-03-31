@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\CondSpecialResource;
-use App\Models\CondSpecial;
-use Illuminate\Http\Request;
+use App\Models\Range;
+use App\Http\Requests\StoreRangeRequest;
+use App\Http\Requests\UpdateRangeRequest;
 
-class CondSpecialController extends Controller
+class RangeController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,16 +15,16 @@ class CondSpecialController extends Controller
      */
     public function index()
     {
-        return CondSpecialResource::collection(CondSpecial::latest()->paginate());
+        //
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Http\Requests\StoreRangeRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreRangeRequest $request)
     {
         //
     }
@@ -32,10 +32,10 @@ class CondSpecialController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\CondSpecial  $condSpecial
+     * @param  \App\Models\Range  $range
      * @return \Illuminate\Http\Response
      */
-    public function show(CondSpecial $condSpecial)
+    public function show(Range $range)
     {
         //
     }
@@ -43,11 +43,11 @@ class CondSpecialController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\CondSpecial  $condSpecial
+     * @param  \App\Http\Requests\UpdateRangeRequest  $request
+     * @param  \App\Models\Range  $range
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, CondSpecial $condSpecial)
+    public function update(UpdateRangeRequest $request, Range $range)
     {
         //
     }
@@ -55,10 +55,10 @@ class CondSpecialController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\CondSpecial  $condSpecial
+     * @param  \App\Models\Range  $range
      * @return \Illuminate\Http\Response
      */
-    public function destroy(CondSpecial $condSpecial)
+    public function destroy(Range $range)
     {
         //
     }

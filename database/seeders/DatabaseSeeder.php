@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Characteristic;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -19,7 +20,7 @@ class DatabaseSeeder extends Seeder
         $this->call(TeacherSeeder::class);
         $this->call(StatusRequestSeeder::class);
         $this->call(PeriodSeeder::class);
-        $this->call(CondSpecialSeeder::class);
+        $this->call(CharacteristicSeeder::class);
         $this->call(ClassroomSeeder::class);
         $this->call(DocMatGruSeeder::class);
     }

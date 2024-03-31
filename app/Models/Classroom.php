@@ -15,7 +15,4 @@ class Classroom extends Model
     public function Availabilitys(){
         return $this->hasMany(Availability::class);
     }
-    public function CondSpecial(){
-        return $this->belongsTo(CondSpecial::class);
-    }
 }
