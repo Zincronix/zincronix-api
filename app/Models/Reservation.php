@@ -10,9 +10,10 @@ class Reservation extends Model
     use HasFactory;
 
     protected $fillable=[
-        'doc_mat_gru_id',
-        'classromm_id',
-        'reservation_request_id',
+        'status_reservation_id',
+        'period_id',
+        'reason',
+        'date',
     ];
 
     protected $hidden=[
