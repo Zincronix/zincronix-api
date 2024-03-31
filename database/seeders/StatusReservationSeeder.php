@@ -5,7 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
-class StatusRequestSeeder extends Seeder
+class StatusReservationSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -14,13 +14,16 @@ class StatusRequestSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('status_requests')->insert([
+        DB::table('status_reservations')->insert([
             [
-                'state'=>'Aprobado',
+                'state'=>'APROBADO',
             ],
             [
-                'state'=>'Pendiente',
+                'state'=>'PENDIENTE',
             ],
+            [
+                'state'=>'CANCELADO',
+            ]
         ]);
     }
 }

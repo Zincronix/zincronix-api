@@ -5,7 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
-class DocMatGruSeeder extends Seeder
+class DocenteMateriaGrupoSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -14,7 +14,7 @@ class DocMatGruSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('doc_mat_grus')->insert([
+        DB::table('docente_materia_grupos')->insert([
             [
                 'teacher_id'=>1,
                 'subject_id'=>1,

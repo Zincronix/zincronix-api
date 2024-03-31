@@ -16,10 +16,13 @@ class CharacteristicSeeder extends Seeder
     {
         DB::table('characteristics')->insert([
             [
-                'characteristic'=>'Data',
+                'characteristic'=>'DATA',
             ],
             [
-                'characteristic'=>'Ventilador',
+                'characteristic'=>'VENTILADOR',
+            ],
+            [
+                'characteristic'=>'TELEVISOR',
             ],
         ]);
     }

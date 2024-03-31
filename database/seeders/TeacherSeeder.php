@@ -16,38 +16,38 @@ class TeacherSeeder extends Seeder
     {
         DB::table('teachers')->insert([
             [
-                'name'=>'maria leticia blanco coca',
+                'name'=>'MARIA LETICIA BLANCO COCA',
                 'email' => 'leticia@gmail.com',
                 'password' => '12345678',
                 'active' => true
             ],
             [
-                'name'=>'alex israel bustillos vargas',
+                'name'=>'ALEX ISRAEL BUSTILLOS VARGAS',
                 'email' => 'alex@gmail.com',
                 'password' => '12345678',
                 'active' => true
             ],
             [
-                'name'=>'patricia gonzales',
+                'name'=>'PATRICIA GONZALES',
                 'email' => 'patricia@gmail.com',
                 'password' => '12345678',
                 'active' => true
                 
             ],
             [
-                'name'=>'carmen rosa',
+                'name'=>'CARMEN ROSA',
                 'email' => 'carmen@gmail.com',
                 'password' => '12345678',
                 'active' => true
             ],
             [
-                'name'=>'carla salazar',
+                'name'=>'CARLA SALAZAR',
                 'email' => 'carla@gmail.com',
                 'password' => '12345678',
                 'active' => true
             ],
             [
-                'name'=>'Doctor lucio gonzales',
+                'name'=>'LUCIO GONZALES',
                 'email' => 'lucio@gmail.com',
                 'password' => '12345678',
                 'active' => true
