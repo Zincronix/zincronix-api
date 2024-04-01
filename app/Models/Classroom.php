@@ -9,13 +9,13 @@ class Classroom extends Model
 {
     use HasFactory;
 
-    public function Reservations(){
-        return $this->hasMany(Reservation::class);
+    public function reservations(){
+        return $this->belongsToMany(Reservation::class);
     }
-    public function Availabilitys(){
+    public function availabilities(){
         return $this->hasMany(Availability::class);
     }
-    public function CondSpecial(){
-        return $this->belongsTo(CondSpecial::class);
+    public function characteristics(){
+        return $this->belongsToMany(Characteristic::class);
     }
 }

@@ -5,11 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class CondSpecial extends Model
+class StatusReservation extends Model
 {
     use HasFactory;
 
-    public function Classroom(){
-        return $this->hasMany(Classroom::class);
+    public function reservations(){
+        return $this->hasMany(Reservation::class);
     }
 }

@@ -9,13 +9,16 @@ class Availability extends Model
 {
     use HasFactory;
 
-    public function Classrooms(){
+    public function classroom(){
         return $this->belongsTo(Classroom::class);
     }
-    public function Periods(){
-        return $this->belongsTo(Period::class);
+    public function periods(){
+        return $this->belongsToMany(Period::class);
     }
-    public function Days(){
+    public function day(){
         return $this->belongsTo(Day::class);
+    }
+    public function range(){
+        return $this->belongsTo(Range::class);
     }
 }

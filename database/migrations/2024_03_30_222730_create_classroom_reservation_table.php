@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateStatusRequestsTable extends Migration
+class CreateClassroomReservationTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,10 @@ class CreateStatusRequestsTable extends Migration
      */
     public function up()
     {
-        Schema::create('status_requests', function (Blueprint $table) {
+        Schema::create('classroom_reservation', function (Blueprint $table) {
             $table->id();
-            $table->string('state');
+            $table->foreignId('reservation_id')->constrained();
+            $table->foreignId('classroom_id')->constrained();
             $table->timestamps();
         });
     }
@@ -27,6 +28,6 @@ class CreateStatusRequestsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('status_requests');
+        Schema::dropIfExists('classroom_reservation');
     }
 }

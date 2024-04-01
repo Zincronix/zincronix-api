@@ -15,9 +15,10 @@ class CreateAvailabilitiesTable extends Migration
     {
         Schema::create('availabilities', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('day_id')->constrained('days')->onDelete('cascade');
-            $table->foreignId('period_id')->constrained('periods')->onDelete('cascade');
-            $table->foreignId('classroom_id')->constrained('classrooms')->onDelete('cascade');
+            $table->foreignId('classroom_id')->constrained();
+            $table->foreignId('day_id')->constrained();
+            $table->foreignId('range_id')->constrained();
+            $table->boolean('active');
             $table->timestamps();
         });
     }

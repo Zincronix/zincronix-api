@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateCondSpecialsTable extends Migration
+class CreateAvailabilityPeriodTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,10 @@ class CreateCondSpecialsTable extends Migration
      */
     public function up()
     {
-        Schema::create('cond_specials', function (Blueprint $table) {
+        Schema::create('availability_period', function (Blueprint $table) {
             $table->id();
-            $table->string('condition');
+            $table->foreignId('availability_id')->constrained();
+            $table->foreignId('period_id')->constrained();
             $table->timestamps();
         });
     }
@@ -27,6 +28,6 @@ class CreateCondSpecialsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('cond_specials');
+        Schema::dropIfExists('availability_period');
     }
 }

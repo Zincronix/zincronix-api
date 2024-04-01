@@ -22,14 +22,17 @@ class DocMatGru extends Model
     ];
 
   
-    public function Teacher(){
+    public function teacher(){
         return $this->belongsTo(Teacher::class);
     }
-    public function Subject(){
+    public function subject(){
         return $this->belongsTo(Subject::class);
     }
-    public function Group(){
+    public function group(){
         return $this->belongsTo(Group::class);
+    }
+    public function reservations(){
+        return $this->belongsToMany(Reservation::class);
     }
 }
 

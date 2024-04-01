@@ -4,7 +4,7 @@ namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-class CondSpecialFactory extends Factory
+class RangeFactory extends Factory
 {
     /**
      * Define the model's default state.

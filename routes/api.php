@@ -1,11 +1,12 @@
 <?php
 
 use App\Http\Controllers\ClassroomController;
-use App\Http\Controllers\CondSpecialController;
+use App\Http\Controllers\CharacteristicController;
 use App\Http\Controllers\GroupController;
 use App\Http\Controllers\ReservationRequestController;
 use App\Http\Controllers\SubjectController;
 use App\Http\Controllers\TeacherController;
+use App\Models\Characteristic;
 use App\Models\Classroom;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -32,6 +33,6 @@ Route::resource('materias', SubjectController::class);
 Route::resource('grupos', GroupController::class);
 
 Route::resource('classrooms', ClassroomController::class);
-Route::resource('condSpecials',CondSpecialController::class);
+Route::resource('characteristics',CharacteristicController::class);
 
 Route::resource('solicitudes', ReservationRequestController::class);

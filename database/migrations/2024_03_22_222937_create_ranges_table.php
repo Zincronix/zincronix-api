@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateAvailabilityGeneralsTable extends Migration
+class CreateRangesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,9 @@ class CreateAvailabilityGeneralsTable extends Migration
      */
     public function up()
     {
-        Schema::create('availability_generals', function (Blueprint $table) {
+        Schema::create('ranges', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('day_id')->constrained('days')->onDelete('cascade');
-            $table->foreignId('period_id')->constrained('periods')->onDelete('cascade');
+            $table->integer('range');
             $table->timestamps();
         });
     }
@@ -28,6 +27,6 @@ class CreateAvailabilityGeneralsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('availability_generals');
+        Schema::dropIfExists('ranges');
     }
 }

@@ -5,7 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
-class CondSpecialSeeder extends Seeder
+class CharacteristicSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -14,12 +14,12 @@ class CondSpecialSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('cond_specials')->insert([
+        DB::table('characteristics')->insert([
             [
-                'condition'=>'Data',
+                'characteristic'=>'Data',
             ],
             [
-                'condition'=>'Ventilador',
+                'characteristic'=>'Ventilador',
             ],
         ]);
     }

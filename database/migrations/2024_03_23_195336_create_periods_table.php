@@ -15,6 +15,7 @@ class CreatePeriodsTable extends Migration
     {
         Schema::create('periods', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('range_id')->constrained();
             $table->string('hour');
             $table->timestamps();
         });

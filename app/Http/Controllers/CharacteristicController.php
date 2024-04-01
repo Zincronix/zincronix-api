@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\AvailabilityGeneral;
+use App\Http\Resources\CharacteristicResource;
+use App\Models\Characteristic;
 use Illuminate\Http\Request;
 
-class AvailabilityGeneralController extends Controller
+class CharacteristicController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,7 +15,7 @@ class AvailabilityGeneralController extends Controller
      */
     public function index()
     {
-        //
+        return CharacteristicResource::collection(Characteristic::latest()->paginate());
     }
 
     /**
@@ -31,10 +32,10 @@ class AvailabilityGeneralController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\AvailabilityGeneral  $availabilityGeneral
+     * @param  \App\Models\Characteristic  $Characteristic
      * @return \Illuminate\Http\Response
      */
-    public function show(AvailabilityGeneral $availabilityGeneral)
+    public function show(Characteristic $characteristic)
     {
         //
     }
@@ -43,10 +44,10 @@ class AvailabilityGeneralController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\AvailabilityGeneral  $availabilityGeneral
+     * @param  \App\Models\characteristic  $characteristic
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, AvailabilityGeneral $availabilityGeneral)
+    public function update(Request $request, Characteristic $characteristic)
     {
         //
     }
@@ -54,10 +55,10 @@ class AvailabilityGeneralController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\AvailabilityGeneral  $availabilityGeneral
+     * @param  \App\Models\CondSpecial  $condSpecial
      * @return \Illuminate\Http\Response
      */
-    public function destroy(AvailabilityGeneral $availabilityGeneral)
+    public function destroy(Characteristic $characteristic)
     {
         //
     }
