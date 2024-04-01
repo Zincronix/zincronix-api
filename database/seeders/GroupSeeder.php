@@ -17,22 +17,22 @@ class GroupSeeder extends Seeder
         DB::table('groups')->insert([
             
             [
-                'name'=>'g1'
+                'name'=>'G1'
             ],
             [
-                'name'=>'g2'
+                'name'=>'G2'
             ],
             [
-                'name'=>'g3'
+                'name'=>'G3'
             ],
             [
-                'name'=>'g4'
+                'name'=>'G4'
             ],
             [
-                'name'=>'g5'
+                'name'=>'G5'
             ],
             [
-                'name'=>'g6'
+                'name'=>'G6'
             ]
     ]);
     }

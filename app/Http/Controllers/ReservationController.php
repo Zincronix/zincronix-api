@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CreateReservationRequest;
+use App\Models\DocenteMateriaGrupo;
 use App\Models\Reservation;
 use Illuminate\Http\Request;
 
@@ -23,9 +25,47 @@ class ReservationController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(CreateReservationRequest $request)
     {
-        //
+        $reservation = new Reservation;
+        $reservation->status_reservation_id = 2;
+        $reservation->period_id = $request->period_id;
+        $reservation->reason = $request->reason_reservation;
+        $reservation->date = $request->date_reservation;
+
+        $reservation->save();
+
+        $reservation->classrooms()->attach($request->classrooms);
+
+        foreach ($request->teachers as $teacher){
+            foreach ($teacher['subjects'] as $subject){
+                
+                foreach ($subject['groups'] as $group){
+                    $docMatGrup = DocenteMateriaGrupo::where([
+                        'teacher_id' => $teacher['teacher_id'],
+                        'subject_id' => $subject['subject_id'],
+                        'group_id' => $group
+                    ])->first();
+
+                    if (!$docMatGrup) {
+                        return response()->json([
+                            'status' => false,
+                            'message' => 'Error en la solicitud de reserva'
+                        ], 500);
+                    }
+
+                    $reservation->docenteMateriaGrupos()->attach($docMatGrup->id);
+                }
+            }
+        }
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Solicitud de reserva creado satisfactoriamente',
+            'Solicitud' => $reservation
+        ],201);
+
+
     }
 
     /**

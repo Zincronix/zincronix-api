@@ -10,9 +10,10 @@ class Reservation extends Model
     use HasFactory;
 
     protected $fillable=[
-        'doc_mat_gru_id',
-        'classromm_id',
-        'reservation_request_id',
+        'status_reservation_id',
+        'period_id',
+        'reason',
+        'date',
     ];
 
     protected $hidden=[
@@ -20,8 +21,8 @@ class Reservation extends Model
         'updated_at'
     ];
 
-    public function docMatGrus(){
-        return $this->belongsToMany(DocMatGru::class);
+    public function docenteMateriaGrupos(){
+        return $this->belongsToMany(DocenteMateriaGrupo::class);
     }
     public function classrooms(){
         return $this->belongsToMany(Classroom::class);

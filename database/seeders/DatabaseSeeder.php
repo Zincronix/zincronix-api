@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Characteristic;
+use App\Models\DocenteMateriaGrupo;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -18,10 +19,12 @@ class DatabaseSeeder extends Seeder
         $this->call(SubjectSeeder::class);
         $this->call(GroupSeeder::class);
         $this->call(TeacherSeeder::class);
-        $this->call(StatusRequestSeeder::class);
+        $this->call(StatusReservationSeeder::class);
+        $this->call(RangeSeeder::class);
         $this->call(PeriodSeeder::class);
         $this->call(CharacteristicSeeder::class);
         $this->call(ClassroomSeeder::class);
-        $this->call(DocMatGruSeeder::class);
+        $this->call(DocenteMateriaGrupoSeeder::class);
+        $this->call(DaySeeder::class);
     }
 }

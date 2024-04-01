@@ -16,22 +16,22 @@ class SubjectSeeder extends Seeder
     {
         DB::table('subjects')->insert([
             [
-                'name'=>'Intro a la progra'
+                'name'=>'INTRODUCCIÓN A LA PROGRAMACIÓN'
             ],
             [
-                'name'=>'Algebra 1'
+                'name'=>'ÁLGEBRA I'
             ],
             [
-                'name'=>'elementos'
+                'name'=>'ELEMENTOS'
             ],
             [
-                'name'=>'calculo 1'
+                'name'=>'CÁLCULO I'
             ],
             [
-                'name'=>'sistemas de informacion 1'
+                'name'=>'SISTEMAS DE INFORMACIÓN I'
             ],
             [
-                'name'=>'calculo 2'
+                'name'=>'CÁLCULO II'
             ]
         ]);
     }
