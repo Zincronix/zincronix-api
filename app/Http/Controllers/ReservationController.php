@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\CreateReservationRequest;
+use App\Models\Availability;
 use App\Models\DocenteMateriaGrupo;
 use App\Models\Reservation;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class ReservationController extends Controller
@@ -17,6 +19,31 @@ class ReservationController extends Controller
     public function index()
     {
         //
+    }
+
+    public function periodsForClassroomReservation($classroom_id, $date)
+    {
+        $date = Carbon::parse($date);
+
+        $reservas = Reservation::whereHas('classrooms', function ($query) use ($classroom_id) {
+            $query->where('classroom_id', $classroom_id);
+        })->whereDate('date', $date)->pluck('period_id');
+
+        $disponibilidades = Availability::where('classroom_id', $classroom_id)->with('periods')->get();
+
+        $periodosDisponibles = collect();
+
+        foreach ($disponibilidades as $disponibilidad) {
+            foreach ($disponibilidad->periods as $period) {
+                if (!$reservas->contains($period->id)) {
+                    $periodosDisponibles->push($period);
+                }
+            }
+        }
+
+        dd($periodosDisponibles);
+
+        return $periodosDisponibles;
     }
 
     /**
