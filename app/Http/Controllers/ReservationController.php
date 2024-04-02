@@ -25,23 +25,37 @@ class ReservationController extends Controller
     {
         $date = Carbon::parse($date);
 
+        $numeroDiaSemana = $date->dayOfWeek;
+
         $reservas = Reservation::whereHas('classrooms', function ($query) use ($classroom_id) {
             $query->where('classroom_id', $classroom_id);
         })->whereDate('date', $date)->pluck('period_id');
 
-        $disponibilidades = Availability::where('classroom_id', $classroom_id)->with('periods')->get();
+        $disponibilidades = Availability::where('classroom_id', $classroom_id)
+                                            ->where('day_id', $numeroDiaSemana)
+                                            ->with('periods')->get();
 
         $periodosDisponibles = collect();
 
         foreach ($disponibilidades as $disponibilidad) {
             foreach ($disponibilidad->periods as $period) {
                 if (!$reservas->contains($period->id)) {
-                    $periodosDisponibles->push($period);
+                    $periodosDisponibles->push([
+                        'id' => $period->id,
+                        'hour' => $period->hour,
+                        'available' => true
+                    ]);
+                } else {
+                    $periodosDisponibles->push([
+                        'id' => $period->id,
+                        'hour' => $period->hour,
+                        'available' => false
+                    ]);
                 }
             }
         }
 
-        dd($periodosDisponibles);
+        // dd($periodosDisponibles);
 
         return $periodosDisponibles;
     }
@@ -52,6 +66,9 @@ class ReservationController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
+    //todo
+    //Verificar que no exista reserva para esa fecha
+    //Manejar transacciones
     public function store(CreateReservationRequest $request)
     {
         $reservation = new Reservation;
