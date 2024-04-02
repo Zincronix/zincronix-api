@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\DocenteMateriaGrupo;
 use App\Models\DocMatGru;
 use App\Models\Reservation;
 use App\Models\ReservationRequest;
@@ -35,7 +36,7 @@ class ReservationRequestController extends Controller
             'teachers' => 'required'
         ]);
 
-        $solicitud = new ReservationRequest;
+        $solicitud = new Reservation();
         $solicitud->status_request_id = 2;
         $solicitud->period_id = $request->period_id;
         $solicitud->reason_reservation = $request->reason_reservation;
@@ -50,7 +51,7 @@ class ReservationRequestController extends Controller
                 foreach ($teacher['subjects'] as $subject){
                     
                     foreach ($subject['groups'] as $group){
-                        $docMatGrup = DocMatGru::where([
+                        $docMatGrup = DocenteMateriaGrupo::where([
                             'teacher_id' => $teacher['teacher_id'],
                             'subject_id' => $subject['subject_id'],
                             'group_id' => $group
@@ -94,7 +95,7 @@ class ReservationRequestController extends Controller
      * @param  \App\Models\ReservationRequest  $reservationRequest
      * @return \Illuminate\Http\Response
      */
-    public function show(ReservationRequest $reservationRequest)
+    public function show(Reservation $reservation)
     {
         //
     }
@@ -106,7 +107,7 @@ class ReservationRequestController extends Controller
      * @param  \App\Models\ReservationRequest  $reservationRequest
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, ReservationRequest $reservationRequest)
+    public function update(Request $request, Reservation $reservation)
     {
         //
     }
@@ -117,7 +118,7 @@ class ReservationRequestController extends Controller
      * @param  \App\Models\ReservationRequest  $reservationRequest
      * @return \Illuminate\Http\Response
      */
-    public function destroy(ReservationRequest $reservationRequest)
+    public function destroy(Reservation $reservation)
     {
         //
     }

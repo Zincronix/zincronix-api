@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\TeacherResource;
-use App\Models\DocMatGru;
+use App\Models\DocenteMateriaGrupo;
 use App\Models\Teacher;
 use Illuminate\Http\Request;
 
@@ -42,7 +42,7 @@ class TeacherController extends Controller
 
         $teacher->save();
 
-        $docMatGru = new DocMatGru();
+        $docMatGru = new DocenteMateriaGrupo();
         $docMatGru->teacher_id = $teacher->id;
         $docMatGru->subject_id = $request->subject_id;
         $docMatGru->group_id = $request->group_id;
@@ -94,5 +94,9 @@ class TeacherController extends Controller
     public function destroy(Teacher $teacher)
     {
         //
+    }
+
+    public function materiaDocente($id){
+        return DocenteMateriaGrupo::where('teacher_id','=',$id)->with('teacher','subject','group')->get();
     }
 }

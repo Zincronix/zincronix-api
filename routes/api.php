@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ClassroomController;
 use App\Http\Controllers\CharacteristicController;
+use App\Http\Controllers\DocMatGruController;
 use App\Http\Controllers\GroupController;
 use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\SubjectController;
@@ -30,7 +31,11 @@ Route::resource('docentes', TeacherController::class);
 Route::resource('materias', SubjectController::class);
 Route::resource('grupos', GroupController::class);
 
+Route::resource('registro',DocMatGruController::class);
+
 Route::resource('classrooms', ClassroomController::class);
 Route::resource('characteristics',CharacteristicController::class);
 
 Route::resource('solicitudes', ReservationController::class);
+
+Route::get('pedirMateria/{id}',[TeacherController::class,'materiaDocente']);
