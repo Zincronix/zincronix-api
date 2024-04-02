@@ -34,3 +34,6 @@ Route::resource('classrooms', ClassroomController::class);
 Route::resource('characteristics',CharacteristicController::class);
 
 Route::resource('solicitudes', ReservationController::class);
+
+Route::get('solicitudes/{classroom_id}/periodos-disponibles/{date}', [ReservationController::class, 'periodsForClassroomReservation']);
+
