@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\ClassroomResource;
 use App\Models\Classroom;
+use App\Models\Teacher;
 use Illuminate\Http\Request;
 
 class ClassroomController extends Controller
@@ -38,6 +39,22 @@ class ClassroomController extends Controller
     public function show(Classroom $classroom)
     {
         //
+    }
+
+    /**
+     * Este controlador servira para mostrar la vista 2 del proceso de reserva
+     * todo
+     * Sugerencias de ambientes
+     */
+    public function showClassroomAvailable($classroom_id, $period_id, $date)
+    {
+        $classroom = Classroom::findOrFail($classroom_id);
+        return response()->json([
+            'Available' => [
+                $classroom
+            ],
+            'Suggestion' => []
+        ], 201);
     }
 
     /**
