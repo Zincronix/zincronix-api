@@ -27,8 +27,8 @@ class Reservation extends Model
     public function classrooms(){
         return $this->belongsToMany(Classroom::class);
     }
-    public function period(){
-        return $this->belongsTo(Period::class);
+    public function periods(){
+        return $this->belongsToMany(Period::class);
     }
     public function statusReservation(){
         return $this->belongsTo(StatusReservation::class);

@@ -80,13 +80,17 @@ class ReservationController extends Controller
         try {
             DB::beginTransaction();
 
-            $existingReservations = Reservation::where('period_id', $request->period_id)
+            $existingReservations = Reservation::whereHas('periods', function ($query) use ($request) {
+                    $query->where('period_id', $request->period_id);
+                })
                 ->where('date', $request->date_reservation)
                 ->whereHas('classrooms', function ($query) use ($request) {
                     $query->whereIn('classroom_id', $request->classrooms);
                 })
                 ->lockForUpdate()
                 ->get();
+
+            dd($existingReservations);
 
             if ($existingReservations->isNotEmpty()) {
                 return response()->json([
@@ -97,12 +101,12 @@ class ReservationController extends Controller
         
             $reservation = new Reservation;
             $reservation->status_reservation_id = 2;
-            $reservation->period_id = $request->period_id;
             $reservation->reason = $request->reason_reservation;
             $reservation->date = $request->date_reservation;
 
             $reservation->save();
 
+            $reservation->periods()->attach($request->classrooms);
             $reservation->classrooms()->attach($request->classrooms);
 
             foreach ($request->teachers as $teacher){
