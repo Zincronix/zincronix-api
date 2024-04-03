@@ -26,14 +26,14 @@ use Illuminate\Support\Facades\Route;
 
 
 
-Route::resource('docentes', TeacherController::class);
-Route::resource('materias', SubjectController::class);
-Route::resource('grupos', GroupController::class);
+Route::apiResource('teachers', TeacherController::class);
+Route::apiResource('materias', SubjectController::class);
+Route::apiResource('grupos', GroupController::class);
 
 Route::resource('classrooms', ClassroomController::class);
 Route::get('classrooms/{classroom_id}/{period_id}/{date}', [ClassroomController::class, 'showClassroomAvailable']);
 
-Route::resource('characteristics',CharacteristicController::class);
+Route::apiResource('characteristics',CharacteristicController::class);
 
 Route::resource('reservations', ReservationController::class);
 Route::get('reservations/{classroom_id}/available-periods/{date}', [ReservationController::class, 'periodsForClassroomReservation']);
