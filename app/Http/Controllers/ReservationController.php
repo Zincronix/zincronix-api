@@ -8,6 +8,8 @@ use App\Models\DocenteMateriaGrupo;
 use App\Models\Reservation;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use PhpParser\Node\Stmt\TryCatch;
 
 class ReservationController extends Controller
 {
@@ -29,11 +31,21 @@ class ReservationController extends Controller
 
         $reservas = Reservation::whereHas('classrooms', function ($query) use ($classroom_id) {
             $query->where('classroom_id', $classroom_id);
-        })->whereDate('date', $date)->pluck('period_id');
+        })->whereDate('date', $date)
+            ->with('periods')
+            ->get()
+            ->pluck('periods.*.id')
+            ->flatten();
 
         $disponibilidades = Availability::where('classroom_id', $classroom_id)
                                             ->where('day_id', $numeroDiaSemana)
                                             ->with('periods')->get();
+
+        if($disponibilidades->isEmpty()){
+            $disponibilidades = Availability::whereNull('classroom_id')
+                                        ->where('day_id', $numeroDiaSemana)
+                                        ->with('periods')->get();
+        }
 
         $periodosDisponibles = collect();
 
@@ -55,8 +67,6 @@ class ReservationController extends Controller
             }
         }
 
-        // dd($periodosDisponibles);
-
         return $periodosDisponibles;
     }
 
@@ -67,47 +77,79 @@ class ReservationController extends Controller
      * @return \Illuminate\Http\Response
      */
     //todo
-    //Verificar que no exista reserva para esa fecha
-    //Manejar transacciones
+    //Manejar multiples periodos en la reserva
     public function store(CreateReservationRequest $request)
     {
-        $reservation = new Reservation;
-        $reservation->status_reservation_id = 2;
-        $reservation->period_id = $request->period_id;
-        $reservation->reason = $request->reason_reservation;
-        $reservation->date = $request->date_reservation;
+        try {
+            DB::beginTransaction();
 
-        $reservation->save();
+            $existingReservations = Reservation::where(function ($query) use ($request) {
+                $query->whereHas('periods', function ($query) use ($request) {
+                    $query->whereIn('period_id', $request->period_id);
+                })
+                ->where('date', $request->date_reservation)
+                ->whereHas('classrooms', function ($query) use ($request) {
+                    $query->whereIn('classroom_id', $request->classrooms);
+                });
+            })
+            ->lockForUpdate() //todo Verificar si produce lentitud al bloquear consultas
+            ->get();
 
-        $reservation->classrooms()->attach($request->classrooms);
+            if ($existingReservations->isNotEmpty()) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Ya existe una reserva para este periodo y estas aulas en la fecha especificada'
+                ], 400);
+            }
+        
+            $reservation = new Reservation;
+            $reservation->status_reservation_id = 2;
+            $reservation->reason = $request->reason_reservation;
+            $reservation->date = $request->date_reservation;
 
-        foreach ($request->teachers as $teacher){
-            foreach ($teacher['subjects'] as $subject){
-                
-                foreach ($subject['groups'] as $group){
-                    $docMatGrup = DocenteMateriaGrupo::where([
-                        'teacher_id' => $teacher['teacher_id'],
-                        'subject_id' => $subject['subject_id'],
-                        'group_id' => $group
-                    ])->first();
+            $reservation->save();
 
-                    if (!$docMatGrup) {
-                        return response()->json([
-                            'status' => false,
-                            'message' => 'Error en la solicitud de reserva'
-                        ], 500);
+            $reservation->periods()->attach($request->period_id);
+            $reservation->classrooms()->attach($request->classrooms);
+
+            foreach ($request->teachers as $teacher){
+                foreach ($teacher['subjects'] as $subject){
+                    
+                    foreach ($subject['groups'] as $group){
+                        $docMatGrup = DocenteMateriaGrupo::where([
+                            'teacher_id' => $teacher['teacher_id'],
+                            'subject_id' => $subject['subject_id'],
+                            'group_id' => $group
+                        ])->first();
+
+                        if (!$docMatGrup) {
+                            DB::rollBack();
+                            return response()->json([
+                                'status' => false,
+                                'message' => 'Error en la solicitud de reserva'
+                            ], 500);
+                        }
+
+                        $reservation->docenteMateriaGrupos()->attach($docMatGrup->id);
                     }
-
-                    $reservation->docenteMateriaGrupos()->attach($docMatGrup->id);
                 }
             }
-        }
 
-        return response()->json([
-            'status' => true,
-            'message' => 'Solicitud de reserva creado satisfactoriamente',
-            'Solicitud' => $reservation
-        ],201);
+            DB::commit();
+
+            return response()->json([
+                'status' => true,
+                'message' => 'Solicitud de reserva creado satisfactoriamente',
+                'Solicitud' => $reservation
+            ],201);
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json([
+                'status' => false,
+                'message' => 'Error al procesar la solicitud de reserva'
+            ], 500);
+        }
 
 
     }
