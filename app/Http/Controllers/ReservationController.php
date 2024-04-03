@@ -31,7 +31,11 @@ class ReservationController extends Controller
 
         $reservas = Reservation::whereHas('classrooms', function ($query) use ($classroom_id) {
             $query->where('classroom_id', $classroom_id);
-        })->whereDate('date', $date)->pluck('period_id');
+        })->whereDate('date', $date)
+            ->with('periods')
+            ->get()
+            ->pluck('periods.*.id')
+            ->flatten();
 
         $disponibilidades = Availability::where('classroom_id', $classroom_id)
                                             ->where('day_id', $numeroDiaSemana)
@@ -73,24 +77,23 @@ class ReservationController extends Controller
      * @return \Illuminate\Http\Response
      */
     //todo
-    //Verificar que no exista reserva para esa fecha
-    //Manejar transacciones
+    //Manejar multiples periodos en la reserva
     public function store(CreateReservationRequest $request)
     {
         try {
             DB::beginTransaction();
 
-            $existingReservations = Reservation::whereHas('periods', function ($query) use ($request) {
-                    $query->where('period_id', $request->period_id);
+            $existingReservations = Reservation::where(function ($query) use ($request) {
+                $query->whereHas('periods', function ($query) use ($request) {
+                    $query->whereIn('period_id', $request->period_id);
                 })
                 ->where('date', $request->date_reservation)
                 ->whereHas('classrooms', function ($query) use ($request) {
                     $query->whereIn('classroom_id', $request->classrooms);
-                })
-                ->lockForUpdate()
-                ->get();
-
-            dd($existingReservations);
+                });
+            })
+            ->lockForUpdate() //todo Verificar si produce lentitud al bloquear consultas
+            ->get();
 
             if ($existingReservations->isNotEmpty()) {
                 return response()->json([
@@ -106,7 +109,7 @@ class ReservationController extends Controller
 
             $reservation->save();
 
-            $reservation->periods()->attach($request->classrooms);
+            $reservation->periods()->attach($request->period_id);
             $reservation->classrooms()->attach($request->classrooms);
 
             foreach ($request->teachers as $teacher){
