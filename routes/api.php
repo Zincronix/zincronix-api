@@ -33,4 +33,7 @@ Route::resource('grupos', GroupController::class);
 Route::resource('classrooms', ClassroomController::class);
 Route::resource('characteristics',CharacteristicController::class);
 
-Route::resource('solicitudes', ReservationController::class);
+Route::resource('reservations', ReservationController::class);
+
+Route::get('reservations/{classroom_id}/available-periods/{date}', [ReservationController::class, 'periodsForClassroomReservation']);
+
