@@ -20,7 +20,13 @@ class Subject extends Model
     public function departament(){
         return $this->belongsTo(Departament::class);
     }
-    public function docenteMateriaGrupos(){
-        return $this->hasMany(DocenteMateriaGrupo::class);
+
+    public function teachers(){
+        return $this->belongsToMany(Teacher::class, 'docente_materia_grupos', 'subject_id', 'teacher_id');
     }
+
+    public function groups(){
+        return $this->belongsToMany(Group::class, 'docente_materia_grupos', 'subject_id', 'group_id');
+    }
+
 }

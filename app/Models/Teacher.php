@@ -22,8 +22,11 @@ class Teacher extends Model
         'updated_at'
     ];
 
+    public function subjects(){
+        return $this->belongsToMany(Subject::class, 'docente_materia_grupos', 'teacher_id', 'subject_id');
+    }
 
-    public function docenteMateriaGrupos(){
-        return $this->hasMany(DocenteMateriaGrupo::class);
+    public function groups(){
+        return $this->belongsToMany(Group::class, 'docente_materia_grupos', 'teacher_id', 'group_id');
     }
 }
