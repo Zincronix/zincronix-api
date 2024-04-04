@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\DocMatGru;
+use App\Http\Resources\DocenteMateriaGrupoResource;
+use App\Models\DocenteMateriaGrupo;
 use Illuminate\Http\Request;
 
 class DocMatGruController extends Controller
@@ -14,7 +15,7 @@ class DocMatGruController extends Controller
      */
     public function index()
     {
-        //
+        return DocenteMateriaGrupoResource::collection(DocenteMateriaGrupo::with(['teacher','subject','group'])->get());
     }
 
     /**
@@ -34,7 +35,7 @@ class DocMatGruController extends Controller
      * @param  \App\Models\DocMatGru  $docMatGru
      * @return \Illuminate\Http\Response
      */
-    public function show(DocMatGru $docMatGru)
+    public function show(DocenteMateriaGrupo $docMatGru)
     {
         //
     }
@@ -46,7 +47,7 @@ class DocMatGruController extends Controller
      * @param  \App\Models\DocMatGru  $docMatGru
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, DocMatGru $docMatGru)
+    public function update(Request $request, DocenteMateriaGrupo $docMatGru)
     {
         //
     }
@@ -57,7 +58,7 @@ class DocMatGruController extends Controller
      * @param  \App\Models\DocMatGru  $docMatGru
      * @return \Illuminate\Http\Response
      */
-    public function destroy(DocMatGru $docMatGru)
+    public function destroy(DocenteMateriaGrupo $docMatGru)
     {
         //
     }
