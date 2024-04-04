@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CreateTeacherRequest;
 use App\Http\Resources\TeacherResource;
 use App\Models\DocenteMateriaGrupo;
 use App\Models\Teacher;
@@ -24,16 +25,11 @@ class TeacherController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+     * todo
+     * Aplicar form request
+     */ 
+    public function store(CreateTeacherRequest $request)
     {
-        $request->validate([
-            'name' => 'required|string|max:15',
-            'email' => 'required|email|unique:teachers,email',
-            'subject_id' => 'required',
-            'group_id' => 'required'
-        ]);
-
         $teacher = new Teacher();
         $teacher->name = $request->name;
         $teacher->email = $request->email;
@@ -42,24 +38,17 @@ class TeacherController extends Controller
 
         $teacher->save();
 
-        $docMatGru = new DocenteMateriaGrupo();
-        $docMatGru->teacher_id = $teacher->id;
-        $docMatGru->subject_id = $request->subject_id;
-        $docMatGru->group_id = $request->group_id;
-
-        $res = $docMatGru->save();
-
-        if($res){
-            return response()->json([
-                'status' => true,
-                'message' => 'Teacher creado satisfactoriamente',
-                'Teacher' => $teacher
-            ],201);
+        foreach ($request['subjects'] as $subjectInfo) {
+            foreach ($subjectInfo['groups'] as $groupId) {
+                
+                $docenteMateriaGrupo = new DocenteMateriaGrupo();
+                $docenteMateriaGrupo->teacher_id = $teacher->id;
+                $docenteMateriaGrupo->subject_id = $subjectInfo['subject_id'];
+                $docenteMateriaGrupo->group_id = $groupId;
+                $docenteMateriaGrupo->save();
+            }
         }
-        return response()->json([
-            'status' => false,
-            'message' => 'Error al crear el teacher'
-        ], 500);
+        return response()->json(['message' => 'Teacher created successfully'], 201);
     }
 
     /**
@@ -68,9 +57,9 @@ class TeacherController extends Controller
      * @param  \App\Models\Teacher  $teacher
      * @return \Illuminate\Http\Response
      */
-    public function show(Teacher $docente)
+    public function show(Teacher $teacher)
     {
-        return new TeacherResource($docente);
+        return new TeacherResource($teacher);
     }
 
     /**

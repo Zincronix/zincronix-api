@@ -41,6 +41,22 @@ class ClassroomController extends Controller
     }
 
     /**
+     * Este controlador servira para mostrar la vista 2 del proceso de reserva
+     * todo
+     * Sugerencias de ambientes
+     */
+    public function showClassroomAvailable($classroom_id, $period_id, $date)
+    {
+        $classroom = Classroom::findOrFail($classroom_id);
+        return response()->json([
+            'Available' => [
+                $classroom
+            ],
+            'Suggestion' => []
+        ], 201);
+    }
+
+    /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request

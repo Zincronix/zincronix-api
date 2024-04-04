@@ -15,7 +15,8 @@ class CreateAvailabilitiesTable extends Migration
     {
         Schema::create('availabilities', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('classroom_id')->constrained();
+            $table->foreignId('classroom_id')->nullable();
+            $table->foreign('classroom_id')->references('id')->on('classrooms');
             $table->foreignId('day_id')->constrained();
             $table->foreignId('range_id')->constrained();
             $table->boolean('active');

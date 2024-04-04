@@ -24,7 +24,7 @@ class CreateReservationRequest extends FormRequest
     public function rules()
     {
         return [
-            'period_id' => 'required|integer',
+            'period_id' => 'required|array',
             'reason_reservation' => 'required|string',
             'date_reservation' => 'required|date',
             'classrooms' => 'required|array',

@@ -24,6 +24,9 @@ class CharacteristicSeeder extends Seeder
             [
                 'characteristic'=>'TELEVISOR',
             ],
+            [
+                'characteristic'=>'SILLAS ESPECIALES',
+            ],
         ]);
     }
 }

@@ -2,6 +2,8 @@
 
 namespace Database\Seeders;
 
+use App\Models\Availability;
+use App\Models\AvailabilityPeriod;
 use App\Models\Characteristic;
 use App\Models\DocenteMateriaGrupo;
 use Illuminate\Database\Seeder;
@@ -26,5 +28,7 @@ class DatabaseSeeder extends Seeder
         $this->call(ClassroomSeeder::class);
         $this->call(DocenteMateriaGrupoSeeder::class);
         $this->call(DaySeeder::class);
+        $this->call(AvailabilitySeeder::class);
+        $this->call(AvailabilityPeriodSeeder::class);
     }
 }
