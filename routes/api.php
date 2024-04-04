@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ClassroomController;
 use App\Http\Controllers\CharacteristicController;
+use App\Http\Controllers\DocenteMateriaGrupoController;
 use App\Http\Controllers\GroupController;
 use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\SubjectController;
@@ -29,6 +30,9 @@ use Illuminate\Support\Facades\Route;
 Route::apiResource('teachers', TeacherController::class);
 Route::apiResource('materias', SubjectController::class);
 Route::apiResource('grupos', GroupController::class);
+
+Route::get('subjects/{teacher_id}', [DocenteMateriaGrupoController::class, 'subjectsOfTeacher']);
+Route::get('groups/{teacher_id}/{subject_id}', [DocenteMateriaGrupoController::class, 'groupsOfSubjectOfTeacher']);
 
 Route::resource('classrooms', ClassroomController::class);
 Route::get('classrooms/{classroom_id}/{period_id}/{date}', [ClassroomController::class, 'showClassroomAvailable']);
