@@ -27,7 +27,7 @@ class ReservationController extends Controller
     {
         $date = Carbon::parse($date);
 
-        $numeroDiaSemana = $date->dayOfWeek;
+        $dayWeekNumber = $date->dayOfWeek;
 
         $reservas = Reservation::whereHas('classrooms', function ($query) use ($classroom_id) {
             $query->where('classroom_id', $classroom_id);
@@ -38,12 +38,12 @@ class ReservationController extends Controller
             ->flatten();
 
         $disponibilidades = Availability::where('classroom_id', $classroom_id)
-                                            ->where('day_id', $numeroDiaSemana)
+                                            ->where('day_id', $dayWeekNumber)
                                             ->with('periods')->get();
 
         if($disponibilidades->isEmpty()){
             $disponibilidades = Availability::whereNull('classroom_id')
-                                        ->where('day_id', $numeroDiaSemana)
+                                        ->where('day_id', $dayWeekNumber)
                                         ->with('periods')->get();
         }
 

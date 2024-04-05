@@ -35,6 +35,7 @@ Route::get('subjects/{teacher_id}', [DocenteMateriaGrupoController::class, 'subj
 Route::get('groups/{teacher_id}/{subject_id}', [DocenteMateriaGrupoController::class, 'groupsOfSubjectOfTeacher']);
 
 Route::resource('classrooms', ClassroomController::class);
+Route::get('classrooms/{period_id}/{date}', [ClassroomController::class, 'showAvailableClassrooms']);
 Route::get('classrooms/{classroom_id}/{period_id}/{date}', [ClassroomController::class, 'showClassroomAvailable']);
 
 Route::apiResource('characteristics',CharacteristicController::class);
