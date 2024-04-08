@@ -40,6 +40,7 @@ Route::get('getG/{docente}/{materia}',[DocenteMateriaGrupoController::class,'get
 //Route::resource('registro',DocMatGruController::class);
 
 Route::resource('classrooms', ClassroomController::class);
+Route::get('classrooms/{period_id}/{date}', [ClassroomController::class, 'showAvailableClassrooms']);
 Route::get('classrooms/{classroom_id}/{period_id}/{date}', [ClassroomController::class, 'showClassroomAvailable']);
 
 Route::apiResource('characteristics',CharacteristicController::class);

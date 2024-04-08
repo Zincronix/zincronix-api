@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\ClassroomResource;
 use App\Models\Classroom;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class ClassroomController extends Controller
@@ -54,6 +55,42 @@ class ClassroomController extends Controller
             ],
             'Suggestion' => []
         ], 201);
+    }
+
+    public function showAvailableClassrooms($period_id, $date)
+    {
+        $date = Carbon::parse($date);
+        $dayWeekNumber = $date->dayOfWeek;
+
+        $reservedClassroom = Classroom::whereHas('reservations', function ($query) use ($period_id, $date) {
+            $query->whereHas('periods', function ($query) use ($period_id) {
+                $query->where('periods.id', $period_id);
+            })->whereDate('date', $date);
+        })->get();
+
+        
+
+        $classroomsWithAvailability = Classroom::whereHas('availabilities', function ($query) use ($dayWeekNumber, $period_id) {
+            $query->where('day_id', $dayWeekNumber)
+                  ->whereHas('periods', function ($query) use ($period_id) {
+                $query->where('periods.id', $period_id);
+            });
+        })->get();
+
+        $classroomsWithoutAvailability = Classroom::whereDoesntHave('availabilities')
+        ->orWhereHas('availabilities', function ($query) use ($dayWeekNumber, $period_id) {
+            $query->whereNull('classroom_id')
+                ->where('day_id', $dayWeekNumber)
+                ->whereHas('periods', function ($query) use ($period_id) {
+                    $query->where('periods.id', $period_id);
+                });
+        })->get();
+
+        $availabilitiesOfClassrooms = $classroomsWithAvailability->merge($classroomsWithoutAvailability);
+
+        $classroomsWithoutReservations = $availabilitiesOfClassrooms->diff($reservedClassroom);
+        
+        return $classroomsWithoutReservations;
     }
 
     /**
