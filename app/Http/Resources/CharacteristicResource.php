@@ -16,6 +16,7 @@ class CharacteristicResource extends JsonResource
     {
         //return parent::toArray($request);
         return [
+            'id'=>$this->id,
             'characteristic'=>$this->characteristic
         ];
     }
