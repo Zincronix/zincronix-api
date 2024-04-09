@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Subject;
 use App\Models\Teacher;
 use Illuminate\Http\Request;
 
@@ -13,12 +14,31 @@ class DocenteMateriaGrupoController extends Controller
         $teacher = Teacher::findOrFail($teacher_id);
         return $teacher->subjects()->distinct()->get();
     }
-
-    public function groupsOfSubjectOfTeacher($teacher_id, $subject_id)
+    
+    public function groupsOfSubjectOfTeacher(Request $request)
     {
-        $teacher = Teacher::findOrFail($teacher_id);
-        return $teacher->groups()
-                   ->where('subject_id', $subject_id)
-                   ->get();
+        $teacher = Teacher::findOrFail($request->teacher_id);
+
+        $groups = collect();
+
+        foreach($request->subjects as $subject_id){
+
+            $subject = Subject::findOrFail($subject_id);
+
+            $actualGroups = $teacher->groups()
+            ->where('subject_id', $subject_id)
+            ->get();
+
+            foreach($actualGroups as $actual){
+                $groups->push([
+                    'id' => $actual->id,
+                    'group' => $subject->name . " / " . $actual->name
+                ]);
+            }
+            
+        }
+
+        return $groups;
+        
     }
 }

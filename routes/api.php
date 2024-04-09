@@ -32,9 +32,9 @@ Route::apiResource('materias', SubjectController::class);
 Route::apiResource('grupos', GroupController::class);
 
 Route::get('subjects/{teacher_id}', [DocenteMateriaGrupoController::class, 'subjectsOfTeacher']);
-Route::get('groups/{teacher_id}/{subject_id}', [DocenteMateriaGrupoController::class, 'groupsOfSubjectOfTeacher']);
+Route::get('groups', [DocenteMateriaGrupoController::class, 'groupsOfSubjectOfTeacher']);
 
-Route::resource('registro',DocMatGruController::class);
+// Route::resource('registro',DocMatGruController::class);
 
 Route::resource('classrooms', ClassroomController::class);
 Route::get('classrooms/{period_id}/{date}', [ClassroomController::class, 'showAvailableClassrooms']);
