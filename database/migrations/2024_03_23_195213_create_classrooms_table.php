@@ -18,6 +18,7 @@ class CreateClassroomsTable extends Migration
             $table->string('name')->unique();
             $table->integer('capacity');
             $table->string('description')->nullable();
+            $table->string('image')->nullable();
             $table->timestamps();
         });
     }

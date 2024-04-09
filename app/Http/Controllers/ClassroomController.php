@@ -27,7 +27,11 @@ class ClassroomController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $curso=new Classroom;
+        $curso->name=$request->input('nombre');
+        $curso->capacity=$request->input('capacidad');
+        $curso->description=$request->input('descripcion');
+        $curso->save();
     }
 
     /**

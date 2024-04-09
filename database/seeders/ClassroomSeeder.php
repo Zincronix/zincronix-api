@@ -17,28 +17,34 @@ class ClassroomSeeder extends Seeder
         DB::table('classrooms')->insert([
             [
                 'name'=>'690A',
-                'capacity' => 40
+                'capacity' => 40,
+                'image'=>'esta es una imagen'
             ],
             [
                 'name'=>'691A',
-                'capacity' => 40
+                'capacity' => 40,
+                'image'=>'esta es una imagen'
             ],
             [
                 'name'=>'692A',
-                'capacity' => 40
+                'capacity' => 40,
+                'image'=>'esta es una imagen'
                 
             ],
             [
                 'name'=>'693A',
-                'capacity' => 40
+                'capacity' => 40,
+                'image'=>'esta es una imagen'
             ],
             [
                 'name'=>'691B',
-                'capacity' => 40
+                'capacity' => 40,
+                'image'=>'esta es una imagen'
             ],
             [
                 'name'=>'691C',
-                'capacity' => 40
+                'capacity' => 40,
+                'image'=>'esta es una imagen'
             ],
         ]);
     }
