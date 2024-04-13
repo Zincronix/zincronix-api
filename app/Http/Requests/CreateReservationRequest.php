@@ -25,54 +25,55 @@ class CreateReservationRequest extends FormRequest
     {
         return [
             'period_id' => 'required|array',
-            'reason_reservation' => 'required|string',
-            'date_reservation' => 'required|date',
+            'period_id.*' => 'required|integer|exists:periods,id', 
+            
+            'reason_reservation' => 'required|string|max:255',
+
+            'date_reservation' => 'required|date|after_or_equal:today',
+
             'classrooms' => 'required|array',
-            'classrooms.*' => 'required|integer',
+            'classrooms.*' => 'required|integer|exists:classrooms,id', 
+
             'teachers' => 'required|array',
-            'teachers.*.teacher_id' => 'required|integer',
+            'teachers.*.teacher_id' => 'required|integer|exists:teachers,id', 
             'teachers.*.subjects' => 'required|array',
-            'teachers.*.subjects.*.subject_id' => 'required|integer',
-            'teachers.*.subjects.*.groups' => 'required|array',
-            'teachers.*.subjects.*.groups.*' => 'required|integer',
+            'teachers.*.subjects.*' => 'required|integer|exists:subjects,id', 
+            'teachers.*.groups' => 'required|array',
+            'teachers.*.groups.*' => 'required|array',
+            'teachers.*.groups.*.*' => 'required|integer|exists:groups,id', 
         ];
     }
 
     public function messages()
     {
         return [
-            'period_id.required' => 'El ID del período es obligatorio.',
-            'period_id.integer' => 'El ID del período debe ser un número entero.',
-            
-            'reason_reservation.required' => 'La razón de la reserva es obligatoria.',
-            'reason_reservation.string' => 'La razón de la reserva debe ser un texto.',
-            
-            'date_reservation.required' => 'La fecha de la reserva es obligatoria.',
-            'date_reservation.date' => 'La fecha de la reserva debe ser una fecha válida.',
-            
-            'classrooms.required' => 'Se requiere al menos un aula para la reserva.',
-            'classrooms.array' => 'Las aulas deben ser proporcionadas en formato de arreglo.',
-            
-            'classrooms.*.required' => 'Cada aula debe tener un ID asociado.',
-            'classrooms.*.integer' => 'El ID de cada aula debe ser un número entero.',
-            
-            'teachers.required' => 'Se requiere al menos un profesor para la reserva.',
-            'teachers.array' => 'Los profesores deben ser proporcionados en formato de arreglo.',
-            
-            'teachers.*.teacher_id.required' => 'Cada profesor debe tener un ID asociado.',
-            'teachers.*.teacher_id.integer' => 'El ID de cada profesor debe ser un número entero.',
-            
-            'teachers.*.subjects.required' => 'Cada profesor debe tener al menos una materia asociada.',
-            'teachers.*.subjects.array' => 'Las materias de cada profesor deben ser proporcionadas en formato de arreglo.',
-            
-            'teachers.*.subjects.*.subject_id.required' => 'Cada materia debe tener un ID asociado.',
-            'teachers.*.subjects.*.subject_id.integer' => 'El ID de cada materia debe ser un número entero.',
-            
-            'teachers.*.subjects.*.groups.required' => 'Cada materia debe tener al menos un grupo asociado.',
-            'teachers.*.subjects.*.groups.array' => 'Los grupos de cada materia deben ser proporcionados en formato de arreglo.',
-            
-            'teachers.*.subjects.*.groups.*.required' => 'Cada grupo debe tener un ID asociado.',
-            'teachers.*.subjects.*.groups.*.integer' => 'El ID de cada grupo debe ser un número entero.',
+            'period_id.*.required' => 'El periodo es obligatorio.',
+            'period_id.*.integer' => 'El periodo debe ser un número entero.',
+            'period_id.*.exists' => 'El periodo seleccionado no es válido.',
+
+            'reason_reservation.required' => 'El motivo de la reserva es obligatorio.',
+            'reason_reservation.string' => 'El motivo de la reserva debe ser una cadena de texto.',
+            'reason_reservation.max' => 'El motivo de la reserva no debe exceder los :max caracteres.',
+
+            'date_reservation.required' => 'La fecha de reserva es obligatoria.',
+            'date_reservation.date' => 'La fecha de reserva debe ser una fecha válida.',
+            'date_reservation.after_or_equal' => 'La fecha de reserva debe ser igual o posterior a hoy.',
+
+            'classrooms.*.required' => 'El aula es obligatoria.',
+            'classrooms.*.integer' => 'El aula debe ser un número entero.',
+            'classrooms.*.exists' => 'El aula seleccionada no es válida.',
+
+            'teachers.*.teacher_id.required' => 'El ID del profesor es obligatorio.',
+            'teachers.*.teacher_id.integer' => 'El ID del profesor debe ser un número entero.',
+            'teachers.*.teacher_id.exists' => 'El ID del profesor seleccionado no es válido.',
+
+            'teachers.*.subjects.*.required' => 'La materia es obligatoria.',
+            'teachers.*.subjects.*.integer' => 'La materia debe ser un número entero.',
+            'teachers.*.subjects.*.exists' => 'La materia seleccionada no es válida.',
+
+            'teachers.*.groups.*.*.required' => 'El grupo es obligatorio.',
+            'teachers.*.groups.*.*.integer' => 'El grupo debe ser un número entero.',
+            'teachers.*.groups.*.*.exists' => 'El grupo seleccionado no es válido.',
         ];
     }
 }
