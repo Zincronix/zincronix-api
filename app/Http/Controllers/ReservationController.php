@@ -76,8 +76,6 @@ class ReservationController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    //todo
-    //Manejar multiples periodos en la reserva
     public function store(CreateReservationRequest $request)
     {
         try {
@@ -113,26 +111,27 @@ class ReservationController extends Controller
             $reservation->classrooms()->attach($request->classrooms);
 
             foreach ($request->teachers as $teacher){
-                foreach ($teacher['subjects'] as $subject){
-                    
-                    foreach ($subject['groups'] as $group){
-                        $docMatGrup = DocenteMateriaGrupo::where([
-                            'teacher_id' => $teacher['teacher_id'],
-                            'subject_id' => $subject['subject_id'],
-                            'group_id' => $group
-                        ])->first();
 
-                        if (!$docMatGrup) {
-                            DB::rollBack();
-                            return response()->json([
-                                'status' => false,
-                                'message' => 'Error en la solicitud de reserva'
-                            ], 500);
-                        }
+                foreach ($teacher['groups'] as $group){
 
-                        $reservation->docenteMateriaGrupos()->attach($docMatGrup->id);
+                    $docMatGrup = DocenteMateriaGrupo::where([
+                        'teacher_id' => $teacher['teacher_id'],
+                        'subject_id' => $group[0],
+                        'group_id' => $group[1]
+                    ])->first();
+
+                    if (!$docMatGrup) {
+                        DB::rollBack();
+                        return response()->json([
+                            'status' => false,
+                            'message' => 'No hay consistencia en los datos de Teacher, Subject o Group'
+                        ], 500);
                     }
+
+                    $reservation->docenteMateriaGrupos()->attach($docMatGrup->id);
+
                 }
+                
             }
 
             DB::commit();
