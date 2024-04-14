@@ -4,7 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class CharacteristicResource extends JsonResource
+class DepartamentResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -15,9 +15,11 @@ class CharacteristicResource extends JsonResource
     public function toArray($request)
     {
         //return parent::toArray($request);
-        return [
+        return 
+        [
             'id'=>$this->id,
-            'characteristic'=>$this->characteristic
-        ];
+            'name'=>$this->name
+        ]
+        ;
     }
 }

@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class DepartamentSeeder extends Seeder
 {
@@ -13,6 +14,28 @@ class DepartamentSeeder extends Seeder
      */
     public function run()
     {
-        //
+        DB::table('departaments')->insert([
+            [
+                'name'=> 'MATEMATICAS',
+            ],
+            [
+                'name'=> 'SISTEMAS',
+            ],
+            [
+                'name'=> 'INDUSTRIAL',
+            ],
+            [
+                'name'=> 'QUIMICA',
+            ],
+            [
+                'name'=> 'CIVIL',
+            ],
+            [
+                'name'=> 'FISICA',
+            ],
+            [
+                'name'=> 'BIOLOGIA',
+            ] 
+        ]);
     }
 }

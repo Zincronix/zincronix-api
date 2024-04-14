@@ -2,8 +2,10 @@
 
 use App\Http\Controllers\ClassroomController;
 use App\Http\Controllers\CharacteristicController;
+use App\Http\Controllers\DepartamentController;
 use App\Http\Controllers\DocenteMateriaGrupoController;
 use App\Http\Controllers\GroupController;
+use App\Http\Controllers\HolidayController;
 use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\SubjectController;
 use App\Http\Controllers\TeacherController;
@@ -30,9 +32,11 @@ use Illuminate\Support\Facades\Route;
 Route::apiResource('teachers', TeacherController::class);
 Route::apiResource('materias', SubjectController::class);
 Route::apiResource('grupos', GroupController::class);
+Route::apiResource('subject',SubjectController::class);
+Route::apiResource('departament',DepartamentController::class);
 
 Route::get('subjects/{teacher_id}', [DocenteMateriaGrupoController::class, 'subjectsOfTeacher']);
-Route::get('groups', [DocenteMateriaGrupoController::class, 'groupsOfSubjectOfTeacher']);
+Route::post('groups', [DocenteMateriaGrupoController::class, 'groupsOfSubjectOfTeacher']);
 
 // Route::resource('registro',DocMatGruController::class);
 
@@ -46,4 +50,6 @@ Route::resource('reservations', ReservationController::class);
 Route::get('reservations/{classroom_id}/available-periods/{date}', [ReservationController::class, 'periodsForClassroomReservation']);
 
 Route::get('pedirMateria/{id}',[TeacherController::class,'materiaDocente']);
+
+Route::resource('holidays',HolidayController::class);
 
