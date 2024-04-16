@@ -6,6 +6,7 @@ use App\Http\Controllers\DepartamentController;
 use App\Http\Controllers\DocenteMateriaGrupoController;
 use App\Http\Controllers\GroupController;
 use App\Http\Controllers\HolidayController;
+use App\Http\Controllers\PeriodController;
 use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\SubjectController;
 use App\Http\Controllers\TeacherController;
@@ -34,6 +35,7 @@ Route::apiResource('materias', SubjectController::class);
 Route::apiResource('grupos', GroupController::class);
 Route::apiResource('subject',SubjectController::class);
 Route::apiResource('departament',DepartamentController::class);
+Route::apiResource('period',PeriodController::class);
 
 Route::get('subjects/{teacher_id}', [DocenteMateriaGrupoController::class, 'subjectsOfTeacher']);
 Route::post('groups', [DocenteMateriaGrupoController::class, 'groupsOfSubjectOfTeacher']);
