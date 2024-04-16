@@ -30,5 +30,7 @@ class DatabaseSeeder extends Seeder
         $this->call(DaySeeder::class);
         $this->call(AvailabilitySeeder::class);
         $this->call(AvailabilityPeriodSeeder::class);
+        $this->call(HolidaySeeder::class);
+        $this->call(DepartamentSeeder::class);
     }
 }

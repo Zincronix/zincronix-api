@@ -38,6 +38,33 @@ class DocenteMateriaGrupoController extends Controller
             
         }
 
+        // $teacher = Teacher::find($request->teacher_id);
+
+        // if (!$teacher) {
+        //     return response()->json(['message' => 'Teacher not found'], 404);
+        // }
+    
+        // $groups = collect();
+    
+        // foreach($request->subjects as $subject_id) {
+        //     $subject = Subject::find($subject_id);
+    
+        //     if (!$subject) {
+        //         continue; // O maneja el error como prefieras
+        //     }
+    
+        //     $actualGroups = $teacher->groups()
+        //         ->where('subject_id', $subject_id)
+        //         ->get();
+    
+        //     foreach($actualGroups as $actual) {
+        //         $groups->push([
+        //             'id' => $actual->id,
+        //             'group' => $subject->name . " / " . $actual->name
+        //         ]);
+        //     }
+        // }
+
         return $groups;
         
     }

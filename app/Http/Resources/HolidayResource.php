@@ -4,7 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class CharacteristicResource extends JsonResource
+class HolidayResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -17,7 +17,8 @@ class CharacteristicResource extends JsonResource
         //return parent::toArray($request);
         return [
             'id'=>$this->id,
-            'characteristic'=>$this->characteristic
+            'date'=>$this->date,
+            'description'=>$this->description
         ];
     }
 }

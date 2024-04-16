@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\PeriodResource;
 use App\Models\Period;
 use Illuminate\Http\Request;
 
@@ -14,7 +15,7 @@ class PeriodController extends Controller
      */
     public function index()
     {
-        //
+        return PeriodResource::collection(Period::latest()->paginate());
     }
 
     /**

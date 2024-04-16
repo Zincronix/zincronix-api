@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\DepartamentResource;
 use App\Models\Departament;
 use Illuminate\Http\Request;
 
@@ -14,7 +15,7 @@ class DepartamentController extends Controller
      */
     public function index()
     {
-        //
+        return DepartamentResource::collection(Departament::latest()->paginate());
     }
 
     /**
