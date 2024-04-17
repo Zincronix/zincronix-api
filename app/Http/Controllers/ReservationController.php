@@ -20,7 +20,25 @@ class ReservationController extends Controller
      */
     public function index()
     {
-        //
+        $reservations = Reservation::with([
+            'periods:id,hour',
+            'classrooms:name',
+            'docenteMateriaGrupos.teacher'
+        ])->latest()->paginate(10);
+
+        $reservations->getCollection()->transform(function ($reservation) {
+            return [
+                'id' => $reservation->id,
+                'teachers' => $reservation->docenteMateriaGrupos->pluck('teacher.name')->unique()->values()->toArray(),
+                'classrooms' => $reservation->classrooms->pluck('name')->toArray(),
+                'date' => $reservation->date,
+                'periods' => $reservation->periods->pluck('hour')->toArray(),
+                'status' => $reservation->statusreservationtion,
+                'reason' => $reservation->reason,
+            ];
+        });
+        
+        return $reservations;
     }
 
     public function periodsForClassroomReservation($classroom_id, $date)
