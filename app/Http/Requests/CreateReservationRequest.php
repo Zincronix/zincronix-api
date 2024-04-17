@@ -36,8 +36,6 @@ class CreateReservationRequest extends FormRequest
 
             'teachers' => 'required|array',
             'teachers.*.teacher_id' => 'required|integer|exists:teachers,id', 
-            'teachers.*.subjects' => 'required|array',
-            'teachers.*.subjects.*' => 'required|integer|exists:subjects,id', 
             'teachers.*.groups' => 'required|array',
             'teachers.*.groups.*' => 'required|array',
             'teachers.*.groups.*.*' => 'required|integer|exists:groups,id', 
