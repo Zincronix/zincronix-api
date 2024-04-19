@@ -61,71 +61,12 @@ class ClassroomController extends Controller
     /**
      * Esta funcion servirá para sugerencias 
      * en la vista de filtrar por ambiente
-     */
-    public function showAvailableClassrooms(Request $request)
-    {
-        $periods = $request->periods;
-        $date = Carbon::parse($request->date);
-        $dayWeekNumber = $date->dayOfWeek;
-
-        $reservedClassrooms = collect();
-        $availableClassrooms = collect();
-
-        foreach($periods as $period_id){
-
-            $reservedClassroomsForPeriod = $this->reservedClassroomsForPeriod($period_id, $date);
-            $reservedClassrooms = $reservedClassrooms->merge($reservedClassroomsForPeriod);
-
-            $availableClassroomsForPeriod = $this->classroomsWithAvailabilityForPeriod($period_id, $dayWeekNumber);
-            $availableClassrooms = $availableClassrooms->merge($availableClassroomsForPeriod);
-                                   
-        }
-
-        $classroomsWithoutReservations = $availableClassrooms->diff($reservedClassrooms);
-        
-        return $classroomsWithoutReservations;
-    }
-
-    private function reservedClassroomsForPeriod($period_id, $date)
-    {
-        return Classroom::whereHas('reservations', function ($query) use ($period_id, $date) {
-            $query->whereHas('periods', function ($query) use ($period_id) {
-                $query->where('periods.id', $period_id);
-            })->whereDate('date', $date)
-                ->where('status_reservation_id', 1);
-        })->get();
-
-    }
-
-    private function classroomsWithAvailabilityForPeriod($period_id, $dayWeekNumber)
-    {
-        $classroomsWithCustomizedAvailability  = Classroom::whereHas('availabilities', function ($query) use ($dayWeekNumber, $period_id) {
-            $query->where('day_id', $dayWeekNumber)
-                    ->whereHas('periods', function ($query) use ($period_id) {
-                        $query->where('periods.id', $period_id);
-                    });
-        })->get();
-
-        $classroomsWithGeneralAvailability  = Classroom::whereDoesntHave('availabilities')
-        ->orWhereHas('availabilities', function ($query) use ($dayWeekNumber, $period_id) {
-            $query->whereNull('classroom_id')
-                ->where('day_id', $dayWeekNumber)
-                ->whereHas('periods', function ($query) use ($period_id) {
-                    $query->where('periods.id', $period_id);
-                });
-        })->get();
-
-        return $classroomsWithCustomizedAvailability->merge($classroomsWithGeneralAvailability);        
-    }
-
+     */    
     public function showAvailableClassroomsEfficiently(Request $request)
     {
         $periods = $request->periods;
         $date = Carbon::parse($request->date);
         $dayWeekNumber = $date->dayOfWeek;
-
-        $minPeriod = min($periods);
-        $maxPeriod = max($periods);
 
         $reservedClassrooms = $this->reservedClassroomsForPeriodRange($periods, $date);
 
