@@ -47,9 +47,11 @@ class ReservationController extends Controller
 
         $dayWeekNumber = $date->dayOfWeek;
 
+        $classroom_id = null;
+
         $reservas = Reservation::whereHas('classrooms', function ($query) use ($classroom_id) {
             $query->where('classroom_id', $classroom_id);
-        })->whereDate('date', $date)
+        })->whereDate('date', $date) 
             ->with('periods')
             ->get()
             ->pluck('periods.*.id')
