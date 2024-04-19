@@ -24,8 +24,15 @@ class ReservationController extends Controller
             'periods:id,hour',
             'classrooms:name',
             'docenteMateriaGrupos.teacher'
-        ])->latest()->paginate(10);
+        ])->oldest()->paginate(10);
 
+        $reservations = $this->transformRservation($reservations);
+        
+        return $reservations;
+    }
+
+    private function transformRservation($reservations)
+    {
         $reservations->getCollection()->transform(function ($reservation) {
             return [
                 'id' => $reservation->id,
@@ -37,7 +44,31 @@ class ReservationController extends Controller
                 'reason' => $reservation->reason,
             ];
         });
-        
+        return $reservations;
+    }
+
+    public function orderBy(Request $request)
+    {
+        $reservations = Reservation::with([
+            'periods:id,hour',
+            'classrooms:name',
+            'docenteMateriaGrupos.teacher'
+        ]);        
+
+        switch ($request->orderBy){
+            case 1:
+                $reservations->oldest();
+                break;
+            case 2:
+                $reservations->orderByRaw('ABS(EXTRACT(EPOCH FROM (AGE(date))))');
+                break;
+            default:
+                $reservations->oldest();
+        }
+
+        $reservations = $reservations->paginate(10);
+
+        $reservations = $this->transformRservation($reservations);
         return $reservations;
     }
 

@@ -47,6 +47,7 @@ Route::apiResource('characteristics',CharacteristicController::class);
 
 Route::apiResource('reservations', ReservationController::class);
 Route::get('reservations/{classroom_id}/available-periods/{date}', [ReservationController::class, 'periodsForClassroomReservation']); //todo
+Route::get('reservationOrderBy', [ReservationController::class, 'orderBy']);
 
 Route::apiResource('holidays',HolidayController::class);
 
