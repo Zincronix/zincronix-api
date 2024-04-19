@@ -43,6 +43,7 @@ class ClassroomController extends Controller
 
     /**
      * Este controlador servira para mostrar la vista 2 del proceso de reserva
+     * Esta funcion es para filtrar por ambiente
      * todo
      * Sugerencias de ambientes
      */
@@ -57,41 +58,58 @@ class ClassroomController extends Controller
         ], 201);
     }
 
-    public function showAvailableClassrooms($period_id, $date)
+    /**
+     * Esta funcion servirá para sugerencias 
+     * en la vista de filtrar por ambiente
+     */    
+    public function showAvailableClassroomsEfficiently(Request $request)
     {
-        $date = Carbon::parse($date);
+        $periods = $request->periods;
+        $date = Carbon::parse($request->date);
         $dayWeekNumber = $date->dayOfWeek;
 
-        $reservedClassroom = Classroom::whereHas('reservations', function ($query) use ($period_id, $date) {
-            $query->whereHas('periods', function ($query) use ($period_id) {
-                $query->where('periods.id', $period_id);
-            })->whereDate('date', $date);
-        })->get();
+        $reservedClassrooms = $this->reservedClassroomsForPeriodRange($periods, $date);
 
-        
+        $availableClassrooms = $this->classroomsAvailableForPeriods($periods, $dayWeekNumber);
 
-        $classroomsWithAvailability = Classroom::whereHas('availabilities', function ($query) use ($dayWeekNumber, $period_id) {
-            $query->where('day_id', $dayWeekNumber)
-                  ->whereHas('periods', function ($query) use ($period_id) {
-                $query->where('periods.id', $period_id);
-            });
-        })->get();
-
-        $classroomsWithoutAvailability = Classroom::whereDoesntHave('availabilities')
-        ->orWhereHas('availabilities', function ($query) use ($dayWeekNumber, $period_id) {
-            $query->whereNull('classroom_id')
-                ->where('day_id', $dayWeekNumber)
-                ->whereHas('periods', function ($query) use ($period_id) {
-                    $query->where('periods.id', $period_id);
-                });
-        })->get();
-
-        $availabilitiesOfClassrooms = $classroomsWithAvailability->merge($classroomsWithoutAvailability);
-
-        $classroomsWithoutReservations = $availabilitiesOfClassrooms->diff($reservedClassroom);
+        $classroomsWithoutReservations = $availableClassrooms->diff($reservedClassrooms);
         
         return $classroomsWithoutReservations;
     }
+
+    private function reservedClassroomsForPeriodRange($periods, $date)
+    {        
+        return Classroom::select('id', 'name', 'capacity')
+        ->whereHas('reservations', function ($query) use ($periods, $date) {
+            $query->whereHas('periods', function ($query) use ($periods){
+                $query->whereIn('periods.id', $periods);
+            })->whereDate('date', $date)
+                ->where('status_reservation_id', 1);
+        })->get();
+    }
+
+    private function classroomsAvailableForPeriods($periods, $dayWeekNumber)
+    {
+
+        $availableClassrooms = Classroom::select('id', 'name', 'capacity')
+        ->whereHas('availabilities', function ($query) use ($dayWeekNumber, $periods) {
+            $query->where('day_id', $dayWeekNumber)
+                    ->whereHas('periods', function ($query) use ($periods) {
+                        $query->whereIn('periods.id', $periods);
+                    }, '=', count($periods));                
+        })
+        ->orWhereDoesntHave('availabilities')
+        ->orWhereHas('availabilities', function ($query) use ($dayWeekNumber, $periods) {
+            $query->whereNull('classroom_id')
+                ->where('day_id', $dayWeekNumber)
+                ->whereHas('periods', function ($query) use ($periods) {
+                    $query->whereIn('periods.id', $periods);
+                }, '=', count($periods));                    
+        })->get();
+
+        return $availableClassrooms;
+    }
+
 
     /**
      * Update the specified resource in storage.
