@@ -16,7 +16,7 @@ class StatusReservationSeeder extends Seeder
     {
         DB::table('status_reservations')->insert([
             [
-                'state'=>'APROBADO',
+                'state'=>'ACEPTADO',
             ],
             [
                 'state'=>'PENDIENTE',

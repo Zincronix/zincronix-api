@@ -101,18 +101,8 @@ class ReservationController extends Controller
         try {
             DB::beginTransaction();
 
-            $existingReservations = Reservation::where(function ($query) use ($request) {
-                $query->whereHas('periods', function ($query) use ($request) {
-                    $query->whereIn('period_id', $request->period_id);
-                })
-                ->where('date', $request->date_reservation)
-                ->whereHas('classrooms', function ($query) use ($request) {
-                    $query->whereIn('classroom_id', $request->classrooms);
-                });
-            })
-            ->lockForUpdate() //todo Verificar si produce lentitud al bloquear consultas
-            ->get();
-
+            $existingReservations = $this->existingReservation($request);
+            
             if ($existingReservations->isNotEmpty()) {
                 return response()->json([
                     'status' => false,
@@ -120,40 +110,8 @@ class ReservationController extends Controller
                 ], 400);
             }
         
-            $reservation = new Reservation;
-            $reservation->status_reservation_id = 2;
-            $reservation->reason = $request->reason_reservation;
-            $reservation->date = $request->date_reservation;
-
-            $reservation->save();
-
-            $reservation->periods()->attach($request->period_id);
-            $reservation->classrooms()->attach($request->classrooms);
-
-            foreach ($request->teachers as $teacher){
-
-                foreach ($teacher['groups'] as $group){
-
-                    $docMatGrup = DocenteMateriaGrupo::where([
-                        'teacher_id' => $teacher['teacher_id'],
-                        'subject_id' => $group[0],
-                        'group_id' => $group[1]
-                    ])->first();
-
-                    if (!$docMatGrup) {
-                        DB::rollBack();
-                        return response()->json([
-                            'status' => false,
-                            'message' => 'No hay consistencia en los datos de Teacher, Subject o Group'
-                        ], 500);
-                    }
-
-                    $reservation->docenteMateriaGrupos()->attach($docMatGrup->id);
-
-                }
-                
-            }
-
+            $reservation = $this->reserve($request);
+            
             DB::commit();
 
             return response()->json([
@@ -171,6 +129,75 @@ class ReservationController extends Controller
         }
 
 
+    }
+
+    private function existingReservation($request)
+    {
+        $existingReservations = Reservation::where(function ($query) use ($request) {
+            $query->whereHas('periods', function ($query) use ($request) {
+                $query->whereIn('period_id', $request->period_id);
+            })
+            ->where('status_reservation_id', 1)
+            ->where('date', $request->date_reservation)
+            ->whereHas('classrooms', function ($query) use ($request) {
+                $query->whereIn('classroom_id', $request->classrooms);
+            });
+        })
+        ->lockForUpdate() //todo Verificar si produce lentitud al bloquear consultas
+        ->get();
+
+        return $existingReservations;
+    }
+
+    private function reserve($request)
+    {
+        $reservation = new Reservation;
+        if(true){
+            $reservation->status_reservation_id = 2;
+        }else{
+            $reservation->status_reservation_id = 1;
+        }
+        
+        $reservation->reason = $request->reason_reservation;
+        $reservation->date = $request->date_reservation;
+
+        $reservation->save();
+
+        $reservation->periods()->attach($request->period_id);
+        $reservation->classrooms()->attach($request->classrooms);
+
+        $reservation = $this->addDocenteMateriaGrupo($reservation, $request);
+
+        return $reservation;
+    }
+
+    private function addDocenteMateriaGrupo($reservation, $request)
+    {
+        foreach ($request->teachers as $teacher){
+
+            foreach ($teacher['groups'] as $group){
+
+                $docMatGrup = DocenteMateriaGrupo::where([
+                    'teacher_id' => $teacher['teacher_id'],
+                    'subject_id' => $group[0],
+                    'group_id' => $group[1]
+                ])->first();
+
+                if (!$docMatGrup) {
+                    DB::rollBack();
+                    return response()->json([
+                        'status' => false,
+                        'message' => 'No hay consistencia en los datos de Teacher, Subject o Group'
+                    ], 500);
+                }
+
+                $reservation->docenteMateriaGrupos()->attach($docMatGrup->id);
+
+            }
+            
+        }
+
+        return $reservation;
     }
 
     /**
