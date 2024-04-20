@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\ClassroomResource;
+use App\Models\Characteristic;
 use App\Models\Classroom;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -31,15 +32,28 @@ class ClassroomController extends Controller
         $validado=$request->validate([
             'nombre'=>'unique:App\Models\Classroom,name',
             'capacidad'=>'required',
+            'image' => 'image|mimes:jpeg,png,jpg,gif'
         ],[
-            'nombre.unique'=>'El nombre de aula que elijiste ya existe'
+            'nombre.unique'=>'El nombre de aula que elijiste ya existe',
+            'image.image'=>'Solo se permiten archivos de tipo imagen',
+            'image.mimes'=>'Solo se permiten imagenes de tipo: jpeg, png, jpg.' 
         ]);
+
+        $jsonizable=json_decode($request->input('condiciones'));
 
         $curso=new Classroom;
         $curso->name=$request->input('nombre');
         $curso->capacity=$request->input('capacidad');
         $curso->description=$request->input('descripcion');
+        $direccionIMG = $request->file('image')->store('classroom', 'public');
+        $origen = "http://127.0.0.1:8000/storage/";
+        $cadenaTotal = $origen . $direccionIMG;
+        $curso->image = $cadenaTotal;
         $curso->save();
+
+        $caracteristicas=Classroom::max('id');
+        $asignarCaracteristica=Classroom::find($caracteristicas);
+        $asignarCaracteristica->characteristics()->attach($jsonizable);
 
         return response()->json([
             'status'=>true,
