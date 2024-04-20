@@ -15,7 +15,7 @@ class PeriodController extends Controller
      */
     public function index()
     {
-        return PeriodResource::collection(Period::latest()->paginate());
+        // return PeriodResource::collection(Period::latest()->paginate());
     }
 
     /**

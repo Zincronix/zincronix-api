@@ -35,25 +35,19 @@ Route::apiResource('materias', SubjectController::class);
 Route::apiResource('grupos', GroupController::class);
 Route::apiResource('subject',SubjectController::class);
 Route::apiResource('departament',DepartamentController::class);
-Route::apiResource('period',PeriodController::class);
 
 Route::get('subjects/{teacher_id}', [DocenteMateriaGrupoController::class, 'subjectsOfTeacher']);
 Route::post('groups', [DocenteMateriaGrupoController::class, 'groupsOfSubjectOfTeacher']);
 
-// Route::resource('registro',DocMatGruController::class);
-
-Route::resource('classrooms', ClassroomController::class);
-Route::get('classrooms/{period_id}/{date}', [ClassroomController::class, 'showAvailableClassrooms']);
-//aulas disponibles perido fecha
+Route::apiResource('classrooms', ClassroomController::class);
+Route::get('classrooms', [ClassroomController::class, 'showAvailableClassroomsEfficiently']);
 Route::get('classrooms/{classroom_id}/{period_id}/{date}', [ClassroomController::class, 'showClassroomAvailable']);
 //aulas disponibles aula periodo fecha
 
 Route::apiResource('characteristics',CharacteristicController::class);
 
-Route::resource('reservations', ReservationController::class);
-Route::get('reservations/{classroom_id}/available-periods/{date}', [ReservationController::class, 'periodsForClassroomReservation']);
+Route::apiResource('reservations', ReservationController::class);
+Route::get('reservations/{classroom_id}/available-periods/{date}', [ReservationController::class, 'periodsForClassroomReservation']); //todo
 
-Route::get('pedirMateria/{id}',[TeacherController::class,'materiaDocente']);
-
-Route::resource('holidays',HolidayController::class);
+Route::apiResource('holidays',HolidayController::class);
 

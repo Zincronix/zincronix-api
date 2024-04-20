@@ -84,8 +84,4 @@ class TeacherController extends Controller
     {
         //
     }
-
-    public function materiaDocente($id){
-        return DocenteMateriaGrupo::where('teacher_id','=',$id)->with('teacher','subject','group')->get();
-    }
 }
