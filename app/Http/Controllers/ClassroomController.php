@@ -27,7 +27,24 @@ class ClassroomController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
+        $validado=$request->validate([
+            'nombre'=>'unique:App\Models\Classroom,name',
+            'capacidad'=>'required',
+        ],[
+            'nombre.unique'=>'El nombre de aula que elijiste ya existe'
+        ]);
+
+        $curso=new Classroom;
+        $curso->name=$request->input('nombre');
+        $curso->capacity=$request->input('capacidad');
+        $curso->description=$request->input('descripcion');
+        $curso->save();
+
+        return response()->json([
+            'status'=>true,
+            'message'=>'Aula creada correctamente',
+        ],201);
     }
 
     /**

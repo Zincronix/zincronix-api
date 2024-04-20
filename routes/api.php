@@ -42,6 +42,7 @@ Route::post('groups', [DocenteMateriaGrupoController::class, 'groupsOfSubjectOfT
 Route::apiResource('classrooms', ClassroomController::class);
 Route::get('classrooms', [ClassroomController::class, 'showAvailableClassroomsEfficiently']);
 Route::get('classrooms/{classroom_id}/{period_id}/{date}', [ClassroomController::class, 'showClassroomAvailable']);
+//aulas disponibles aula periodo fecha
 
 Route::apiResource('characteristics',CharacteristicController::class);
 
