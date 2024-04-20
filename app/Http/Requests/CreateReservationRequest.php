@@ -24,8 +24,8 @@ class CreateReservationRequest extends FormRequest
     public function rules()
     {
         return [
-            'period_id' => 'required|array',
-            'period_id.*' => 'required|integer|exists:periods,id', 
+            'periods' => 'required|array',
+            'periods.*' => 'required|integer|exists:periods,id', 
             
             'reason_reservation' => 'required|string|max:255',
 
@@ -45,9 +45,9 @@ class CreateReservationRequest extends FormRequest
     public function messages()
     {
         return [
-            'period_id.*.required' => 'El periodo es obligatorio.',
-            'period_id.*.integer' => 'El periodo debe ser un número entero.',
-            'period_id.*.exists' => 'El periodo seleccionado no es válido.',
+            'periods.*.required' => 'El periodo es obligatorio.',
+            'periods.*.integer' => 'El periodo debe ser un número entero.',
+            'periods.*.exists' => 'El periodo seleccionado no es válido.',
 
             'reason_reservation.required' => 'El motivo de la reserva es obligatorio.',
             'reason_reservation.string' => 'El motivo de la reserva debe ser una cadena de texto.',

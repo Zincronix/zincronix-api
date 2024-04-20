@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\CreateReservationRequest;
+use App\Http\Requests\UpdateReservationRequest;
 use App\Models\Availability;
 use App\Models\DocenteMateriaGrupo;
 use App\Models\Reservation;
@@ -40,7 +41,7 @@ class ReservationController extends Controller
                 'classrooms' => $reservation->classrooms->pluck('name')->toArray(),
                 'date' => $reservation->date,
                 'periods' => $reservation->periods->pluck('hour')->toArray(),
-                'status' => $reservation->statusreservationtion,
+                'status' => $reservation->status_reservation_id,
                 'reason' => $reservation->reason,
             ];
         });
@@ -132,7 +133,7 @@ class ReservationController extends Controller
         try {
             DB::beginTransaction();
 
-            $existingReservations = $this->existingReservation($request);
+            $existingReservations = $this->existingReservation($request->periods, $request->date_reservation, $request->classrooms);
             
             if ($existingReservations->isNotEmpty()) {
                 return response()->json([
@@ -162,16 +163,16 @@ class ReservationController extends Controller
 
     }
 
-    private function existingReservation($request)
+    private function existingReservation($periods, $date_reservation, $classrooms)
     {
-        $existingReservations = Reservation::where(function ($query) use ($request) {
-            $query->whereHas('periods', function ($query) use ($request) {
-                $query->whereIn('period_id', $request->period_id);
+        $existingReservations = Reservation::where(function ($query) use ($periods, $date_reservation, $classrooms) {
+            $query->whereHas('periods', function ($query) use ($periods) {
+                $query->whereIn('period_id', $periods);
             })
             ->where('status_reservation_id', 1)
-            ->where('date', $request->date_reservation)
-            ->whereHas('classrooms', function ($query) use ($request) {
-                $query->whereIn('classroom_id', $request->classrooms);
+            ->where('date', $date_reservation)
+            ->whereHas('classrooms', function ($query) use ($classrooms) {
+                $query->whereIn('classroom_id', $classrooms);
             });
         })
         ->lockForUpdate() //todo Verificar si produce lentitud al bloquear consultas
@@ -194,7 +195,7 @@ class ReservationController extends Controller
 
         $reservation->save();
 
-        $reservation->periods()->attach($request->period_id);
+        $reservation->periods()->attach($request->periods);
         $reservation->classrooms()->attach($request->classrooms);
 
         $reservation = $this->addDocenteMateriaGrupo($reservation, $request);
@@ -249,9 +250,23 @@ class ReservationController extends Controller
      * @param  \App\Models\Reservation  $reservation
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Reservation $reservation)
-    {
-        //
+    public function update(UpdateReservationRequest $request, Reservation $reservation)
+    {        
+        $existingReservation = $this->existingReservation($reservation->periods->pluck('id'), $reservation->date, $reservation->classrooms->pluck('id'));
+        
+        if ($request->id_state === 1 && $existingReservation) {
+            return response()->json([
+                'status' => false,
+                'message' => 'No se puede aceptar la reserva. Ya existe una reserva para este periodo y estas aulas en la fecha especificada'], 400);
+        }
+
+        $reservation->update($request->all());
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Solicitud de reserva actualizado exitosamente',
+            'solicitud' => $reservation
+        ], 200);
     }
 
     /**
