@@ -8,8 +8,10 @@ use App\Http\Controllers\GroupController;
 use App\Http\Controllers\HolidayController;
 use App\Http\Controllers\PeriodController;
 use App\Http\Controllers\ReservationController;
+use App\Http\Controllers\SettingController;
 use App\Http\Controllers\SubjectController;
 use App\Http\Controllers\TeacherController;
+use App\Models\Setting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -37,7 +39,10 @@ Route::apiResource('subject',SubjectController::class);
 Route::apiResource('departament',DepartamentController::class);
 
 Route::get('subjects/{teacher_id}', [DocenteMateriaGrupoController::class, 'subjectsOfTeacher']);
+Route::get('departamentSubjects/{departament}', [SubjectController::class, 'showDepartamentSubject']);
 Route::post('groups', [DocenteMateriaGrupoController::class, 'groupsOfSubjectOfTeacher']);
+Route::get('unoccupiedGroups/{subject}', [DocenteMateriaGrupoController::class, 'unoccupiedSubjectGroups']);
+Route::post('unoccupiedGroups2', [DocenteMateriaGrupoController::class, 'unoccupiedSubjectGroups2']);
 
 Route::apiResource('classrooms', ClassroomController::class);
 Route::get('classrooms', [ClassroomController::class, 'showAvailableClassroomsEfficiently']);
@@ -50,4 +55,6 @@ Route::get('reservations/{classroom_id}/available-periods/{date}', [ReservationC
 Route::get('reservationOrderBy', [ReservationController::class, 'orderBy']);
 
 Route::apiResource('holidays',HolidayController::class);
+
+Route::get('settings', [SettingController::class, 'index']);
 

@@ -16,55 +16,55 @@ class HolidaySeeder extends Seeder
     {
         DB::table('holidays')->insert([
             [
-                'date'=> '25-05-2024',
+                'date'=> '2024-05-25',
                 'description' => 'FERIADO NACIONAL'
             ],
             [
-                'date'=> '25-06-2024',
+                'date'=> '2024-06-25',
                 'description' => 'FERIADO DEPARTAMENTAL'
             ],
             [
-                'date'=> '25-12-2024',
+                'date'=> '2024-12-25',
                 'description' => 'FERIADO NACIONAL'
             ],
             [
-                'date'=> '01-05-2024',
+                'date'=> '2024-05-01',
                 'description' => 'FERIADO DEPARTAMENTAL'
             ],
             [
-                'date'=> '14-09-2024',
+                'date'=> '2024-09-14',
                 'description' => 'FERIADO DEPARTAMENTAL'
             ],
             [
-                'date'=> '25-06-2024',
+                'date'=> '2024-06-25',
                 'description' => 'FERIADO DEPARTAMENTAL'
             ],
             [
-                'date'=> '18-06-2024',
+                'date'=> '2024-06-18',
                 'description' => 'FERIADO DEPARTAMENTAL'
             ],
             [
-                'date'=> '30-07-2024',
+                'date'=> '2024-07-30',
                 'description' => 'FERIADO DEPARTAMENTAL'
             ],
             [
-                'date'=> '12-04-2024',
+                'date'=> '2024-04-12',
                 'description' => 'FERIADO DEPARTAMENTAL'
             ],
             [
-                'date'=> '01-01-2024',
+                'date'=> '2024-01-01',
                 'description' => 'FERIADO NACIONAL'
             ],
             [
-                'date'=> '31-12-2024',
+                'date'=> '2024-12-31',
                 'description' => 'FERIADO NACIONAL'
             ],
             [
-                'date'=> '25-06-2024',
+                'date'=> '2024-06-25',
                 'description' => 'FERIADO NACIONAL'
             ],
             [
-                'date'=> '12-02-2024',
+                'date'=> '2024-02-12',
                 'description' => 'FERIADO DEPARTAMENTAL'
             ],
         ]);

@@ -18,6 +18,7 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         // \App\Models\User::factory(10)->create();
+        $this->call(DepartamentSeeder::class);
         $this->call(SubjectSeeder::class);
         $this->call(GroupSeeder::class);
         $this->call(TeacherSeeder::class);
@@ -31,6 +32,6 @@ class DatabaseSeeder extends Seeder
         $this->call(AvailabilitySeeder::class);
         $this->call(AvailabilityPeriodSeeder::class);
         $this->call(HolidaySeeder::class);
-        $this->call(DepartamentSeeder::class);
+        $this->call(SettingSeeder::class);
     }
 }

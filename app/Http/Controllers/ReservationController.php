@@ -184,6 +184,7 @@ class ReservationController extends Controller
     private function reserve($request)
     {
         $reservation = new Reservation;
+        //todo logica para elegir entre manera automatica y manera manual
         if(true){
             $reservation->status_reservation_id = 2;
         }else{
