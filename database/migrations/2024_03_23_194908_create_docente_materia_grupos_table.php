@@ -15,7 +15,7 @@ class CreateDocenteMateriaGruposTable extends Migration
     {
         Schema::create('docente_materia_grupos', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('teacher_id')->constrained();
+            $table->foreignId('teacher_id')->nullable();
             $table->foreignId('subject_id')->constrained();
             $table->foreignId('group_id')->constrained();
             $table->timestamps();

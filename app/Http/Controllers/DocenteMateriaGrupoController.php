@@ -42,4 +42,42 @@ class DocenteMateriaGrupoController extends Controller
         return $groups;
         
     }
+
+    public function unoccupiedSubjectGroups(Subject $subject)
+    {
+        $groups = $subject->groups()->where('teacher_id', null)->get();
+
+        $response = collect();
+        
+        foreach($groups as $group){
+            $response->push([
+                'id' => $group->id,
+                'subject_id' => $subject->id,
+                'group' => $subject->name . " / " . $group->name
+            ]);
+        }
+
+        return $response;
+    }
+
+    public function unoccupiedSubjectGroups2(Request $request)
+    {
+        $response = collect();
+
+        foreach($request->subjects as $subject_id){
+
+            $subject = Subject::findOrFail($subject_id);
+            $groups = $subject->groups()->where('teacher_id', null)->get();
+
+            foreach($groups as $group){
+                $response->push([
+                    'id' => $group->id,
+                    'subject_id' => $subject->id,
+                    'group' => $subject->name . " / " . $group->name
+                ]);
+            }
+        }   
+
+        return $response;
+    }
 }
