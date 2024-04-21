@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\SubjectResource;
+use App\Models\Departament;
 use App\Models\Subject;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 
 class SubjectController extends Controller
@@ -38,6 +40,18 @@ class SubjectController extends Controller
     public function show(Subject $subject)
     {
         //
+    }
+
+    public function showDepartamentSubject(Departament $departament)
+    {
+        return $departament->subjects()
+        ->where(function ($query) {
+            $query->doesntHave('groups')
+                  ->orWhereHas('groups', function ($query) {
+                      $query->whereNull('teacher_id');
+                  });
+        })
+        ->get();
     }
 
     /**
