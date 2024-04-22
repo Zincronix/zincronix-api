@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Setting;
 use App\Http\Requests\StoreSettingRequest;
 use App\Http\Requests\UpdateSettingRequest;
+use App\Http\Resources\SettingResource;
 
 class SettingController extends Controller
 {
@@ -15,7 +16,7 @@ class SettingController extends Controller
      */
     public function index()
     {
-        return Setting::all();
+        return SettingResource::collection(Setting::all());
     }
 
     /**

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Group;
 use App\Models\Subject;
 use App\Models\Teacher;
 use Illuminate\Http\Request;
@@ -53,7 +54,7 @@ class DocenteMateriaGrupoController extends Controller
             $response->push([
                 'id' => $group->id,
                 'subject_id' => $subject->id,
-                'group' => $subject->name . " / " . $group->name
+                'group' => $group->name
             ]);
         }
 
@@ -73,7 +74,7 @@ class DocenteMateriaGrupoController extends Controller
                 $response->push([
                     'id' => $group->id,
                     'subject_id' => $subject->id,
-                    'group' => $subject->name . " / " . $group->name
+                    'group' => $group->name
                 ]);
             }
         }   
