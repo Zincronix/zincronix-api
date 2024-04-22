@@ -28,11 +28,10 @@ class ClassroomController extends Controller
      */
     public function store(Request $request)
     {
-
         $validado=$request->validate([
             'nombre'=>'unique:App\Models\Classroom,name',
             'capacidad'=>'required',
-            'image' => 'image|mimes:jpeg,png,jpg,gif'
+            'image' => 'image|mimes:jpeg,png,jpg'
         ],[
             'nombre.unique'=>'El nombre de aula que elijiste ya existe',
             'image.image'=>'Solo se permiten archivos de tipo imagen',
@@ -45,15 +44,20 @@ class ClassroomController extends Controller
         $curso->name=$request->input('nombre');
         $curso->capacity=$request->input('capacidad');
         $curso->description=$request->input('descripcion');
-        $direccionIMG = $request->file('image')->store('classroom', 'public');
-        $origen = "http://127.0.0.1:8000/storage/";
-        $cadenaTotal = $origen . $direccionIMG;
-        $curso->image = $cadenaTotal;
+        if($request->input('image')){
+            $direccionIMG = $request->file('image')->store('classroom', 'public');
+            $origen = "http://127.0.0.1:8000/storage/";
+            $cadenaTotal = $origen . $direccionIMG;
+            $curso->image = $cadenaTotal;    
+        }else{
+            $curso->image="No hay imagenes en este curso";
+        }
+        
         $curso->save();
 
-        $caracteristicas=Classroom::max('id');
-        $asignarCaracteristica=Classroom::find($caracteristicas);
-        $asignarCaracteristica->characteristics()->attach($jsonizable);
+        //$caracteristicas=Classroom::max('id');
+        //$asignarCaracteristica=Classroom::find($caracteristicas);
+        $curso->characteristics()->attach($jsonizable);
 
         return response()->json([
             'status'=>true,

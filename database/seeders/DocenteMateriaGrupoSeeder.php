@@ -32,17 +32,17 @@ class DocenteMateriaGrupoSeeder extends Seeder
             ],
             [
                 'teacher_id'=>1,
-                'subject_id'=>2,
-                'group_id'=>1,
+                'subject_id'=>3,
+                'group_id'=>4,
             ],
             [
-                'teacher_id'=>1,
+                'teacher_id'=>2,
                 'subject_id'=>2,
                 'group_id'=>2,
             ],
             [
                 'teacher_id'=>3,
-                'subject_id'=>3,
+                'subject_id'=>5,
                 'group_id'=>1,
             ],
             [
@@ -53,22 +53,57 @@ class DocenteMateriaGrupoSeeder extends Seeder
             [
                 'teacher_id'=>null,
                 'subject_id'=>3,
+                'group_id'=>3,
+            ],
+            [
+                'teacher_id'=>null,
+                'subject_id'=>4,
+                'group_id'=>2,
+            ],
+            [
+                'teacher_id'=>null,
+                'subject_id'=>4,
                 'group_id'=>3,
             ],
             [
                 'teacher_id'=>4,
-                'subject_id'=>4,
+                'subject_id'=>7,
                 'group_id'=>1,
             ],
             [
-                'teacher_id'=>null,
-                'subject_id'=>4,
+                'teacher_id'=>4,
+                'subject_id'=>8,
+                'group_id'=>1,
+            ],
+            [
+                'teacher_id'=>3,
+                'subject_id'=>7,
                 'group_id'=>2,
             ],
             [
-                'teacher_id'=>null,
-                'subject_id'=>4,
-                'group_id'=>3,
+                'teacher_id'=>7,
+                'subject_id'=>10,
+                'group_id'=>1,
+            ],
+            [
+                'teacher_id'=>8,
+                'subject_id'=>11,
+                'group_id'=>1,
+            ],
+            [
+                'teacher_id'=>9,
+                'subject_id'=>9,
+                'group_id'=>1,
+            ],
+            [
+                'teacher_id'=>10,
+                'subject_id'=>12,
+                'group_id'=>1,
+            ],
+            [
+                'teacher_id'=>10,
+                'subject_id'=>13,
+                'group_id'=>1,
             ],
         ]);
     }

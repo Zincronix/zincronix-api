@@ -44,8 +44,8 @@ Route::post('groups', [DocenteMateriaGrupoController::class, 'groupsOfSubjectOfT
 Route::get('unoccupiedGroups/{subject}', [DocenteMateriaGrupoController::class, 'unoccupiedSubjectGroups']);
 Route::post('unoccupiedGroups2', [DocenteMateriaGrupoController::class, 'unoccupiedSubjectGroups2']);
 
-Route::apiResource('classrooms', ClassroomController::class);
-Route::get('classrooms', [ClassroomController::class, 'showAvailableClassroomsEfficiently']);
+Route::get('classrooms_buscador', [ClassroomController::class,'index']);
+Route::post('classrooms', [ClassroomController::class, 'showAvailableClassroomsEfficiently']);
 Route::get('classrooms/{classroom_id}/{period_id}/{date}', [ClassroomController::class, 'showClassroomAvailable']);
 //aulas disponibles aula periodo fecha
 

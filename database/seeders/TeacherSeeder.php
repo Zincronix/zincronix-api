@@ -52,6 +52,30 @@ class TeacherSeeder extends Seeder
                 'password' => '12345678',
                 'active' => true
             ],
+            [
+                'name'=>'BENITA CESPEDES',
+                'email' => 'benita@gmail.com',
+                'password' => '12345678',
+                'active' => true
+            ],
+            [
+                'name'=>'ILONA PETEERS',
+                'email' => 'ilona@gmail.com',
+                'password' => '12345678',
+                'active' => true
+            ],
+            [
+                'name'=>'JALDIN',
+                'email' => 'jaldin@gmail.com',
+                'password' => '12345678',
+                'active' => true
+            ],
+            [
+                'name'=>'MARCO MONTECINOS',
+                'email' => 'marco@gmail.com',
+                'password' => '12345678',
+                'active' => true
+            ],
         ]);
     }
 }

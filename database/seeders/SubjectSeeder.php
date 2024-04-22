@@ -38,7 +38,35 @@ class SubjectSeeder extends Seeder
             [
                 'name'=>'CÁLCULO II',
                 'departament_id' => 1
-            ]
+            ],
+            [
+                'name'=>'INTELIGENCIA ARTIFICIAL I',
+                'departament_id' => 2
+            ],
+            [
+                'name'=>'INTELIGENCIA ARTIFICIAL II',
+                'departament_id' => 2
+            ],
+            [
+                'name'=>'SISTEMAS DE INFORMACIÓN II',
+                'departament_id' =>  2
+            ],
+            [
+                'name'=>'INGLES I',
+                'departament_id' =>  2
+            ],
+            [
+                'name'=>'INGLES II',
+                'departament_id' =>  2
+            ],
+            [
+                'name'=>'REDES AVANZADAS',
+                'departament_id' =>  2
+            ],
+            [
+                'name'=>'TALLER DE PROGRAMACION EN BAJO NIVEL',
+                'departament_id' =>  2
+            ],
         ]);
     }
 }
