@@ -19,7 +19,8 @@ class ClassroomResource extends JsonResource
             'id'=>$this->id,
             'name'=>$this->name,
             'capacity'=>$this->capacity,
-            'description'=>$this->description
+            'description'=>$this->description,
+            'image'=>$this->image
         ];
     }
 }

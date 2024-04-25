@@ -46,7 +46,7 @@ class DocenteMateriaGrupoController extends Controller
     public function unoccupiedSubjectGroups(Subject $subject)
     {
         $groups = $subject->groups()->where('teacher_id', null)->get();
-
+        //materias libres que no estan registradas
         $response = collect();
         
         foreach($groups as $group){
@@ -59,7 +59,7 @@ class DocenteMateriaGrupoController extends Controller
 
         return $response;
     }
-
+    //varias materias
     public function unoccupiedSubjectGroups2(Request $request)
     {
         $response = collect();
