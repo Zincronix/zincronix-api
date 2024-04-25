@@ -9,6 +9,17 @@ class Classroom extends Model
 {
     use HasFactory;
 
+    protected $fillable=[
+        'name',
+        'capacity',
+        'description'
+    ];
+
+    protected $hidden=[
+        'updated_at',
+        'created_at'
+    ];
+
     public function reservations(){
         return $this->belongsToMany(Reservation::class);
     }
