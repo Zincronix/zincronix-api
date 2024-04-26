@@ -42,16 +42,20 @@ class SubjectController extends Controller
         //
     }
 
-    public function showDepartamentSubject(Departament $departament)
+    public function showDepartamentSubject(Request $request)
     {
-        return $departament->subjects()
+        $subjects = Subject::whereHas('departament', function ($query) use ($request) {
+            $query->whereIn('id', $request->departaments);
+        })        
         ->where(function ($query) {
             $query->doesntHave('groups')
-                  ->orWhereHas('groups', function ($query) {
-                      $query->whereNull('teacher_id');
-                  });
+                ->orWhereHas('groups', function ($query) {
+                    $query->whereNull('teacher_id');
+                });
         })
-        ->get();
+        ->get();               
+
+        return $subjects;
     }
 
     /**

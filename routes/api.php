@@ -40,7 +40,7 @@ Route::apiResource('subject',SubjectController::class);
 Route::apiResource('departament',DepartamentController::class);
 
 Route::get('subjects/{teacher_id}', [DocenteMateriaGrupoController::class, 'subjectsOfTeacher']);
-Route::get('departamentSubjects/{departament}', [SubjectController::class, 'showDepartamentSubject']);
+Route::post('departamentSubjects', [SubjectController::class, 'showDepartamentSubject']);
 Route::post('groups', [DocenteMateriaGrupoController::class, 'groupsOfSubjectOfTeacher']);
 Route::get('unoccupiedGroups/{subject}', [DocenteMateriaGrupoController::class, 'unoccupiedSubjectGroups']);
 Route::post('unoccupiedGroups2', [DocenteMateriaGrupoController::class, 'unoccupiedSubjectGroups2']);
