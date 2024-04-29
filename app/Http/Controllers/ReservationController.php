@@ -24,7 +24,8 @@ class ReservationController extends Controller
         $reservations = Reservation::with([
             'periods:id,hour',
             'classrooms:name',
-            'docenteMateriaGrupos.teacher'
+            'docenteMateriaGrupos.teacher',
+            'statusReservation'
         ])->oldest()->paginate(10);
 
         $reservations = $this->transformRservation($reservations);
@@ -35,13 +36,22 @@ class ReservationController extends Controller
     private function transformRservation($reservations)
     {
         $reservations->getCollection()->transform(function ($reservation) {
+            $state = null;
+            if ($reservation->statusReservation) {
+            $state = [
+                'state_id' => $reservation->statusReservation->id,
+                'state' => $reservation->statusReservation->state,
+            ];
+            }   
             return [
-                'id' => $reservation->id,
+                'reservation_id' => $reservation->id,
                 'teachers' => $reservation->docenteMateriaGrupos->pluck('teacher.name')->unique()->values()->toArray(),
                 'classrooms' => $reservation->classrooms->pluck('name')->toArray(),
-                'date' => $reservation->date,
+                //'date' => $reservation->date,
+                'date' => date('d/m/Y', strtotime($reservation->date)),
                 'periods' => $reservation->periods->pluck('hour')->toArray(),
-                'status' => $reservation->status_reservation_id,
+                //'status' => $reservation->statusReservation,
+                'state' => $state,
                 'reason' => $reservation->reason,
             ];
         });
