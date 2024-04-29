@@ -290,4 +290,19 @@ class ReservationController extends Controller
     {
         //
     }
+
+    public function aprove(Request $request){
+        $reserva=Reservation::find($request->id);
+        if($reserva && $request->response==1){
+            $reserva->status_reservation_id=1;
+        }else{
+            if($request->response==2){
+            $reserva->status_reservation_id=2;
+            }else{
+                $reserva->status_reservation_id=3;
+            }
+        }
+        $reserva->save();
+        return response()->json("Aprobado correctamente",200);
+    }
 }
