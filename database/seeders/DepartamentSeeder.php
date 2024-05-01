@@ -35,7 +35,22 @@ class DepartamentSeeder extends Seeder
             ],
             [
                 'name'=> 'BIOLOGIA',
-            ] 
+            ],
+            [
+                'name'=> 'INFORMATICA',
+            ],
+            [
+                'name'=> 'ELECTRICA',
+            ],
+            [
+                'name'=> 'ELECTRONICA',
+            ],
+            [
+                'name'=> 'MECANICA',
+            ],
+            [
+                'name'=> 'ALIMENTOS',
+            ],
         ]);
     }
 }
