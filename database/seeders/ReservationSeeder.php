@@ -2,7 +2,9 @@
 
 namespace Database\Seeders;
 
+use App\Models\Reservation;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class ReservationSeeder extends Seeder
 {
@@ -13,6 +15,140 @@ class ReservationSeeder extends Seeder
      */
     public function run()
     {
-        //
+        DB::table('reservations')->insert([
+            [
+                "status_reservation_id" => 1,
+                "reason" => "esta es una reserva",
+                "date" => "2024-05-29",
+            ],
+            [
+                "status_reservation_id" => 2,
+                "date" => "2024-04-29",
+                "reason" => "esta es otra reserva",
+            ],
+            [
+                "status_reservation_id" => 3,
+                "reason" => "esta es una reserva",
+                "date" => "2024-05-21",
+            ],
+            [
+                "status_reservation_id" => 2,
+                "date" => "2024-04-26",
+                "reason" => "esta es otra reserva",
+            ],
+            [
+                "status_reservation_id" => 1,
+                "reason" => "esta es una reserva",
+                "date" => "2024-05-01",
+            ],
+            [
+                "status_reservation_id" => 3,
+                "date" => "2024-04-12",
+                "reason" => "esta es otra reserva",
+            ],
+            [
+                "status_reservation_id" => 3,
+                "reason" => "esta es una reserva",
+                "date" => "2024-03-10",
+            ],
+            [
+                "status_reservation_id" => 2,
+                "date" => "2024-04-29",
+                "reason" => "esta es otra reserva",
+            ],
+            [
+                "status_reservation_id" => 3,
+                "reason" => "esta es una reserva",
+                "date" => "2024-04-30",
+            ],
+            [
+                "status_reservation_id" => 1,
+                "date" => "2024-03-21",
+                "reason" => "esta es otra reserva",
+            ],
+            [
+                "status_reservation_id" => 1,
+                "reason" => "esta es una reserva",
+                "date" => "2024-05-29",
+            ],
+            [
+                "status_reservation_id" => 1,
+                "date" => "2024-05-01",
+                "reason" => "esta es otra reserva",
+            ],
+            [
+                "status_reservation_id" => 1,
+                "reason" => "esta es una reserva",
+                "date" => "2024-05-29",
+            ],
+            [
+                "status_reservation_id" => 2,
+                "date" => "2024-04-29",
+                "reason" => "esta es otra reserva",
+            ],
+            [
+                "status_reservation_id" => 3,
+                "reason" => "esta es una reserva",
+                "date" => "2024-05-05",
+            ],
+            [
+                "status_reservation_id" => 1,
+                "date" => "2024-04-29",
+                "reason" => "esta es otra reserva",
+            ],
+            [
+                "status_reservation_id" => 2,
+                "reason" => "esta es una reserva",
+                "date" => "2024-05-29",
+            ],
+            [
+                "status_reservation_id" => 2,
+                "date" => "2024-04-29",
+                "reason" => "esta es otra reserva",
+            ],
+            [
+                "status_reservation_id" => 2,
+                "reason" => "esta es una reserva",
+                "date" => "2024-05-29",
+            ],
+            [
+                "status_reservation_id" => 3,
+                "date" => "2024-04-29",
+                "reason" => "esta es otra reserva",
+            ],
+            [
+                "status_reservation_id" => 3,
+                "reason" => "esta es una reserva",
+                "date" => "2024-05-29",
+            ],
+            [
+                "status_reservation_id" => 3,
+                "date" => "2024-04-29",
+                "reason" => "esta es otra reserva",
+            ],
+            [
+                "status_reservation_id" => 1,
+                "reason" => "esta es una reserva",
+                "date" => "2024-05-29",
+            ],
+            [
+                "status_reservation_id" => 2,
+                "date" => "2024-04-29",
+                "reason" => "esta es otra reserva",
+            ]
+        ]);
+
+        $reservas=Reservation::all();
+
+        foreach ($reservas as $reserva1) {
+        $random=rand(11,18);
+        $random1=rand(1,6);
+        $random2=rand(1,10);
+        $reserva1->docenteMateriaGrupos()->attach([$random]);
+        $reserva1->classrooms()->attach([$random1]);
+        $reserva1->periods()->attach([$random2]);
+        $reserva1->save();
+        }
+        
     }
 }
