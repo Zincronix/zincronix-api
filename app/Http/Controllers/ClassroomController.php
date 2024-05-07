@@ -90,9 +90,16 @@ class ClassroomController extends Controller
      * todo
      * Sugerencias de ambientes
      */
-    public function showClassroomAvailable($classroom_id, $period_id, $date)
+    public function showClassroomAvailable(Classroom $classroom, Request $request)
     {
-        $classroom = Classroom::findOrFail($classroom_id);
+        // dd($classroom, $request);
+
+        $reservas = $classroom->reservations()->whereHas('periods', function ($query) use ($request){
+            $query->whereIn('periods.id', $request->periods);
+        })->whereDate('date', $request->date)
+        ->where('status_reservation_id', 1)->get();
+
+        dd($reservas);
         return response()->json([
             'Available' => [
                 $classroom
