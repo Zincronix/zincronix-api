@@ -79,7 +79,7 @@ class ReservationController extends Controller
 
         $dayWeekNumber = $date->dayOfWeek;
 
-        $classroom_id = null;
+        //$classroom_id = null;
 
         $reservas = Reservation::whereHas('classrooms', function ($query) use ($classroom_id) {
             $query->where('classroom_id', $classroom_id);
@@ -103,16 +103,19 @@ class ReservationController extends Controller
 
         foreach ($disponibilidades as $disponibilidad) {
             foreach ($disponibilidad->periods as $period) {
+                $aux = strtotime($period->hour);
+                $aux += $period->range->range * 60;
+                $horaFin = date('H:i', $aux);
                 if (!$reservas->contains($period->id)) {
                     $periodosDisponibles->push([
                         'id' => $period->id,
-                        'hour' => $period->hour,
+                        'hour' => $period->hour . " - " . $horaFin,
                         'available' => true
                     ]);
                 } else {
                     $periodosDisponibles->push([
                         'id' => $period->id,
-                        'hour' => $period->hour,
+                        'hour' => $period->hour . " - " . $horaFin,
                         'available' => false
                     ]);
                 }
@@ -122,6 +125,33 @@ class ReservationController extends Controller
         return $periodosDisponibles;
     }
 
+    public function procesarReserva(Request $request)
+    {
+        
+        if($request->status == false){
+            
+            $existingReservationsAceptadas = $this->existingReservation($request->periods, $request->date_reservation, $request->classrooms, 1);
+                
+            if ($existingReservationsAceptadas->isNotEmpty()) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Ya existe una reserva aceptada para este periodo y estas aulas en la fecha especificada'
+                ], 400);
+            }
+            
+            $existingReservationsPendiente = $this->existingReservation($request->periods, $request->date_reservation, $request->classrooms, 2);
+            
+            if ($existingReservationsPendiente->isNotEmpty()) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Ya existe una reserva pendiente para este periodo y estas aulas en la fecha especificada'
+                ], 400);
+            }
+        }
+
+        return true;
+    }
+
     /**
      * Store a newly created resource in storage.
      *
@@ -129,28 +159,31 @@ class ReservationController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(CreateReservationRequest $request)
-    {
+    {   
+
+        $check = $this->procesarReserva($request);
+
+        if($check !== true){
+            return $check;
+        }
+
         try {
             DB::beginTransaction();
-
-            $existingReservations = $this->existingReservation($request->periods, $request->date_reservation, $request->classrooms);
-            
-            if ($existingReservations->isNotEmpty()) {
-                return response()->json([
-                    'status' => false,
-                    'message' => 'Ya existe una reserva para este periodo y estas aulas en la fecha especificada'
-                ], 400);
-            }
         
-            $reservation = $this->reserve($request);
-            
-            DB::commit();
+            $result = $this->reserve($request);
 
-            return response()->json([
-                'status' => true,
-                'message' => 'Solicitud de reserva creado satisfactoriamente',
-                'Solicitud' => $reservation
-            ],201);
+            if( $result === true ){
+            
+                DB::commit();
+
+                return response()->json([
+                    'status' => true,
+                    'message' => 'Solicitud de reserva creado satisfactoriamente'
+                ],201);
+
+            }else{
+                return $result;
+            }
 
         } catch (\Exception $e) {
             DB::rollBack();
@@ -159,17 +192,15 @@ class ReservationController extends Controller
                 'message' => 'Error al procesar la solicitud de reserva'
             ], 500);
         }
-
-
     }
 
-    private function existingReservation($periods, $date_reservation, $classrooms)
+    private function existingReservation($periods, $date_reservation, $classrooms, $status_reservation_id)
     {
-        $existingReservations = Reservation::where(function ($query) use ($periods, $date_reservation, $classrooms) {
+        $existingReservations = Reservation::where(function ($query) use ($periods, $date_reservation, $classrooms, $status_reservation_id) {
             $query->whereHas('periods', function ($query) use ($periods) {
                 $query->whereIn('period_id', $periods);
             })
-            ->where('status_reservation_id', 1)
+            ->where('status_reservation_id', $status_reservation_id)
             ->where('date', $date_reservation)
             ->whereHas('classrooms', function ($query) use ($classrooms) {
                 $query->whereIn('classroom_id', $classrooms);
@@ -199,9 +230,9 @@ class ReservationController extends Controller
         $reservation->periods()->attach($request->periods);
         $reservation->classrooms()->attach($request->classrooms);
 
-        $reservation = $this->addDocenteMateriaGrupo($reservation, $request);
+        $result = $this->addDocenteMateriaGrupo($reservation, $request);
 
-        return $reservation;
+        return $result;
     }
 
     private function addDocenteMateriaGrupo($reservation, $request)
@@ -230,7 +261,7 @@ class ReservationController extends Controller
             
         }
 
-        return $reservation;
+        return true;
     }
 
     /**
@@ -253,13 +284,24 @@ class ReservationController extends Controller
      */
     public function update(UpdateReservationRequest $request, Reservation $reservation)
     {        
-        $existingReservation = $this->existingReservation($reservation->periods->pluck('id'), $reservation->date, $reservation->classrooms->pluck('id'));
+        if( $request->status_reservation_id === 1 ){
+
+            $existingReservation = $this->existingReservation($reservation->periods->pluck('id'), $reservation->date, $reservation->classrooms->pluck('id'), 1);
         
-        if ($request->id_state === 1 && $existingReservation) {
-            return response()->json([
-                'status' => false,
-                'message' => 'No se puede aceptar la reserva. Ya existe una reserva para este periodo y estas aulas en la fecha especificada'], 400);
-        }
+            if ( $existingReservation ) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'No se puede aceptar la reserva. Ya existe una reserva para este periodo y estas aulas en la fecha especificada'], 400);
+            }
+
+            // De esta manera o hacer una automatizacion para actualizar el estado si la fehca se vence
+            // Enviar correos de recordatorio para el administrador de las solicitudes pendietes urgentes
+            // if ( !$this->verificarDate() ){
+            //     return response()->json([
+            //         'status' => false,
+            //         'message' => 'La fecha de reserva no es válida'], 400);
+            // }
+        }        
 
         $reservation->update($request->all());
 
