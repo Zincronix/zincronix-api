@@ -125,7 +125,7 @@ class ReservationController extends Controller
         return $periodosDisponibles;
     }
 
-    public function procesarReserva(Request $request)
+    private function procesarReserva(Request $request)
     {
         
         if($request->status == false){
@@ -196,7 +196,7 @@ class ReservationController extends Controller
 
     private function existingReservation($periods, $date_reservation, $classrooms, $status_reservation_id)
     {
-        $existingReservations = Reservation::where(function ($query) use ($periods, $date_reservation, $classrooms, $status_reservation_id) {
+        return Reservation::where(function ($query) use ($periods, $date_reservation, $classrooms, $status_reservation_id) {
             $query->whereHas('periods', function ($query) use ($periods) {
                 $query->whereIn('period_id', $periods);
             })
@@ -208,8 +208,6 @@ class ReservationController extends Controller
         })
         ->lockForUpdate() //todo Verificar si produce lentitud al bloquear consultas
         ->get();
-
-        return $existingReservations;
     }
 
     private function reserve($request)
@@ -288,7 +286,7 @@ class ReservationController extends Controller
 
             $existingReservation = $this->existingReservation($reservation->periods->pluck('id'), $reservation->date, $reservation->classrooms->pluck('id'), 1);
         
-            if ( $existingReservation ) {
+            if ( $existingReservation->isNotEmpty() ) {
                 return response()->json([
                     'status' => false,
                     'message' => 'No se puede aceptar la reserva. Ya existe una reserva para este periodo y estas aulas en la fecha especificada'], 400);
@@ -296,11 +294,11 @@ class ReservationController extends Controller
 
             // De esta manera o hacer una automatizacion para actualizar el estado si la fehca se vence
             // Enviar correos de recordatorio para el administrador de las solicitudes pendietes urgentes
-            // if ( !$this->verificarDate() ){
-            //     return response()->json([
-            //         'status' => false,
-            //         'message' => 'La fecha de reserva no es válida'], 400);
-            // }
+            if ( !$this->verificarDate($reservation->date) ){
+                return response()->json([
+                    'status' => false,
+                    'message' => 'La fecha de reserva no es válida'], 400);
+            }
         }        
 
         $reservation->update($request->all());
@@ -310,6 +308,16 @@ class ReservationController extends Controller
             'message' => 'Solicitud de reserva actualizado exitosamente',
             'solicitud' => $reservation
         ], 200);
+    }
+
+    private function verificarDate($date)
+    {
+        $dateCarbon = Carbon::parse($date);
+
+        if($dateCarbon->isToday() || $dateCarbon->isFuture()){
+            return true;
+        }
+        return false;
     }
 
     /**
