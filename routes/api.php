@@ -49,7 +49,7 @@ Route::post('unoccupiedGroups2', [DocenteMateriaGrupoController::class, 'unoccup
 // Route::post('classroon_guardar', [ClassroomController::class,'store']);
 Route::apiResource('classrooms',ClassroomController::class);
 Route::post('classrooms_disponibles', [ClassroomController::class, 'showAvailableClassroomsEfficiently']);
-Route::get('classrooms/{classroom}', [ClassroomController::class, 'showClassroomAvailable']);
+Route::post('classrooms/{classroom}', [ClassroomController::class, 'showClassroomAvailable']);
 //aulas disponibles aula periodo fecha
 
 Route::apiResource('characteristics',CharacteristicController::class);
