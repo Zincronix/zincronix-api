@@ -83,7 +83,7 @@ class ReservationController extends Controller
 
         $reservas = Reservation::whereHas('classrooms', function ($query) use ($classroom_id) {
             $query->where('classroom_id', $classroom_id);
-        })->whereDate('date', $date) 
+        })->whereDate('date', $date)->where('status_reservation_id', 1)
             ->with('periods')
             ->get()
             ->pluck('periods.*.id')
