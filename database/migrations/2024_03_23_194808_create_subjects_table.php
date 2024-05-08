@@ -18,8 +18,6 @@ class CreateSubjectsTable extends Migration
             $table->string('name')->unique();
             $table->foreignId('departament_id')->constrained();
             $table->timestamps();
-
-            $table->index('departament_id');
         });
     }
 

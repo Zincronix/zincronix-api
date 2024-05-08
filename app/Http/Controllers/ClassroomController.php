@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Resources\ClassroomResource;
 use App\Models\Characteristic;
 use App\Models\Classroom;
+use App\Models\Reservation;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
@@ -90,15 +91,52 @@ class ClassroomController extends Controller
      * todo
      * Sugerencias de ambientes
      */
-    public function showClassroomAvailable($classroom_id, $period_id, $date)
+    public function showClassroomAvailable(Classroom $classroom, Request $request)
     {
-        $classroom = Classroom::findOrFail($classroom_id);
+        $reservas = $this->getReservationsForClassroom($classroom, $request);
+
+        $state = $reservas ? "En otra solicitud" : "Libre";
+
+        $suggestion = $this->showAvailableClassroomsEfficiently($request);
+        $suggestion = $suggestion->except($classroom->id);
+
+        $suggestionStates = $this->getStatesForSuggestion($suggestion, $request);
+
         return response()->json([
             'Available' => [
-                $classroom
+                'id' => $classroom->id,
+                'name' => $classroom->name,
+                'capacity' => $classroom->capacity,
+                'state' => $state
             ],
-            'Suggestion' => []
+            'Suggestion' => $suggestionStates
         ], 201);
+    }
+
+    private function getReservationsForClassroom(Classroom $classroom, Request $request)
+    {
+        return $classroom->reservations()
+            ->whereHas('periods', function ($query) use ($request) {
+                $query->whereIn('periods.id', $request->periods);
+            })
+            ->whereDate('date', $request->date)
+            ->where('status_reservation_id', 2)
+            ->exists();
+    }
+
+    private function getStatesForSuggestion($suggestion, Request $request)
+    {
+        $suggestionStates = [];
+        foreach ($suggestion as $suggestedClassroom) {
+            $suggestedReservas = $this->getReservationsForClassroom($suggestedClassroom, $request);
+            $suggestionStates[] = [
+                'id' => $suggestedClassroom->id,
+                'name' => $suggestedClassroom->name,
+                'capacity' => $suggestedClassroom->capacity,
+                'state' => $suggestedReservas ? "En otra solicitud" : "Libre"
+            ];
+        }
+        return $suggestionStates;
     }
 
     /**
