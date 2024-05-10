@@ -35,14 +35,13 @@ class ReservationController extends Controller
 
     private function transformRservation($reservations)
     {
-        $reservations->getCollection()->transform(function ($reservation) {
-            $state = null;
-            if ($reservation->statusReservation) {
+        $reservations->getCollection()->transform(function ($reservation) {       
+                             
             $state = [
                 'state_id' => $reservation->statusReservation->id,
                 'state' => $reservation->statusReservation->state,
             ];
-            }   
+               
             return [
                 'reservation_id' => $reservation->id,
                 'teachers' => $reservation->docenteMateriaGrupos->pluck('teacher.name')->unique()->values()->toArray(),
