@@ -50,6 +50,7 @@ Route::post('unoccupiedGroups2', [DocenteMateriaGrupoController::class, 'unoccup
 Route::apiResource('classrooms',ClassroomController::class);
 Route::post('classrooms_disponibles', [ClassroomController::class, 'showAvailableClassroomsEfficiently']);
 Route::post('classrooms/{classroom}', [ClassroomController::class, 'showClassroomAvailable']);
+Route::post('classroomsCapacity', [ClassroomController::class, 'showClassroomAvailableByCapacity']);
 //aulas disponibles aula periodo fecha
 
 Route::apiResource('characteristics',CharacteristicController::class);

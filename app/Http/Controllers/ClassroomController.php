@@ -36,7 +36,7 @@ class ClassroomController extends Controller
             'capacidad'=>'required',
             'imagen' => 'nullable|mimes:jpeg,png,jpg,binary'
         ],[
-            'nombre.unique'=>'El nombre de aula que elijiste ya existe',
+            'nombre.unique'=>'Ambiente ya registrado.',
             'imagen.mimes'=>'Solo se permiten imagenes de tipo: jpeg, png, jpg.' 
         ]);
 
@@ -45,7 +45,7 @@ class ClassroomController extends Controller
             'nombre'=>'unique:App\Models\Classroom,name',
             'capacidad'=>'required',
         ],[
-            'nombre.unique'=>'El nombre de aula que elijiste ya existe',
+            'nombre.unique'=>'Ambiente ya registrado.',
             'imagen.mimes'=>'Solo se permiten imagenes de tipo: jpeg, png, jpg.' 
         ]);
         }
@@ -85,6 +85,59 @@ class ClassroomController extends Controller
         //
     }
 
+    public function showClassroomAvailableByCapacity(Request $request)
+    {
+        $availableClassrooms = $this->availableClassroomsByCapacity($request);
+
+        $availableClassroomsStates = $this->getStatesForClassroom($availableClassrooms, $request);
+
+        $sug = $this->availableClassroomsSuggestion($request);
+        $suggestionResult = $sug->diff($availableClassrooms);
+
+        $suggestionStates = $this->getStatesForClassroom($suggestionResult, $request);
+
+        $suggestion = $this->availableClassroomsSuggestionByCapacity($suggestionStates, $request->capacity);
+
+        return response()->json([
+            'Available' => $availableClassroomsStates,
+            'Suggestion' => $suggestion
+        ], 201);
+    }
+
+    private function availableClassroomsByCapacity($request)
+    {
+        $periods = $request->periods;
+        $date = Carbon::parse($request->date);
+        $dayWeekNumber = $date->dayOfWeek;
+        $capacityRange = $request->capacity;
+
+        $reservedClassrooms = $this->reservedClassroomsForPeriodRange($periods, $date);
+
+        $availableClassrooms = $this->classroomsAvailableForPeriods($periods, $dayWeekNumber, $capacityRange);
+
+        $classroomsWithoutReservations = $availableClassrooms->diff($reservedClassrooms);
+        
+        return $classroomsWithoutReservations;
+    }
+
+    private function availableClassroomsSuggestionByCapacity($suggestionStates, $capacityRange)
+    {
+        $pairs = collect();
+
+        foreach ($suggestionStates as $classroom1) {
+            foreach ($suggestionStates as $classroom2) {
+                if ($classroom1['id'] != $classroom2['id']) {
+                    $totalCapacity = $classroom1['capacity'] + $classroom2['capacity'];
+                    if ($totalCapacity >= $capacityRange[0] && $totalCapacity <= $capacityRange[1]) {
+                        $pairs->push([$classroom1, $classroom2]);
+                    }
+                }
+            }
+        }
+
+        return $pairs;
+    }
+
     /**
      * Este controlador servira para mostrar la vista 2 del proceso de reserva
      * Esta funcion es para filtrar por ambiente
@@ -97,10 +150,10 @@ class ClassroomController extends Controller
 
         $state = $reservas ? "En otra solicitud" : "Libre";
 
-        $suggestion = $this->showAvailableClassroomsEfficiently($request);
+        $suggestion = $this->availableClassroomsSuggestion($request);
         $suggestion = $suggestion->except($classroom->id);
 
-        $suggestionStates = $this->getStatesForSuggestion($suggestion, $request);
+        $suggestionStates = $this->getStatesForClassroom($suggestion, $request);
 
         return response()->json([
             'Available' => [
@@ -113,7 +166,7 @@ class ClassroomController extends Controller
         ], 201);
     }
 
-    private function getReservationsForClassroom(Classroom $classroom, Request $request)
+    private function getReservationsForClassroom($classroom, $request)
     {
         return $classroom->reservations()
             ->whereHas('periods', function ($query) use ($request) {
@@ -124,7 +177,7 @@ class ClassroomController extends Controller
             ->exists();
     }
 
-    private function getStatesForSuggestion($suggestion, Request $request)
+    private function getStatesForClassroom($suggestion, $request)
     {
         $suggestionStates = [];
         foreach ($suggestion as $suggestedClassroom) {
@@ -143,7 +196,7 @@ class ClassroomController extends Controller
      * Esta funcion servirá para sugerencias 
      * en la vista de filtrar por ambiente
      */    
-    public function showAvailableClassroomsEfficiently(Request $request)
+    private function availableClassroomsSuggestion($request)
     {
         $periods = $request->periods;
         $date = Carbon::parse($request->date);
@@ -169,10 +222,9 @@ class ClassroomController extends Controller
         })->get();
     }
 
-    private function classroomsAvailableForPeriods($periods, $dayWeekNumber)
+    private function classroomsAvailableForPeriods($periods, $dayWeekNumber, $capacityRange = null)
     {
-
-        $availableClassrooms = Classroom::select('id', 'name', 'capacity')
+        $subQuery = Classroom::select('id', 'name', 'capacity')
         ->whereHas('availabilities', function ($query) use ($dayWeekNumber, $periods) {
             $query->where('day_id', $dayWeekNumber)
                     ->whereHas('periods', function ($query) use ($periods) {
@@ -186,7 +238,16 @@ class ClassroomController extends Controller
                 ->whereHas('periods', function ($query) use ($periods) {
                     $query->whereIn('periods.id', $periods);
                 }, '=', count($periods));                    
-        })->get();
+        });
+
+        $query = Classroom::fromSub($subQuery, 'sub')
+        ->select('sub.id', 'sub.name', 'sub.capacity');
+
+        if ($capacityRange) {
+            $query->whereBetween('sub.capacity', $capacityRange);
+        }
+        
+        $availableClassrooms = $query->orderBy('capacity', 'desc')->get();
 
         return $availableClassrooms;
     }

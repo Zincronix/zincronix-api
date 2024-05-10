@@ -24,7 +24,8 @@ class ReservationController extends Controller
         $reservations = Reservation::with([
             'periods:id,hour',
             'classrooms:name',
-            'docenteMateriaGrupos.teacher'
+            'docenteMateriaGrupos.teacher',
+            'statusReservation'
         ])->oldest()->paginate(10);
 
         $reservations = $this->transformRservation($reservations);
@@ -35,13 +36,22 @@ class ReservationController extends Controller
     private function transformRservation($reservations)
     {
         $reservations->getCollection()->transform(function ($reservation) {
+            $state = null;
+            if ($reservation->statusReservation) {
+            $state = [
+                'state_id' => $reservation->statusReservation->id,
+                'state' => $reservation->statusReservation->state,
+            ];
+            }   
             return [
-                'id' => $reservation->id,
+                'reservation_id' => $reservation->id,
                 'teachers' => $reservation->docenteMateriaGrupos->pluck('teacher.name')->unique()->values()->toArray(),
                 'classrooms' => $reservation->classrooms->pluck('name')->toArray(),
-                'date' => $reservation->date,
+                //'date' => $reservation->date,
+                'date' => date('d/m/Y', strtotime($reservation->date)),
                 'periods' => $reservation->periods->pluck('hour')->toArray(),
-                'status' => $reservation->status_reservation_id,
+                //'status' => $reservation->statusReservation,
+                'state' => $state,
                 'reason' => $reservation->reason,
             ];
         });
@@ -83,7 +93,7 @@ class ReservationController extends Controller
 
         $reservas = Reservation::whereHas('classrooms', function ($query) use ($classroom_id) {
             $query->where('classroom_id', $classroom_id);
-        })->whereDate('date', $date) 
+        })->whereDate('date', $date)->where('status_reservation_id', 1)
             ->with('periods')
             ->get()
             ->pluck('periods.*.id')
@@ -329,5 +339,20 @@ class ReservationController extends Controller
     public function destroy(Reservation $reservation)
     {
         //
+    }
+
+    public function aprove(Request $request){
+        $reserva=Reservation::find($request->id);
+        if($reserva && $request->response==1){
+            $reserva->status_reservation_id=1;
+        }else{
+            if($request->response==2){
+            $reserva->status_reservation_id=2;
+            }else{
+                $reserva->status_reservation_id=3;
+            }
+        }
+        $reserva->save();
+        return response()->json("Aprobado correctamente",200);
     }
 }
