@@ -6,6 +6,7 @@ use App\Models\Availability;
 use App\Models\AvailabilityPeriod;
 use App\Models\Characteristic;
 use App\Models\DocenteMateriaGrupo;
+use App\Models\Reservation;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -33,5 +34,6 @@ class DatabaseSeeder extends Seeder
         $this->call(AvailabilityPeriodSeeder::class);
         $this->call(HolidaySeeder::class);
         $this->call(SettingSeeder::class);
+        $this->call(ReservationSeeder::class);
     }
 }

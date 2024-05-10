@@ -36,7 +36,7 @@ class ClassroomController extends Controller
             'capacidad'=>'required',
             'imagen' => 'nullable|mimes:jpeg,png,jpg,binary'
         ],[
-            'nombre.unique'=>'El nombre de aula que elijiste ya existe',
+            'nombre.unique'=>'Ambiente ya registrado.',
             'imagen.mimes'=>'Solo se permiten imagenes de tipo: jpeg, png, jpg.' 
         ]);
 
@@ -45,7 +45,7 @@ class ClassroomController extends Controller
             'nombre'=>'unique:App\Models\Classroom,name',
             'capacidad'=>'required',
         ],[
-            'nombre.unique'=>'El nombre de aula que elijiste ya existe',
+            'nombre.unique'=>'Ambiente ya registrado.',
             'imagen.mimes'=>'Solo se permiten imagenes de tipo: jpeg, png, jpg.' 
         ]);
         }

@@ -9,6 +9,10 @@ class StatusReservation extends Model
 {
     use HasFactory;
 
+    protected $hidden=[
+        'created_at',
+        'updated_at'
+    ];
     public function reservations(){
         return $this->hasMany(Reservation::class);
     }
