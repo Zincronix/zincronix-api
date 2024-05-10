@@ -18,6 +18,28 @@ class PeriodController extends Controller
         // return PeriodResource::collection(Period::latest()->paginate());
     }
 
+    public function periodsForFilterByCantidad()
+    {
+        $selectPeriod = Period::with('range')
+                        ->select('id', 'hour', 'range_id')
+                        ->where('range_id', 2)
+                        ->get();
+
+        $periods = $selectPeriod->map(function ($period) {
+            $aux = strtotime($period->hour);
+            $aux += $period->range->range * 60;
+            $horaFin = date('H:i', $aux);
+    
+            return [
+                'id' => $period->id,
+                'hour' => $period->hour . " - " . $horaFin,
+                'available' => true
+            ];
+        });
+
+        return $periods;
+    }
+
     /**
      * Store a newly created resource in storage.
      *
