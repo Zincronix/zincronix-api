@@ -354,4 +354,33 @@ class ReservationController extends Controller
         $reserva->save();
         return response()->json("Aprobado correctamente",200);
     }
+
+    public function weekReservation(Request $request){
+    
+        $fechaInicio = Carbon::createFromFormat('d-m-Y', $request->fechaInicio)->toDateString();
+        $fechaFin = Carbon::createFromFormat('d-m-Y', $request->fechaFin)->toDateString();
+        $aulasIds=$request->aula;
+        $reservations = Reservation::whereDate('date', '>=', $fechaInicio)
+            ->whereDate('date', '<=', $fechaFin)
+            ->whereHas('classrooms', function ($query) use ($aulasIds) {
+                $query->whereIn('classrooms.id', $aulasIds);
+            })
+            ->with([
+                'periods:id,hour',
+                'classrooms:name',
+                'docenteMateriaGrupos.teacher',
+                'statusReservation'
+            ])
+            ->oldest()
+            ->paginate(10);
+
+        $reservations = $this->transformRservation($reservations);
+    
+        if ($reservations->isEmpty()) {
+            return response()->json(['message' => 'No se encontraron reservaciones para el rango de fechas proporcionado'], 404);
+        }
+    
+        return $reservations;
+    }
+
 }
