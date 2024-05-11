@@ -4,12 +4,15 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\CreateReservationRequest;
 use App\Http\Requests\UpdateReservationRequest;
+use App\Mail\ReservationMail;
 use App\Models\Availability;
 use App\Models\DocenteMateriaGrupo;
 use App\Models\Reservation;
+use App\Models\Teacher;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 use PhpParser\Node\Stmt\TryCatch;
 
 class ReservationController extends Controller
@@ -307,6 +310,11 @@ class ReservationController extends Controller
                 return response()->json([
                     'status' => false,
                     'message' => 'La fecha de reserva no es válida'], 400);
+            }
+
+            $teachers = $reservation->docenteMateriaGrupos->pluck('teacher');
+            foreach($teachers as $teacher){
+                Mail::to($teacher->email)->send(new ReservationMail($reservation));
             }
         }        
 
