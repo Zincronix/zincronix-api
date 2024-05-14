@@ -40,32 +40,39 @@ class ReservationController extends Controller
     {
 
         $state = $this->getState($reservation);
-        $teachers = $this->getUniqueValues($reservation->docenteMateriaGrupos, 'teacher.name');
-        $subjects = $this->getUniqueValues($reservation->docenteMateriaGrupos, 'subject');
-        $groups = $this->getUniqueValues($reservation->docenteMateriaGrupos, 'group');
+        // $teachers = $this->getUniqueValues($reservation->docenteMateriaGrupos, 'teacher.name');
+        // $subjects = $this->getUniqueValues($reservation->docenteMateriaGrupos, 'subject');
+        // $groups = $this->getUniqueValues($reservation->docenteMateriaGrupos, 'group');
         $classrooms = $this->getValues($reservation->classrooms, 'name');
         $periods = $this->getValues($reservation->periods, 'hour');
 
-        $teachersSubjectsGroups = $reservation->docenteMateriaGrupos->map(function ($docenteMateriaGrupo) {
-            return [
-                'teacher' => $docenteMateriaGrupo->teacher->name,
-                'subject' => $docenteMateriaGrupo->subject,
-                'group' => $docenteMateriaGrupo->group,
-            ];
-        });
+        $docenteMateriaGrupoData = [];
 
-        dd($teachersSubjectsGroups[0]);
+        foreach ($reservation->docenteMateriaGrupos as $docenteMateriaGrupo) {
+            $teacherData = [
+                'teacher_id' => $docenteMateriaGrupo->teacher->id,
+                'teacher_name' => $docenteMateriaGrupo->teacher->name,
+                'subjects' => [],
+            ];            
+            
+                $subjectData = [
+                    'subject_name' => $docenteMateriaGrupo->subject->name,
+                    'groups' => $docenteMateriaGrupo->subject->groups->pluck('name')->toArray(),
+                ];
+                $teacherData['subjects'][] = $subjectData;
+            
+
+            $docenteMateriaGrupoData[] = $teacherData;
+        }
 
         return [
             'reservation_id' => $reservation->id,
-            'teachers' => $teachers,
-            'subjects' => $subjects,
-            'groups' => $groups,
             'classrooms' => $classrooms,
             'date' => date('d/m/Y', strtotime($reservation->date)),
             'periods' => $periods,
             'state' => $state,
             'reason' => $reservation->reason,
+            'docenteMateriaGrupo' => $docenteMateriaGrupoData
         ];
         // $reservations->transform(function ($reservation) {       
                              
