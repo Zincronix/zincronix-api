@@ -36,28 +36,75 @@ class ReservationController extends Controller
         return $reservations;
     }
 
-    private function transformRservation($reservations)
+    private function transformRservation($reservation)
     {
-        $reservations->getCollection()->transform(function ($reservation) {       
-                             
-            $state = [
-                'state_id' => $reservation->statusReservation->id,
-                'state' => $reservation->statusReservation->state,
-            ];
-               
+
+        $state = $this->getState($reservation);
+        $teachers = $this->getUniqueValues($reservation->docenteMateriaGrupos, 'teacher.name');
+        $subjects = $this->getUniqueValues($reservation->docenteMateriaGrupos, 'subject');
+        $groups = $this->getUniqueValues($reservation->docenteMateriaGrupos, 'group');
+        $classrooms = $this->getValues($reservation->classrooms, 'name');
+        $periods = $this->getValues($reservation->periods, 'hour');
+
+        $teachersSubjectsGroups = $reservation->docenteMateriaGrupos->map(function ($docenteMateriaGrupo) {
             return [
-                'reservation_id' => $reservation->id,
-                'teachers' => $reservation->docenteMateriaGrupos->pluck('teacher.name')->unique()->values()->toArray(),
-                'classrooms' => $reservation->classrooms->pluck('name')->toArray(),
-                //'date' => $reservation->date,
-                'date' => date('d/m/Y', strtotime($reservation->date)),
-                'periods' => $reservation->periods->pluck('hour')->toArray(),
-                //'status' => $reservation->statusReservation,
-                'state' => $state,
-                'reason' => $reservation->reason,
+                'teacher' => $docenteMateriaGrupo->teacher->name,
+                'subject' => $docenteMateriaGrupo->subject,
+                'group' => $docenteMateriaGrupo->group,
             ];
         });
-        return $reservations;
+
+        dd($teachersSubjectsGroups[0]);
+
+        return [
+            'reservation_id' => $reservation->id,
+            'teachers' => $teachers,
+            'subjects' => $subjects,
+            'groups' => $groups,
+            'classrooms' => $classrooms,
+            'date' => date('d/m/Y', strtotime($reservation->date)),
+            'periods' => $periods,
+            'state' => $state,
+            'reason' => $reservation->reason,
+        ];
+        // $reservations->transform(function ($reservation) {       
+                             
+        //     $state = [
+        //         'state_id' => $reservation->statusReservation->id,
+        //         'state' => $reservation->statusReservation->state,
+        //     ];
+               
+        //     return [
+        //         'reservation_id' => $reservation->id,
+        //         'teachers' => $reservation->docenteMateriaGrupos->pluck('teacher.name')->unique()->values()->toArray(),
+        //         'classrooms' => $reservation->classrooms->pluck('name')->toArray(),
+        //         //'date' => $reservation->date,
+        //         'date' => date('d/m/Y', strtotime($reservation->date)),
+        //         'periods' => $reservation->periods->pluck('hour')->toArray(),
+        //         //'status' => $reservation->statusReservation,
+        //         'state' => $state,
+        //         'reason' => $reservation->reason,
+        //     ];
+        // });
+        // return $reservations;
+    }
+
+    private function getState($reservation)
+    {
+        return [
+            'state_id' => $reservation->statusReservation->id,
+            'state' => $reservation->statusReservation->state,
+        ];
+    }
+
+    private function getUniqueValues($collection, $attribute)
+    {
+        return $collection->pluck($attribute)->unique()->values()->toArray();
+    }
+
+    private function getValues($collection, $attribute)
+    {
+        return $collection->pluck($attribute)->toArray();
     }
 
     public function orderBy(Request $request)
@@ -90,8 +137,6 @@ class ReservationController extends Controller
         $date = Carbon::parse($date);
 
         $dayWeekNumber = $date->dayOfWeek;
-
-        //$classroom_id = null;
 
         $reservas = Reservation::whereHas('classrooms', function ($query) use ($classroom_id) {
             $query->where('classroom_id', $classroom_id);
@@ -282,7 +327,18 @@ class ReservationController extends Controller
      */
     public function show(Reservation $reservation)
     {
-        //
+        $reservation->load([
+            'periods:id,hour',
+            'classrooms:name',
+            'docenteMateriaGrupos.teacher',
+            'docenteMateriaGrupos.subject',
+            'docenteMateriaGrupos.group',
+            'statusReservation'
+        ]);
+
+        $reservation = $this->transformRservation($reservation);
+
+        return $reservation;
     }
 
     /**
@@ -313,8 +369,12 @@ class ReservationController extends Controller
             }
 
             $teachers = $reservation->docenteMateriaGrupos->pluck('teacher');
+            
+            $subjects = $this->subjectsFormat($reservation->docenteMateriaGrupos);
+            
+            dd($subjects);
             foreach($teachers as $teacher){
-                Mail::to($teacher->email)->send(new ReservationMail($reservation));
+                Mail::to($teacher->email)->send(new ReservationMail($reservation, $reservation->classrooms, $teachers, $subjects));
             }
         }        
 
@@ -337,29 +397,10 @@ class ReservationController extends Controller
         return false;
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Reservation  $reservation
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Reservation $reservation)
+    private function subjectsFormat($docenteMateriaGrupos)
     {
-        //
-    }
-
-    public function aprove(Request $request){
-        $reserva=Reservation::find($request->id);
-        if($reserva && $request->response==1){
-            $reserva->status_reservation_id=1;
-        }else{
-            if($request->response==2){
-            $reserva->status_reservation_id=2;
-            }else{
-                $reserva->status_reservation_id=3;
-            }
-        }
-        $reserva->save();
-        return response()->json("Aprobado correctamente",200);
+        $res = collect();
+        
+        return $res;
     }
 }
