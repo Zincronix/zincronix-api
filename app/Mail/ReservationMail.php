@@ -11,7 +11,7 @@ class ReservationMail extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $reservation, $classrooms, $teachers, $subjects;
+    public $classrooms, $date, $docenteMateriaGrupo, $hour;
     
 
     /**
@@ -19,12 +19,14 @@ class ReservationMail extends Mailable
      *
      * @return void
      */
-    public function __construct($reservation, $classrooms, $teachers, $subjects)
+    public function __construct($classrooms, $date, $docenteMateriaGrupo, $hour)
     {
-        $this->reservation = $reservation;
         $this->classrooms = $classrooms;
-        $this->teachers = $teachers;
-        $this->subjects = $subjects;
+
+        // dd($classrooms);
+        $this->date = $date;
+        $this->docenteMateriaGrupo = $docenteMateriaGrupo;
+        $this->hour = $hour;
     }
 
     /**
@@ -34,10 +36,6 @@ class ReservationMail extends Mailable
      */
     public function build()
     {
-        return $this->markdown('emails.reservations.confirmar')
-                    ->with([
-                        'date' => "Lunes 24 de mayo",
-                        'hora' => "De 08:15 am. a 09:45 am."
-                    ]);
+        return $this->markdown('emails.reservations.confirmar');
     }
 }
