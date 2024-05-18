@@ -4,12 +4,15 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\CreateReservationRequest;
 use App\Http\Requests\UpdateReservationRequest;
+use App\Mail\ReservationMail;
 use App\Models\Availability;
 use App\Models\DocenteMateriaGrupo;
 use App\Models\Reservation;
+use App\Models\Teacher;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 use PhpParser\Node\Stmt\TryCatch;
 
 class ReservationController extends Controller
@@ -22,45 +25,80 @@ class ReservationController extends Controller
     public function index()
     {
         $reservations = Reservation::with([
-            'periods:id,hour',
-            'classrooms:name',
+            'periods:hour',
+            'classrooms:name,capacity',
             'docenteMateriaGrupos.teacher',
             'statusReservation'
-        ])->oldest()->paginate(10);
+        ])->get();
 
-        $reservations = $this->transformRservation($reservations);
+        $reservations->transform(function ($reservation) {
+            return $this->transformRservation($reservation);
+        });
+    
         
         return $reservations;
     }
 
-    private function transformRservation($reservations)
+    private function transformRservation($reservation)
     {
-        $reservations->getCollection()->transform(function ($reservation) {       
-                             
-            $state = [
-                'state_id' => $reservation->statusReservation->id,
-                'state' => $reservation->statusReservation->state,
-            ];
-               
-            return [
-                'reservation_id' => $reservation->id,
-                'teachers' => $reservation->docenteMateriaGrupos->pluck('teacher.name')->unique()->values()->toArray(),
-                'classrooms' => $reservation->classrooms->pluck('name')->toArray(),
-                //'date' => $reservation->date,
-                'date' => date('d/m/Y', strtotime($reservation->date)),
-                'periods' => $reservation->periods->pluck('hour')->toArray(),
-                //'status' => $reservation->statusReservation,
-                'state' => $state,
-                'reason' => $reservation->reason,
-            ];
-        });
-        return $reservations;
+        $state = $reservation->statusReservation;
+        // $classrooms = $this->getValues($reservation->classrooms, 'name');
+        $classrooms = $reservation->classrooms;
+        $periods = $this->getValues($reservation->periods, 'hour');
+
+        $teacherData = [];
+
+        foreach ($reservation->docenteMateriaGrupos as $docenteMateriaGrupo) {
+            $teacherId = $docenteMateriaGrupo->teacher->id;
+            $teacherName = $docenteMateriaGrupo->teacher->name;
+            $subjectName = $docenteMateriaGrupo->subject->name;
+            
+            $groups = $reservation->docenteMateriaGrupos
+            ->where('teacher_id', $teacherId)
+            ->where('subject_id', $docenteMateriaGrupo->subject->id)
+            ->load('group') 
+            ->pluck('group.name') 
+            ->toArray();            
+
+            $teacherData[$teacherId]['teacher_id'] = $teacherId;
+            $teacherData[$teacherId]['teacher_name'] = $teacherName;
+            $teacherData[$teacherId]['subjects'][$subjectName]['groups'] = $groups;
+        }
+    
+        return [
+            'reservation_id' => $reservation->id,
+            'classrooms' => $classrooms,
+            'date' => date('d/m/Y', strtotime($reservation->date)),
+            'periods' => $periods,
+            'state' => $state,
+            'reason' => $reservation->reason,
+            'docenteMateriaGrupo' => array_values($teacherData)
+        ];
     }
+
+    private function getState($reservation)
+    {
+        return [
+            'state_id' => $reservation->statusReservation->id,
+            'state' => $reservation->statusReservation->state,
+        ];
+    }
+    
+    private function getValues($collection, $attribute)
+    {
+        return $collection->pluck($attribute)->toArray();
+    }
+    
+    private function getUniqueValues($collection, $attribute)
+    {
+        return $collection->pluck($attribute)->unique()->values()->toArray();
+    }
+
 
     public function orderBy(Request $request)
     {
         $reservations = Reservation::with([
-            'periods:id,hour',
+            'periods:hour',
             'classrooms:name',
             'docenteMateriaGrupos.teacher'
         ]);        
@@ -87,8 +125,6 @@ class ReservationController extends Controller
         $date = Carbon::parse($date);
 
         $dayWeekNumber = $date->dayOfWeek;
-
-        //$classroom_id = null;
 
         $reservas = Reservation::whereHas('classrooms', function ($query) use ($classroom_id) {
             $query->where('classroom_id', $classroom_id);
@@ -279,7 +315,17 @@ class ReservationController extends Controller
      */
     public function show(Reservation $reservation)
     {
-        //
+        $reservation->load([
+            'periods:hour',
+            'classrooms:name,capacity',
+            'docenteMateriaGrupos.teacher',
+            'docenteMateriaGrupos.subject.groups',
+            'statusReservation'
+        ]);
+
+        $reservation = $this->transformRservation($reservation);
+
+        return $reservation;
     }
 
     /**
@@ -308,7 +354,18 @@ class ReservationController extends Controller
                     'status' => false,
                     'message' => 'La fecha de reserva no es válida'], 400);
             }
-        }        
+
+        }
+        
+        $teachers = $reservation->docenteMateriaGrupos->pluck('teacher');
+        $emails = $teachers->pluck('email')->toArray();
+        $formatReservation = $this->show($reservation);
+        $convertirDate = $this->convertirDate($reservation->date);
+        $convertirHour = $this->convertirHour($reservation->periods);
+
+        Mail::to(config('mail.from.address'))
+        ->bcc($emails)
+        ->queue(new ReservationMail($formatReservation['classrooms'], $convertirDate, $formatReservation['docenteMateriaGrupo'], $convertirHour));
 
         $reservation->update($request->all());
 
@@ -323,35 +380,23 @@ class ReservationController extends Controller
     {
         $dateCarbon = Carbon::parse($date);
 
-        if($dateCarbon->isToday() || $dateCarbon->isFuture()){
-            return true;
-        }
-        return false;
+        return $dateCarbon->isToday() || $dateCarbon->isFuture();
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Reservation  $reservation
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Reservation $reservation)
+    private function convertirDate($date)
     {
-        //
+        $fechaCarbon = Carbon::createFromFormat('Y-m-d', $date);
+        Carbon::setLocale('es');
+
+        return $fechaCarbon->isoFormat('dddd, D [de] MMMM [de] YYYY');
     }
 
-    public function aprove(Request $request){
-        $reserva=Reservation::find($request->id);
-        if($reserva && $request->response==1){
-            $reserva->status_reservation_id=1;
-        }else{
-            if($request->response==2){
-            $reserva->status_reservation_id=2;
-            }else{
-                $reserva->status_reservation_id=3;
-            }
-        }
-        $reserva->save();
-        return response()->json("Aprobado correctamente",200);
+    private function convertirHour($periods)
+    {
+        $arrPeriods = $periods->pluck('hour');
+        $primeraHora = $arrPeriods->first();
+        $ultimaHora = $arrPeriods->last();
+        
+        return $primeraHora . ' a ' . $ultimaHora;
     }
 }

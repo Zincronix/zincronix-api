@@ -27,7 +27,7 @@ class CreateReservationRequest extends FormRequest
             'periods' => 'required|array',
             'periods.*' => 'required|integer|exists:periods,id', 
             
-            'reason_reservation' => 'required|string|max:255',
+            'reason_reservation' => 'string|max:255',
 
             'date_reservation' => 'required|date|after_or_equal:today',
 
@@ -38,7 +38,7 @@ class CreateReservationRequest extends FormRequest
             'teachers.*.teacher_id' => 'required|integer|exists:teachers,id', 
             'teachers.*.groups' => 'required|array',
             'teachers.*.groups.*' => 'required|array',
-            'teachers.*.groups.*.*' => 'required|integer|exists:groups,id', 
+            //'teachers.*.groups.*.*' => 'required|integer|exists:groups,id', 
         ];
     }
 
@@ -48,8 +48,7 @@ class CreateReservationRequest extends FormRequest
             'periods.*.required' => 'El periodo es obligatorio.',
             'periods.*.integer' => 'El periodo debe ser un número entero.',
             'periods.*.exists' => 'El periodo seleccionado no es válido.',
-
-            'reason_reservation.required' => 'El motivo de la reserva es obligatorio.',
+            
             'reason_reservation.string' => 'El motivo de la reserva debe ser una cadena de texto.',
             'reason_reservation.max' => 'El motivo de la reserva no debe exceder los :max caracteres.',
 
