@@ -50,7 +50,12 @@ class SettingController extends Controller
      */
     public function update(UpdateSettingRequest $request, Setting $setting)
     {
-        //
+        $setting->update($request->all());
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Settings actualizado exitosamente'
+        ], 200);
     }
 
     /**

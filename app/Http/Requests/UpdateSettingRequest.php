@@ -13,7 +13,7 @@ class UpdateSettingRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +24,16 @@ class UpdateSettingRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'deadline_reservation' => 'date',
+            'type_reservation' => 'in:MANUAL,AUTOMATICO',
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            'deadline_reservation.date' => 'La fecha límite de reserva debe ser una fecha válida.',
+            'type_reservation.in' => 'El tipo de reserva debe ser MANUAL o AUTOMATICO.',
         ];
     }
 }
