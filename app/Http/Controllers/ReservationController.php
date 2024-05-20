@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\CreateReservationRequest;
 use App\Http\Requests\UpdateReservationRequest;
+use App\Jobs\EmailJob;
 use App\Mail\ReservationMail;
 use App\Models\Availability;
 use App\Models\DocenteMateriaGrupo;
@@ -42,7 +43,6 @@ class ReservationController extends Controller
     private function transformRservation($reservation)
     {
         $state = $reservation->statusReservation;
-        // $classrooms = $this->getValues($reservation->classrooms, 'name');
         $classrooms = $reservation->classrooms;
         $periods = $this->getValues($reservation->periods, 'hour');
 
@@ -356,23 +356,14 @@ class ReservationController extends Controller
             }
 
         }
-        
-        $teachers = $reservation->docenteMateriaGrupos->pluck('teacher');
-        $emails = $teachers->pluck('email')->toArray();
-        $formatReservation = $this->show($reservation);
-        $convertirDate = $this->convertirDate($reservation->date);
-        $convertirHour = $this->convertirHour($reservation->periods);
-
-        Mail::to(config('mail.from.address'))
-        ->bcc($emails)
-        ->queue(new ReservationMail($formatReservation['classrooms'], $convertirDate, $formatReservation['docenteMateriaGrupo'], $convertirHour));
 
         $reservation->update($request->all());
+        
+        EmailJob::dispatch($reservation, $request->status_reservation_id);                  
 
         return response()->json([
             'status' => true,
-            'message' => 'Solicitud de reserva actualizado exitosamente',
-            'solicitud' => $reservation
+            'message' => 'Solicitud de reserva actualizado exitosamente'
         ], 200);
     }
 
@@ -381,22 +372,5 @@ class ReservationController extends Controller
         $dateCarbon = Carbon::parse($date);
 
         return $dateCarbon->isToday() || $dateCarbon->isFuture();
-    }
-
-    private function convertirDate($date)
-    {
-        $fechaCarbon = Carbon::createFromFormat('Y-m-d', $date);
-        Carbon::setLocale('es');
-
-        return $fechaCarbon->isoFormat('dddd, D [de] MMMM [de] YYYY');
-    }
-
-    private function convertirHour($periods)
-    {
-        $arrPeriods = $periods->pluck('hour');
-        $primeraHora = $arrPeriods->first();
-        $ultimaHora = $arrPeriods->last();
-        
-        return $primeraHora . ' a ' . $ultimaHora;
     }
 }
