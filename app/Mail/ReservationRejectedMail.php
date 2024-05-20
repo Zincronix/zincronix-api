@@ -7,12 +7,11 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
-class ReservationMail extends Mailable
+class ReservationRejectedMail extends Mailable
 {
     use Queueable, SerializesModels;
 
     protected $classrooms, $date, $docenteMateriaGrupo, $hour;
-    
 
     /**
      * Create a new message instance.
@@ -33,11 +32,11 @@ class ReservationMail extends Mailable
      */
     public function build()
     {
-        return $this->markdown('emails.reservations.confirmar', [
+        return $this->markdown('emails.reservations.rechazar', [
             'classrooms' => $this->classrooms,
             'date' => $this->date,
             'docenteMateriaGrupo' => $this->docenteMateriaGrupo,
             'hour' => $this->hour
-        ])->subject('Confirmación de Reserva');
+        ])->subject('Rechazo de solicitud de Reserva');
     }
 }

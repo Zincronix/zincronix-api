@@ -1,11 +1,11 @@
 @component('mail::message')
     
-# Confirmación de reserva de ambiente(s).
+# Rechazo de solicitud de reserva de ambiente(s).
 
 ## Estimado docente,
 
-Nos complace informarle que su solicitud de reserva ha sido aceptada. 
-A continuación, le proporcionamos los detalles de su reserva:
+Lamentamos informarle que su solicitud de reserva no ha sido aceptada. 
+A continuación, le proporcionamos los detalles de su solicitud rechazada:
 
 ## Información de la fecha y hora
 
@@ -15,7 +15,7 @@ A continuación, le proporcionamos los detalles de su reserva:
 @endcomponent
 
 
-## Información del ambiente(s)
+## Información del ambiente(s) solicitudado(s)
 
 @component('mail::table')
 | Ambiente                  | Capacidad                     |
@@ -25,11 +25,13 @@ A continuación, le proporcionamos los detalles de su reserva:
 @endforeach
 @endcomponent
 
-@component('mail::button', ['url' => URL::to('/')])
-Mira tu reserva aquí
+Sentimos los inconvenientes que esto pueda causar. 
+
+@component('mail::button', ['url' => 'http://localhost:5173/reservar/detalle'])
+Hacer otra solicitud
 @endcomponent
 
-Gracias, <br>
+Gracias por su compresión, <br>
 {{ config('app.name') }}
 
 @endcomponent
