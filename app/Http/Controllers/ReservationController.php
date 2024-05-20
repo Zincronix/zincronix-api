@@ -9,6 +9,7 @@ use App\Mail\ReservationMail;
 use App\Models\Availability;
 use App\Models\DocenteMateriaGrupo;
 use App\Models\Reservation;
+use App\Models\Setting;
 use App\Models\Teacher;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -258,8 +259,9 @@ class ReservationController extends Controller
     private function reserve($request)
     {
         $reservation = new Reservation;
-        //todo logica para elegir entre manera automatica y manera manual
-        if(true){
+        
+        $modoReservation = Setting::where('id', 1)->value('type_reservation');
+        if($modoReservation == 'MANUAL'){
             $reservation->status_reservation_id = 2;
         }else{
             $reservation->status_reservation_id = 1;

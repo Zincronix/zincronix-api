@@ -64,4 +64,4 @@ Route::post('reservaSemanal',[ReservationController::class,'weekReservation']);
 
 Route::apiResource('holidays',HolidayController::class);
 
-Route::get('settings', [SettingController::class, 'index']);
+Route::apiResource('settings', SettingController::class);
