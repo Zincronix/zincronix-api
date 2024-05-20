@@ -12,6 +12,7 @@ use App\Http\Controllers\SettingController;
 use App\Http\Controllers\SubjectController;
 use App\Http\Controllers\TeacherController;
 use App\Models\Classroom;
+use App\Models\Reservation;
 use App\Models\Setting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -59,6 +60,7 @@ Route::apiResource('reservations', ReservationController::class);
 Route::get('reservationOrderBy', [ReservationController::class, 'orderBy']);
 Route::get('reservations/{classroom_id}/available-periods/{date}', [ReservationController::class, 'periodsForClassroomReservation']);
 Route::get('periods2', [PeriodController::class, 'periodsForFilterByCantidad']);
+Route::post('reservaSemanal',[ReservationController::class,'weekReservation']);
 
 Route::apiResource('holidays',HolidayController::class);
 
