@@ -12,8 +12,12 @@ class DocenteMateriaGrupoController extends Controller
     
     public function subjectsOfTeacher($teacher_id)
     {
-        $teacher = Teacher::findOrFail($teacher_id);
-        return $teacher->subjects()->distinct()->get();
+        // $teacher = Teacher::findOrFail($teacher_id);
+        // return $teacher->subjects()->distinct()->get();
+
+        return Subject::whereHas('teachers', function ($query) use ($teacher_id) {
+            $query->where('teachers.id', $teacher_id);
+        })->distinct()->get();
     }
     
     public function groupsOfSubjectOfTeacher(Request $request)

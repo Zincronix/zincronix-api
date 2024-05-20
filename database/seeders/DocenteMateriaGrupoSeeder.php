@@ -16,18 +16,18 @@ class DocenteMateriaGrupoSeeder extends Seeder
     public function run()
     {
 
-        // $subjects = [21,63];
-        // $groupsPerSubject = 4;
+        $subjects = [21,63];
+        $groupsPerSubject = 4;
 
-        // for($i=21;$i<64;$i++){
-        //     for ($j = 2; $j <= $groupsPerSubject + 1; $j++) {
-        //         DocenteMateriaGrupo::create([
-        //             'teacher_id' => null,
-        //             'subject_id' => $i,
-        //             'group_id' => $j,
-        //         ]);
-        //     }
-        // }
+        for($i=21;$i<64;$i++){
+            for ($j = 2; $j <= $groupsPerSubject + 1; $j++) {
+                DocenteMateriaGrupo::create([
+                    'teacher_id' => null,
+                    'subject_id' => $i,
+                    'group_id' => $j,
+                ]);
+            }
+        }
  
         DB::table('docente_materia_grupos')->insert([
             [
@@ -85,46 +85,46 @@ class DocenteMateriaGrupoSeeder extends Seeder
                 'subject_id'=>7,
                 'group_id'=>1,
             ],
-            // [
-            //     'teacher_id'=>null,
-            //     'subject_id'=>7,
-            //     'group_id'=>2,
-            // ],
-            // [
-            //     'teacher_id'=>null,
-            //     'subject_id'=>7,
-            //     'group_id'=>3,
-            // ],
-            // [
-            //     'teacher_id'=>null,
-            //     'subject_id'=>7,
-            //     'group_id'=>4,
-            // ],
+            [
+                'teacher_id'=>null,
+                'subject_id'=>7,
+                'group_id'=>2,
+            ],
+            [
+                'teacher_id'=>null,
+                'subject_id'=>7,
+                'group_id'=>3,
+            ],
+            [
+                'teacher_id'=>null,
+                'subject_id'=>7,
+                'group_id'=>4,
+            ],
             [
                 'teacher_id'=>4,
                 'subject_id'=>8,
                 'group_id'=>1,
             ],
-            // [
-            //     'teacher_id'=>null,
-            //     'subject_id'=>8,
-            //     'group_id'=>2,
-            // ],
-            // [
-            //     'teacher_id'=>null,
-            //     'subject_id'=>8,
-            //     'group_id'=>3,
-            // ],
-            // [
-            //     'teacher_id'=>null,
-            //     'subject_id'=>8,
-            //     'group_id'=>4,
-            // ],
-            // [
-            //     'teacher_id'=>null,
-            //     'subject_id'=>8,
-            //     'group_id'=>5,
-            // ],
+            [
+                'teacher_id'=>null,
+                'subject_id'=>8,
+                'group_id'=>2,
+            ],
+            [
+                'teacher_id'=>null,
+                'subject_id'=>8,
+                'group_id'=>3,
+            ],
+            [
+                'teacher_id'=>null,
+                'subject_id'=>8,
+                'group_id'=>4,
+            ],
+            [
+                'teacher_id'=>null,
+                'subject_id'=>8,
+                'group_id'=>5,
+            ],
             [
                 'teacher_id'=>3,
                 'subject_id'=>7,
@@ -135,306 +135,306 @@ class DocenteMateriaGrupoSeeder extends Seeder
                 'subject_id'=>10,
                 'group_id'=>1,
             ],
-            // [
-            //     'teacher_id'=>null,
-            //     'subject_id'=>10,
-            //     'group_id'=>2,
-            // ],
-            // [
-            //     'teacher_id'=>null,
-            //     'subject_id'=>10,
-            //     'group_id'=>3,
-            // ],
-            // [
-            //     'teacher_id'=>null,
-            //     'subject_id'=>10,
-            //     'group_id'=>4,
-            // ],
-            // [
-            //     'teacher_id'=>null,
-            //     'subject_id'=>10,
-            //     'group_id'=>5,
-            // ],
+            [
+                'teacher_id'=>null,
+                'subject_id'=>10,
+                'group_id'=>2,
+            ],
+            [
+                'teacher_id'=>null,
+                'subject_id'=>10,
+                'group_id'=>3,
+            ],
+            [
+                'teacher_id'=>null,
+                'subject_id'=>10,
+                'group_id'=>4,
+            ],
+            [
+                'teacher_id'=>null,
+                'subject_id'=>10,
+                'group_id'=>5,
+            ],
             [
                 'teacher_id'=>8,
                 'subject_id'=>11,
                 'group_id'=>1,
             ],
-            // [
-            //     'teacher_id'=>null,
-            //     'subject_id'=>11,
-            //     'group_id'=>2,
-            // ],
-            // [
-            //     'teacher_id'=>null,
-            //     'subject_id'=>11,
-            //     'group_id'=>3,
-            // ],
-            // [
-            //     'teacher_id'=>null,
-            //     'subject_id'=>11,
-            //     'group_id'=>4,
-            // ],
-            // [
-            //     'teacher_id'=>null,
-            //     'subject_id'=>11,
-            //     'group_id'=>5,
-            // ],
+            [
+                'teacher_id'=>null,
+                'subject_id'=>11,
+                'group_id'=>2,
+            ],
+            [
+                'teacher_id'=>null,
+                'subject_id'=>11,
+                'group_id'=>3,
+            ],
+            [
+                'teacher_id'=>null,
+                'subject_id'=>11,
+                'group_id'=>4,
+            ],
+            [
+                'teacher_id'=>null,
+                'subject_id'=>11,
+                'group_id'=>5,
+            ],
             [
                 'teacher_id'=>9,
                 'subject_id'=>9,
                 'group_id'=>1,
             ],
-            // [
-            //     'teacher_id'=>null,
-            //     'subject_id'=>9,
-            //     'group_id'=>2,
-            // ],
-            // [
-            //     'teacher_id'=>null,
-            //     'subject_id'=>9,
-            //     'group_id'=>3,
-            // ],
-            // [
-            //     'teacher_id'=>null,
-            //     'subject_id'=>9,
-            //     'group_id'=>4,
-            // ],
-            // [
-            //     'teacher_id'=>null,
-            //     'subject_id'=>9,
-            //     'group_id'=>5,
-            // ],
+            [
+                'teacher_id'=>null,
+                'subject_id'=>9,
+                'group_id'=>2,
+            ],
+            [
+                'teacher_id'=>null,
+                'subject_id'=>9,
+                'group_id'=>3,
+            ],
+            [
+                'teacher_id'=>null,
+                'subject_id'=>9,
+                'group_id'=>4,
+            ],
+            [
+                'teacher_id'=>null,
+                'subject_id'=>9,
+                'group_id'=>5,
+            ],
             [
                 'teacher_id'=>10,
                 'subject_id'=>12,
                 'group_id'=>1,
             ],
-            // [
-            //     'teacher_id'=>null,
-            //     'subject_id'=>12,
-            //     'group_id'=>2,
-            // ],
-            // [
-            //     'teacher_id'=>null,
-            //     'subject_id'=>12,
-            //     'group_id'=>3,
-            // ],
-            // [
-            //     'teacher_id'=>null,
-            //     'subject_id'=>12,
-            //     'group_id'=>4,
-            // ],
-            // [
-            //     'teacher_id'=>null,
-            //     'subject_id'=>12,
-            //     'group_id'=>5,
-            // ],
+            [
+                'teacher_id'=>null,
+                'subject_id'=>12,
+                'group_id'=>2,
+            ],
+            [
+                'teacher_id'=>null,
+                'subject_id'=>12,
+                'group_id'=>3,
+            ],
+            [
+                'teacher_id'=>null,
+                'subject_id'=>12,
+                'group_id'=>4,
+            ],
+            [
+                'teacher_id'=>null,
+                'subject_id'=>12,
+                'group_id'=>5,
+            ],
             [
                 'teacher_id'=>10,
                 'subject_id'=>13,
                 'group_id'=>1,
             ],
-            // [
-            //     'teacher_id'=>null,
-            //     'subject_id'=>13,
-            //     'group_id'=>2,
-            // ],
-            // [
-            //     'teacher_id'=>null,
-            //     'subject_id'=>13,
-            //     'group_id'=>3,
-            // ],
-            // [
-            //     'teacher_id'=>null,
-            //     'subject_id'=>13,
-            //     'group_id'=>4,
-            // ],
-            // [
-            //     'teacher_id'=>null,
-            //     'subject_id'=>13,
-            //     'group_id'=>5,
-            // ],
-            // [
-            //     'teacher_id'=>null,
-            //     'subject_id'=>18,
-            //     'group_id'=>2,
-            // ],
-            // [
-            //     'teacher_id'=>null,
-            //     'subject_id'=>18,
-            //     'group_id'=>3,
-            // ],
-            // [
-            //     'teacher_id'=>null,
-            //     'subject_id'=>18,
-            //     'group_id'=>4,
-            // ],
-            // [
-            //     'teacher_id'=>null,
-            //     'subject_id'=>18,
-            //     'group_id'=>5,
-            // ],
-            // [
-            //     'teacher_id'=>null,
-            //     'subject_id'=>5,
-            //     'group_id'=>2,
-            // ],
-            // [
-            //     'teacher_id'=>null,
-            //     'subject_id'=>5,
-            //     'group_id'=>3,
-            // ],
-            // [
-            //     'teacher_id'=>null,
-            //     'subject_id'=>5,
-            //     'group_id'=>4,
-            // ],
-            // [
-            //     'teacher_id'=>null,
-            //     'subject_id'=>5,
-            //     'group_id'=>5,
-            // ],
-            // [
-            //     'teacher_id'=>null,
-            //     'subject_id'=>6,
-            //     'group_id'=>2,
-            // ],
-            // [
-            //     'teacher_id'=>null,
-            //     'subject_id'=>6,
-            //     'group_id'=>3,
-            // ],
-            // [
-            //     'teacher_id'=>null,
-            //     'subject_id'=>6,
-            //     'group_id'=>4,
-            // ],
-            // [
-            //     'teacher_id'=>null,
-            //     'subject_id'=>6,
-            //     'group_id'=>5,
-            // ],
-            // [
-            //     'teacher_id'=>null,
-            //     'subject_id'=>14,
-            //     'group_id'=>2,
-            // ],
-            // [
-            //     'teacher_id'=>null,
-            //     'subject_id'=>14,
-            //     'group_id'=>3,
-            // ],
-            // [
-            //     'teacher_id'=>null,
-            //     'subject_id'=>14,
-            //     'group_id'=>4,
-            // ],
-            // [
-            //     'teacher_id'=>null,
-            //     'subject_id'=>14,
-            //     'group_id'=>5,
-            // ],
-            // [
-            //     'teacher_id'=>null,
-            //     'subject_id'=>15,
-            //     'group_id'=>2,
-            // ],
-            // [
-            //     'teacher_id'=>null,
-            //     'subject_id'=>15,
-            //     'group_id'=>3,
-            // ],
-            // [
-            //     'teacher_id'=>null,
-            //     'subject_id'=>15,
-            //     'group_id'=>4,
-            // ],
-            // [
-            //     'teacher_id'=>null,
-            //     'subject_id'=>15,
-            //     'group_id'=>5,
-            // ],
-            // [
-            //     'teacher_id'=>null,
-            //     'subject_id'=>16,
-            //     'group_id'=>2,
-            // ],
-            // [
-            //     'teacher_id'=>null,
-            //     'subject_id'=>16,
-            //     'group_id'=>3,
-            // ],
-            // [
-            //     'teacher_id'=>null,
-            //     'subject_id'=>16,
-            //     'group_id'=>4,
-            // ],
-            // [
-            //     'teacher_id'=>null,
-            //     'subject_id'=>16,
-            //     'group_id'=>5,
-            // ],
-            // [
-            //     'teacher_id'=>null,
-            //     'subject_id'=>17,
-            //     'group_id'=>2,
-            // ],
-            // [
-            //     'teacher_id'=>null,
-            //     'subject_id'=>17,
-            //     'group_id'=>3,
-            // ],
-            // [
-            //     'teacher_id'=>null,
-            //     'subject_id'=>17,
-            //     'group_id'=>4,
-            // ],
-            // [
-            //     'teacher_id'=>null,
-            //     'subject_id'=>17,
-            //     'group_id'=>5,
-            // ],
-            // [
-            //     'teacher_id'=>null,
-            //     'subject_id'=>19,
-            //     'group_id'=>2,
-            // ],
-            // [
-            //     'teacher_id'=>null,
-            //     'subject_id'=>19,
-            //     'group_id'=>3,
-            // ],
-            // [
-            //     'teacher_id'=>null,
-            //     'subject_id'=>19,
-            //     'group_id'=>4,
-            // ],
-            // [
-            //     'teacher_id'=>null,
-            //     'subject_id'=>19,
-            //     'group_id'=>5,
-            // ],
-            // [
-            //     'teacher_id'=>null,
-            //     'subject_id'=>20,
-            //     'group_id'=>2,
-            // ],
-            // [
-            //     'teacher_id'=>null,
-            //     'subject_id'=>20,
-            //     'group_id'=>3,
-            // ],
-            // [
-            //     'teacher_id'=>null,
-            //     'subject_id'=>20,
-            //     'group_id'=>4,
-            // ],
-            // [
-            //     'teacher_id'=>null,
-            //     'subject_id'=>20,
-            //     'group_id'=>5,
-            // ],
+            [
+                'teacher_id'=>null,
+                'subject_id'=>13,
+                'group_id'=>2,
+            ],
+            [
+                'teacher_id'=>null,
+                'subject_id'=>13,
+                'group_id'=>3,
+            ],
+            [
+                'teacher_id'=>null,
+                'subject_id'=>13,
+                'group_id'=>4,
+            ],
+            [
+                'teacher_id'=>null,
+                'subject_id'=>13,
+                'group_id'=>5,
+            ],
+            [
+                'teacher_id'=>null,
+                'subject_id'=>18,
+                'group_id'=>2,
+            ],
+            [
+                'teacher_id'=>null,
+                'subject_id'=>18,
+                'group_id'=>3,
+            ],
+            [
+                'teacher_id'=>null,
+                'subject_id'=>18,
+                'group_id'=>4,
+            ],
+            [
+                'teacher_id'=>null,
+                'subject_id'=>18,
+                'group_id'=>5,
+            ],
+            [
+                'teacher_id'=>null,
+                'subject_id'=>5,
+                'group_id'=>2,
+            ],
+            [
+                'teacher_id'=>null,
+                'subject_id'=>5,
+                'group_id'=>3,
+            ],
+            [
+                'teacher_id'=>null,
+                'subject_id'=>5,
+                'group_id'=>4,
+            ],
+            [
+                'teacher_id'=>null,
+                'subject_id'=>5,
+                'group_id'=>5,
+            ],
+            [
+                'teacher_id'=>null,
+                'subject_id'=>6,
+                'group_id'=>2,
+            ],
+            [
+                'teacher_id'=>null,
+                'subject_id'=>6,
+                'group_id'=>3,
+            ],
+            [
+                'teacher_id'=>null,
+                'subject_id'=>6,
+                'group_id'=>4,
+            ],
+            [
+                'teacher_id'=>null,
+                'subject_id'=>6,
+                'group_id'=>5,
+            ],
+            [
+                'teacher_id'=>null,
+                'subject_id'=>14,
+                'group_id'=>2,
+            ],
+            [
+                'teacher_id'=>null,
+                'subject_id'=>14,
+                'group_id'=>3,
+            ],
+            [
+                'teacher_id'=>null,
+                'subject_id'=>14,
+                'group_id'=>4,
+            ],
+            [
+                'teacher_id'=>null,
+                'subject_id'=>14,
+                'group_id'=>5,
+            ],
+            [
+                'teacher_id'=>null,
+                'subject_id'=>15,
+                'group_id'=>2,
+            ],
+            [
+                'teacher_id'=>null,
+                'subject_id'=>15,
+                'group_id'=>3,
+            ],
+            [
+                'teacher_id'=>null,
+                'subject_id'=>15,
+                'group_id'=>4,
+            ],
+            [
+                'teacher_id'=>null,
+                'subject_id'=>15,
+                'group_id'=>5,
+            ],
+            [
+                'teacher_id'=>null,
+                'subject_id'=>16,
+                'group_id'=>2,
+            ],
+            [
+                'teacher_id'=>null,
+                'subject_id'=>16,
+                'group_id'=>3,
+            ],
+            [
+                'teacher_id'=>null,
+                'subject_id'=>16,
+                'group_id'=>4,
+            ],
+            [
+                'teacher_id'=>null,
+                'subject_id'=>16,
+                'group_id'=>5,
+            ],
+            [
+                'teacher_id'=>null,
+                'subject_id'=>17,
+                'group_id'=>2,
+            ],
+            [
+                'teacher_id'=>null,
+                'subject_id'=>17,
+                'group_id'=>3,
+            ],
+            [
+                'teacher_id'=>null,
+                'subject_id'=>17,
+                'group_id'=>4,
+            ],
+            [
+                'teacher_id'=>null,
+                'subject_id'=>17,
+                'group_id'=>5,
+            ],
+            [
+                'teacher_id'=>null,
+                'subject_id'=>19,
+                'group_id'=>2,
+            ],
+            [
+                'teacher_id'=>null,
+                'subject_id'=>19,
+                'group_id'=>3,
+            ],
+            [
+                'teacher_id'=>null,
+                'subject_id'=>19,
+                'group_id'=>4,
+            ],
+            [
+                'teacher_id'=>null,
+                'subject_id'=>19,
+                'group_id'=>5,
+            ],
+            [
+                'teacher_id'=>null,
+                'subject_id'=>20,
+                'group_id'=>2,
+            ],
+            [
+                'teacher_id'=>null,
+                'subject_id'=>20,
+                'group_id'=>3,
+            ],
+            [
+                'teacher_id'=>null,
+                'subject_id'=>20,
+                'group_id'=>4,
+            ],
+            [
+                'teacher_id'=>null,
+                'subject_id'=>20,
+                'group_id'=>5,
+            ],
         ]);
     }
 }
