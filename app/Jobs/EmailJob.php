@@ -38,6 +38,7 @@ class EmailJob implements ShouldQueue
      */
     public function handle()
     {
+        $id = $this->reservation->id;
         $teachers = $this->reservation->docenteMateriaGrupos->pluck('teacher');
         $classrooms = $this->reservation->classrooms->map(function ($classroom) {
             return [
@@ -53,7 +54,7 @@ class EmailJob implements ShouldQueue
 
         switch ($this->type){
             case 1:
-                $mail = new ReservationMail($classrooms, $convertirDate, $convertirHour);
+                $mail = new ReservationMail($id, $classrooms, $convertirDate, $convertirHour);
                 break;
             case 3:
                 $mail = new ReservationRejectedMail($classrooms, $convertirDate, $convertirHour);
@@ -84,7 +85,7 @@ class EmailJob implements ShouldQueue
         $arrPeriods = $periods->pluck('hour');
         $primeraHora = $arrPeriods->first();
         $ultimaHora = $arrPeriods->last();
-        
+
         return $primeraHora . ' a ' . $ultimaHora;
     }
 }
