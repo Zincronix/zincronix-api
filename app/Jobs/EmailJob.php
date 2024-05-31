@@ -18,17 +18,18 @@ class EmailJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    private $reservation, $type;
+    private $reservation, $type, $motivo;
 
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct(Reservation $reservation, $type)
+    public function __construct(Reservation $reservation, $type, $motivo)
     {
         $this->reservation = $reservation;
         $this->type = $type;
+        $this->motivo = $motivo;
     }
 
     /**
@@ -56,7 +57,7 @@ class EmailJob implements ShouldQueue
                 $mail = new ReservationMail($classrooms, $convertirDate, $convertirHour);
                 break;
             case 3:
-                $mail = new ReservationRejectedMail($classrooms, $convertirDate, $convertirHour);
+                $mail = new ReservationRejectedMail($classrooms, $convertirDate, $convertirHour, $this->motivo);
                 break;
             default:
                 $mail = null;
