@@ -1,10 +1,10 @@
 @component('mail::message')
-    
+
 # Confirmación de reserva de ambiente(s).
 
 ## Estimado docente,
 
-Nos complace informarle que su solicitud de reserva ha sido aceptada. 
+Nos complace informarle que su solicitud de reserva ha sido aceptada.
 A continuación, le proporcionamos los detalles de su reserva:
 
 ## Información de la fecha y hora
@@ -25,7 +25,7 @@ A continuación, le proporcionamos los detalles de su reserva:
 @endforeach
 @endcomponent
 
-@component('mail::button', ['url' => URL::to('/')])
+@component('mail::button', ['url' => 'http://localhost:5173/estado/reserva/{{$id}}'])
 Mira tu reserva aquí
 @endcomponent
 
