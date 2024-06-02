@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdvertisementController;
 use App\Http\Controllers\ClassroomController;
 use App\Http\Controllers\CharacteristicController;
 use App\Http\Controllers\DepartamentController;
@@ -65,3 +66,5 @@ Route::post('reservaSemanal',[ReservationController::class,'weekReservation']);
 Route::apiResource('holidays',HolidayController::class);
 
 Route::apiResource('settings', SettingController::class);
+
+Route::apiResource('advertisement',AdvertisementController::class);
