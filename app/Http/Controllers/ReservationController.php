@@ -361,7 +361,7 @@ class ReservationController extends Controller
 
         $reservation->update($request->all());
         
-        EmailJob::dispatch($reservation, $request->status_reservation_id);                  
+        EmailJob::dispatch($reservation, $request->status_reservation_id, $request->motivo);                  
 
         return response()->json([
             'status' => true,

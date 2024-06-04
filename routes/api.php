@@ -46,7 +46,7 @@ Route::post('groups', [DocenteMateriaGrupoController::class, 'groupsOfSubjectOfT
 Route::get('unoccupiedGroups/{subject}', [DocenteMateriaGrupoController::class, 'unoccupiedSubjectGroups']);
 Route::post('unoccupiedGroups2', [DocenteMateriaGrupoController::class, 'unoccupiedSubjectGroups2']);
 
-// Route::get('classrooms_buscador', [ClassroomController::class,'index']);
+Route::get('classrooms_buscador', [ClassroomController::class,'index']);
 // Route::post('classroon_guardar', [ClassroomController::class,'store']);
 Route::apiResource('classrooms',ClassroomController::class);
 Route::post('classrooms_disponibles', [ClassroomController::class, 'showAvailableClassroomsEfficiently']);

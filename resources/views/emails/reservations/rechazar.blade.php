@@ -7,6 +7,8 @@
 Lamentamos informarle que su solicitud de reserva no ha sido aceptada. 
 A continuación, le proporcionamos los detalles de su solicitud rechazada:
 
+{{ $motivo }}
+
 ## Información de la fecha y hora
 
 @component('mail::panel')

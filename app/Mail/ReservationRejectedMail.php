@@ -11,18 +11,19 @@ class ReservationRejectedMail extends Mailable
 {
     use Queueable, SerializesModels;
 
-    protected $classrooms, $date, $docenteMateriaGrupo, $hour;
+    protected $classrooms, $date, $docenteMateriaGrupo, $hour,$motivo;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($classrooms, $date, $hour)
+    public function __construct($classrooms, $date, $hour, $motivo)
     {
         $this->classrooms = $classrooms;
         $this->date = $date;
         $this->hour = $hour;
+        $this->motivo=$motivo;
     }
 
     /**
@@ -36,7 +37,8 @@ class ReservationRejectedMail extends Mailable
             'classrooms' => $this->classrooms,
             'date' => $this->date,
             'docenteMateriaGrupo' => $this->docenteMateriaGrupo,
-            'hour' => $this->hour
+            'hour' => $this->hour,
+            'motivo' => $this->motivo
         ])->subject('Rechazo de solicitud de Reserva');
     }
 }
