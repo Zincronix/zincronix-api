@@ -65,3 +65,5 @@ Route::post('reservaSemanal',[ReservationController::class,'weekReservation']);
 Route::apiResource('holidays',HolidayController::class);
 
 Route::apiResource('settings', SettingController::class);
+
+Route::get('ordenarUrg',[ReservationController::class,'sortDate']);
