@@ -25,6 +25,7 @@ class UpdateReservationRequest extends FormRequest
     {
         return [
             'status_reservation_id' => 'required|integer|between:1,3',
+            'motivo'=>'nullable'
         ];
     }
 

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdvertisementController;
 use App\Http\Controllers\ClassroomController;
 use App\Http\Controllers\CharacteristicController;
 use App\Http\Controllers\DepartamentController;
@@ -46,7 +47,7 @@ Route::post('groups', [DocenteMateriaGrupoController::class, 'groupsOfSubjectOfT
 Route::get('unoccupiedGroups/{subject}', [DocenteMateriaGrupoController::class, 'unoccupiedSubjectGroups']);
 Route::post('unoccupiedGroups2', [DocenteMateriaGrupoController::class, 'unoccupiedSubjectGroups2']);
 
-// Route::get('classrooms_buscador', [ClassroomController::class,'index']);
+Route::get('classrooms_buscador', [ClassroomController::class,'index']);
 // Route::post('classroon_guardar', [ClassroomController::class,'store']);
 Route::apiResource('classrooms',ClassroomController::class);
 Route::post('classrooms_disponibles', [ClassroomController::class, 'showAvailableClassroomsEfficiently']);
@@ -68,3 +69,7 @@ Route::get('reservations/report/teachers', [ReservationController::class, 'repor
 Route::apiResource('holidays',HolidayController::class);
 
 Route::apiResource('settings', SettingController::class);
+
+Route::get('ordenarUrg',[ReservationController::class,'sortDate']);
+Route::apiResource('advertisement',AdvertisementController::class);
+
