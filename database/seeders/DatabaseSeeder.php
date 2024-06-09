@@ -36,5 +36,6 @@ class DatabaseSeeder extends Seeder
         $this->call(SettingSeeder::class);
         $this->call(ReservationSeeder::class);
         $this->call(BuildingSeeder::class);
+
     }
 }
