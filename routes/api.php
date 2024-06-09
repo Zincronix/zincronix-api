@@ -62,6 +62,9 @@ Route::get('reservations/{classroom_id}/available-periods/{date}', [ReservationC
 Route::get('periods2', [PeriodController::class, 'periodsForFilterByCantidad']);
 Route::post('reservaSemanal',[ReservationController::class,'weekReservation']);
 
+Route::get('reservations/report/classrooms', [ReservationController::class, 'reportMostReservedClassrooms']);
+Route::get('reservations/report/teachers', [ReservationController::class, 'reportTeachersWithMostReservations']);
+
 Route::apiResource('holidays',HolidayController::class);
 
 Route::apiResource('settings', SettingController::class);
