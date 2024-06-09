@@ -12,7 +12,8 @@ class Classroom extends Model
     protected $fillable=[
         'name',
         'capacity',
-        'description'
+        'description',
+        'location_id'
     ];
 
     protected $hidden=[
@@ -28,5 +29,9 @@ class Classroom extends Model
     }
     public function characteristics(){
         return $this->belongsToMany(Characteristic::class);
+    }
+
+    public function location(){
+        return $this->belongsTo(Location::class);
     }
 }

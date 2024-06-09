@@ -15,7 +15,7 @@ class BuildingController extends Controller
      */
     public function index()
     {
-        //
+        return Building::all();
     }
 
     /**

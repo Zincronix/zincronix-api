@@ -1,11 +1,13 @@
 <?php
 
+use App\Http\Controllers\BuildingController;
 use App\Http\Controllers\ClassroomController;
 use App\Http\Controllers\CharacteristicController;
 use App\Http\Controllers\DepartamentController;
 use App\Http\Controllers\DocenteMateriaGrupoController;
 use App\Http\Controllers\GroupController;
 use App\Http\Controllers\HolidayController;
+use App\Http\Controllers\LocationController;
 use App\Http\Controllers\PeriodController;
 use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\SettingController;
@@ -68,3 +70,6 @@ Route::get('reservations/report/teachers', [ReservationController::class, 'repor
 Route::apiResource('holidays',HolidayController::class);
 
 Route::apiResource('settings', SettingController::class);
+
+Route::get('buildings', [BuildingController::class, 'index']);
+Route::post('locations', [LocationController::class, 'store']);

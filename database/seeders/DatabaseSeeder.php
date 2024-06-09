@@ -34,6 +34,7 @@ class DatabaseSeeder extends Seeder
         $this->call(AvailabilityPeriodSeeder::class);
         $this->call(HolidaySeeder::class);
         $this->call(SettingSeeder::class);
-        //$this->call(ReservationSeeder::class);
+        $this->call(ReservationSeeder::class);
+        $this->call(BuildingSeeder::class);
     }
 }

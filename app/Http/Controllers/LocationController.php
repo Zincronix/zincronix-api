@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Location;
 use App\Http\Requests\StoreLocationRequest;
 use App\Http\Requests\UpdateLocationRequest;
+use App\Models\Classroom;
 
 class LocationController extends Controller
 {
@@ -26,7 +27,28 @@ class LocationController extends Controller
      */
     public function store(StoreLocationRequest $request)
     {
-        //
+        $classroom = Classroom::findOrFail($request->classroom_id);
+
+        if( $classroom->location_id === null ){
+            $location = new Location;
+            $location->description = $request->description;
+            $location->building_id = $request->building_id;
+
+            $location->save();
+
+            $classroom->location_id = $location->id;
+
+            $classroom->save();
+
+            return response()->json([
+                'message' => 'Ubicación creado correctamente',
+                'location' => $location
+            ], 201);
+        }else{
+            return response()->json([
+                'message' => 'El ambiente seleccionado ya tiene una ubicación asociada'
+            ], 409);
+        }
     }
 
     /**

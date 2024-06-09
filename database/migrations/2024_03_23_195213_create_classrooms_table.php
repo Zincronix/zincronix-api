@@ -19,6 +19,7 @@ class CreateClassroomsTable extends Migration
             $table->integer('capacity');
             $table->string('description')->nullable();
             $table->string('image')->nullable();
+            $table->foreignId('location_id')->nullable();
             $table->timestamps();
         });
     }
