@@ -25,7 +25,7 @@ A continuación, le proporcionamos los detalles de su reserva:
 @endforeach
 @endcomponent
 
-@component('mail::button', ['url' => 'http://localhost:5173/estado/reserva/{{$id}}'])
+@component('mail::button', ['url' => "http://localhost:5173/estado/reserva/{$id}"])
 Mira tu reserva aquí
 @endcomponent
 

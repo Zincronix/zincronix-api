@@ -7,6 +7,7 @@ use App\Http\Requests\UpdateReservationRequest;
 use App\Jobs\EmailJob;
 use App\Mail\ReservationMail;
 use App\Models\Availability;
+use App\Models\Classroom;
 use App\Models\DocenteMateriaGrupo;
 use App\Models\Reservation;
 use App\Models\Setting;
@@ -37,8 +38,8 @@ class ReservationController extends Controller
         $reservations->transform(function ($reservations) {
             return $this->transformRservation($reservations);
         });
-    
-        
+
+
         return $reservations;
     }
 
@@ -56,19 +57,19 @@ class ReservationController extends Controller
             $teacherId = $docenteMateriaGrupo->teacher->id;
             $teacherName = $docenteMateriaGrupo->teacher->name;
             $subjectName = $docenteMateriaGrupo->subject->name;
-            
+
             $groups = $reservation->docenteMateriaGrupos
             ->where('teacher_id', $teacherId)
             ->where('subject_id', $docenteMateriaGrupo->subject->id)
-            ->load('group') 
-            ->pluck('group.name') 
-            ->toArray();            
+            ->load('group')
+            ->pluck('group.name')
+            ->toArray();
 
             $teacherData[$teacherId]['teacher_id'] = $teacherId;
             $teacherData[$teacherId]['teacher_name'] = $teacherName;
             $teacherData[$teacherId]['subjects'][$subjectName]['groups'] = $groups;
         }
-    
+
         return [
             'reservation_id' => $reservation->id,
             'classrooms' => $classrooms,
@@ -88,12 +89,12 @@ class ReservationController extends Controller
             'state' => $reservation->statusReservation->state,
         ];
     }
-    
+
     private function getValues($collection, $attribute)
     {
         return $collection->pluck($attribute)->toArray();
     }
-    
+
     private function getUniqueValues($collection, $attribute)
     {
         return $collection->pluck($attribute)->unique()->values()->toArray();
@@ -106,7 +107,7 @@ class ReservationController extends Controller
             'periods:hour',
             'classrooms:name',
             'docenteMateriaGrupos.teacher'
-        ]);        
+        ]);
 
         switch ($request->orderBy){
             case 1:
@@ -177,20 +178,20 @@ class ReservationController extends Controller
 
     private function procesarReserva(Request $request)
     {
-        
+
         if($request->status == false){
-            
+
             $existingReservationsAceptadas = $this->existingReservation($request->periods, $request->date_reservation, $request->classrooms, 1);
-                
+
             if ($existingReservationsAceptadas->isNotEmpty()) {
                 return response()->json([
                     'status' => false,
                     'message' => 'Ya existe una reserva aceptada para este periodo y estas aulas en la fecha especificada'
                 ], 400);
             }
-            
+
             $existingReservationsPendiente = $this->existingReservation($request->periods, $request->date_reservation, $request->classrooms, 2);
-            
+
             if ($existingReservationsPendiente->isNotEmpty()) {
                 return response()->json([
                     'status' => false,
@@ -209,7 +210,7 @@ class ReservationController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(CreateReservationRequest $request)
-    {   
+    {
 
         $check = $this->procesarReserva($request);
 
@@ -219,11 +220,11 @@ class ReservationController extends Controller
 
         try {
             DB::beginTransaction();
-        
+
             $result = $this->reserve($request);
 
             if( $result === true ){
-            
+
                 DB::commit();
 
                 return response()->json([
@@ -263,14 +264,14 @@ class ReservationController extends Controller
     private function reserve($request)
     {
         $reservation = new Reservation;
-        
+
         $modoReservation = Setting::where('id', 1)->value('type_reservation');
         if($modoReservation == 'MANUAL'){
             $reservation->status_reservation_id = 2;
         }else{
             $reservation->status_reservation_id = 1;
         }
-        
+
         $reservation->reason = $request->reason_reservation;
         $reservation->date = $request->date_reservation;
 
@@ -307,7 +308,7 @@ class ReservationController extends Controller
                 $reservation->docenteMateriaGrupos()->attach($docMatGrup->id);
 
             }
-            
+
         }
 
         return true;
@@ -342,11 +343,11 @@ class ReservationController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(UpdateReservationRequest $request, Reservation $reservation)
-    {        
+    {
         if( $request->status_reservation_id === 1 ){
 
             $existingReservation = $this->existingReservation($reservation->periods->pluck('id'), $reservation->date, $reservation->classrooms->pluck('id'), 1);
-        
+
             if ( $existingReservation->isNotEmpty() ) {
                 return response()->json([
                     'status' => false,
@@ -364,8 +365,10 @@ class ReservationController extends Controller
         }
 
         $reservation->update($request->all());
-        
+
+       
         EmailJob::dispatch($reservation, $request->status_reservation_id, $request->motivo);                  
+
 
         return response()->json([
             'status' => true,
@@ -381,7 +384,7 @@ class ReservationController extends Controller
     }
 
     public function weekReservation(Request $request){
-    
+
         $fechaInicio = Carbon::createFromFormat('d-m-Y', $request->fechaInicio)->toDateString();
         $fechaFin = Carbon::createFromFormat('d-m-Y', $request->fechaFin)->toDateString();
         $aulasIds=$request->aula;
@@ -398,15 +401,48 @@ class ReservationController extends Controller
             ])
             ->get();
 
+
         $reservations->transform(function ($reservations) {
             return $this->transformRservation($reservations);
         });
     
         if($reservations->isEmpty()){
+
             return response()->json(['message' => 'No se encontraron reservaciones para el rango de fechas proporcionado'], 404);
         }
-    
+
         return $reservations;
+    }
+
+
+    public function reportMostReservedClassrooms()
+    {
+        $mostReservedClassrooms = Classroom::withCount('reservations')
+            ->orderBy('reservations_count', 'desc')
+            ->get();
+
+        if ($mostReservedClassrooms->isEmpty()) {
+            return response()->json(['message' => 'No se encontraron reservas'], 404);
+        }
+
+        return response()->json($mostReservedClassrooms, 200);
+    }
+
+    public function reportTeachersWithMostReservations()
+    {
+        $teachersWithMostReservations = Teacher::select('teachers.id', 'teachers.name', DB::raw('COUNT(reservations.id) as total_reservations'))
+            ->join('docente_materia_grupos', 'teachers.id', '=', 'docente_materia_grupos.teacher_id')
+            ->join('docente_materia_grupo_reservation', 'docente_materia_grupos.id', '=', 'docente_materia_grupo_reservation.docente_materia_grupo_id')
+            ->join('reservations', 'docente_materia_grupo_reservation.reservation_id', '=', 'reservations.id')
+            ->groupBy('teachers.id', 'teachers.name')
+            ->orderByDesc('total_reservations')
+            ->get();
+
+        if ($teachersWithMostReservations->isEmpty()) {
+            return response()->json(['message' => 'No se encontraron reservas para los profesores'], 404);
+        }
+
+        return response()->json($teachersWithMostReservations, 200);
     }
 
     public function sortDate()
