@@ -12,6 +12,7 @@ use App\Models\Reservation;
 use App\Models\Setting;
 use App\Models\Teacher;
 use Carbon\Carbon;
+use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
@@ -33,8 +34,8 @@ class ReservationController extends Controller
             'statusReservation'
         ])->get();
 
-        $reservations->transform(function ($reservation) {
-            return $this->transformRservation($reservation);
+        $reservations->transform(function ($reservations) {
+            return $this->transformRservation($reservations);
         });
     
         
@@ -47,6 +48,8 @@ class ReservationController extends Controller
         $classrooms = $reservation->classrooms;
         $periods = $this->getValues($reservation->periods, 'hour');
 
+        $fechaModificada=$reservation->created_at;
+        $fechaformateada=date('d/m/Y H:i:s', strtotime($fechaModificada));
         $teacherData = [];
 
         foreach ($reservation->docenteMateriaGrupos as $docenteMateriaGrupo) {
@@ -73,7 +76,8 @@ class ReservationController extends Controller
             'periods' => $periods,
             'state' => $state,
             'reason' => $reservation->reason,
-            'docenteMateriaGrupo' => array_values($teacherData)
+            'docenteMateriaGrupo' => array_values($teacherData),
+            'fecha_creado'=>$fechaformateada
         ];
     }
 
@@ -392,16 +396,61 @@ class ReservationController extends Controller
                 'docenteMateriaGrupos.teacher',
                 'statusReservation'
             ])
-            ->oldest()
-            ->paginate(10);
+            ->get();
 
-        $reservations = $this->transformRservation($reservations);
+        $reservations->transform(function ($reservations) {
+            return $this->transformRservation($reservations);
+        });
     
-        if ($reservations->isEmpty()) {
+        if($reservations->isEmpty()){
             return response()->json(['message' => 'No se encontraron reservaciones para el rango de fechas proporcionado'], 404);
         }
     
         return $reservations;
+    }
+
+    public function sortDate()
+    {
+        $reservations = Reservation::with([
+            'periods:hour',
+            'classrooms:name,capacity',
+            'docenteMateriaGrupos.teacher',
+            'statusReservation'
+        ])->get();
+
+        $reservations->transform(function ($reservations) {
+            return $this->transformRservation($reservations);
+        });
+        
+        $reservas=$reservations->toArray();
+
+
+        $currentDate = new DateTime();
+
+    usort($reservas, function($a, $b) use ($currentDate) {
+    $dateA = DateTime::createFromFormat('d/m/Y', $a['date']);
+    $dateB = DateTime::createFromFormat('d/m/Y', $b['date']);
+
+    if ($dateA == $dateB) {
+        $stateOrder = ['ACEPTADO' => 1, 'PENDIENTE' => 2, 'CANCELADO' => 3];
+        $stateA = $a['state']['state'];
+        $stateB = $b['state']['state'];
+        return $stateOrder[$stateA] - $stateOrder[$stateB];
+    }
+
+    if ($dateA == $currentDate) {
+        return -1; 
+    } elseif ($dateB == $currentDate) {
+        return 1; 
+    } elseif ($dateA < $currentDate && $dateB > $currentDate) {
+        return 1; 
+    } elseif ($dateA > $currentDate && $dateB < $currentDate) {
+        return -1; 
+    } else {
+        return $dateA <=> $dateB; 
+    }
+    });
+     return $reservas;
     }
 
 }

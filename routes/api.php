@@ -67,4 +67,5 @@ Route::apiResource('holidays',HolidayController::class);
 
 Route::apiResource('settings', SettingController::class);
 
+Route::get('ordenarUrg',[ReservationController::class,'sortDate']);
 Route::apiResource('advertisement',AdvertisementController::class);
