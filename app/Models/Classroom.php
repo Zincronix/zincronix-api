@@ -34,4 +34,7 @@ class Classroom extends Model
     public function location(){
         return $this->belongsTo(Location::class);
     }
+    public function rules(){
+        return $this->hasMany(Rule::class);
+    }
 }

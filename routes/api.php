@@ -11,6 +11,7 @@ use App\Http\Controllers\HolidayController;
 use App\Http\Controllers\LocationController;
 use App\Http\Controllers\PeriodController;
 use App\Http\Controllers\ReservationController;
+use App\Http\Controllers\RuleController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\SubjectController;
 use App\Http\Controllers\TeacherController;
@@ -74,7 +75,9 @@ Route::apiResource('settings', SettingController::class);
 
 Route::get('buildings', [BuildingController::class, 'index']);
 Route::post('locations', [LocationController::class, 'store']);
+Route::get('aulaBuild',[BuildingController::class,'aulasHabilitadas']);
 
 Route::get('ordenarUrg',[ReservationController::class,'sortDate']);
 Route::apiResource('advertisement',AdvertisementController::class);
 
+Route::apiResource('rules',RuleController::class);
