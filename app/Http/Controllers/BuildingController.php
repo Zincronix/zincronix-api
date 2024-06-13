@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Building;
 use App\Http\Requests\StoreBuildingRequest;
 use App\Http\Requests\UpdateBuildingRequest;
+use App\Models\Classroom;
+use Illuminate\Http\Request;
 
 class BuildingController extends Controller
 {
@@ -61,5 +63,10 @@ class BuildingController extends Controller
     public function destroy(Building $building)
     {
         //
+    }
+
+    public function aulasHabilitadas(){
+        $aulas=Classroom::with('location')->whereNull('location_id')->get();
+        return $aulas;
     }
 }
