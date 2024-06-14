@@ -43,10 +43,29 @@ class ReservationController extends Controller
         return $reservations;
     }
 
-    public function pendingReservation(){
+    public function pendingReservation()
+    {
         $today = date('Y-m-d');
         $reservations = Reservation::where('status_reservation_id', 2)
                                     ->whereDate('date', '>=', $today)
+                                    ->with([
+                                        'periods:hour',
+                                        'classrooms:name,capacity',
+                                        'docenteMateriaGrupos.teacher',
+                                        'statusReservation'
+                                    ])->get();
+
+        $reservations->transform(function ($reservation) {
+            return $this->transformRservation($reservation);
+        });
+
+
+        return $reservations;
+    }
+
+    public function myReservations()
+    {
+        $reservations = Reservation::whereIn('status_reservation_id', [1,2])
                                     ->with([
                                         'periods:hour',
                                         'classrooms:name,capacity',
