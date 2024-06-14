@@ -61,6 +61,8 @@ Route::post('classroomsCapacity', [ClassroomController::class, 'showClassroomAva
 Route::apiResource('characteristics',CharacteristicController::class);
 
 Route::apiResource('reservations', ReservationController::class);
+Route::get('pending/reservation', [ReservationController::class, 'pendingReservation']);
+Route::get('myReservations', [ReservationController::class, 'myReservations']);
 Route::get('reservationOrderBy', [ReservationController::class, 'orderBy']);
 Route::get('reservations/{classroom_id}/available-periods/{date}', [ReservationController::class, 'periodsForClassroomReservation']);
 Route::get('periods2', [PeriodController::class, 'periodsForFilterByCantidad']);

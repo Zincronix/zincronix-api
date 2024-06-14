@@ -43,6 +43,44 @@ class ReservationController extends Controller
         return $reservations;
     }
 
+    public function pendingReservation()
+    {
+        $today = date('Y-m-d');
+        $reservations = Reservation::where('status_reservation_id', 2)
+                                    ->whereDate('date', '>=', $today)
+                                    ->with([
+                                        'periods:hour',
+                                        'classrooms:name,capacity',
+                                        'docenteMateriaGrupos.teacher',
+                                        'statusReservation'
+                                    ])->get();
+
+        $reservations->transform(function ($reservation) {
+            return $this->transformRservation($reservation);
+        });
+
+
+        return $reservations;
+    }
+
+    public function myReservations()
+    {
+        $reservations = Reservation::whereIn('status_reservation_id', [1,2])
+                                    ->with([
+                                        'periods:hour',
+                                        'classrooms:name,capacity',
+                                        'docenteMateriaGrupos.teacher',
+                                        'statusReservation'
+                                    ])->get();
+
+        $reservations->transform(function ($reservation) {
+            return $this->transformRservation($reservation);
+        });
+
+
+        return $reservations;
+    }
+
     private function transformRservation($reservation)
     {
         $state = $reservation->statusReservation;
@@ -366,8 +404,8 @@ class ReservationController extends Controller
 
         $reservation->update($request->all());
 
-       
-        EmailJob::dispatch($reservation, $request->status_reservation_id, $request->motivo);                  
+
+        EmailJob::dispatch($reservation, $request->status_reservation_id, $request->motivo);
 
 
         return response()->json([
@@ -405,7 +443,7 @@ class ReservationController extends Controller
         $reservations->transform(function ($reservations) {
             return $this->transformRservation($reservations);
         });
-    
+
         if($reservations->isEmpty()){
 
             return response()->json(['message' => 'No se encontraron reservaciones para el rango de fechas proporcionado'], 404);
@@ -457,7 +495,7 @@ class ReservationController extends Controller
         $reservations->transform(function ($reservations) {
             return $this->transformRservation($reservations);
         });
-        
+
         $reservas=$reservations->toArray();
 
 
@@ -475,15 +513,15 @@ class ReservationController extends Controller
     }
 
     if ($dateA == $currentDate) {
-        return -1; 
+        return -1;
     } elseif ($dateB == $currentDate) {
-        return 1; 
+        return 1;
     } elseif ($dateA < $currentDate && $dateB > $currentDate) {
-        return 1; 
+        return 1;
     } elseif ($dateA > $currentDate && $dateB < $currentDate) {
-        return -1; 
+        return -1;
     } else {
-        return $dateA <=> $dateB; 
+        return $dateA <=> $dateB;
     }
     });
      return $reservas;
