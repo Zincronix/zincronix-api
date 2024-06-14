@@ -63,9 +63,12 @@ class ReservationController extends Controller
         return $reservations;
     }
 
-    public function myReservations()
+    public function myReservations($id)
     {
         $reservations = Reservation::whereIn('status_reservation_id', [1,2])
+        ->whereHas('docenteMateriaGrupos', function ($query) use ($id) {
+            $query->where('teacher_id', $id);
+        })
                                     ->with([
                                         'periods:hour',
                                         'classrooms:name,capacity',
