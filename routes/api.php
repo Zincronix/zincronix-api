@@ -80,6 +80,7 @@ Route::post('locations', [LocationController::class, 'store']);
 Route::get('aulaBuild',[BuildingController::class,'aulasHabilitadas']);
 
 Route::get('ordenarUrg',[ReservationController::class,'sortDate']);
+Route::get('ordenarList',[ReservationController::class,'sortList']);
 Route::apiResource('advertisement',AdvertisementController::class);
 
 Route::apiResource('rules',RuleController::class);

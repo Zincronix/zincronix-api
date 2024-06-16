@@ -492,34 +492,47 @@ class ReservationController extends Controller
     public function sortDate()
     {
         $reservas=$this->pendingReservation()->toArray();
-
         $currentDate = new DateTime();
+        $resultado=$this->sortReservation($reservas,$currentDate);
 
-    usort($reservas, function($a, $b) use ($currentDate) {
-    $dateA = DateTime::createFromFormat('d/m/Y', $a['date']);
-    $dateB = DateTime::createFromFormat('d/m/Y', $b['date']);
-
-    if ($dateA == $dateB) {
-        $stateOrder = ['ACEPTADO' => 1, 'PENDIENTE' => 2, 'CANCELADO' => 3];
-        $stateA = $a['state']['state'];
-        $stateB = $b['state']['state'];
-        return $stateOrder[$stateA] - $stateOrder[$stateB];
+        return $resultado;
     }
 
-    if ($dateA == $currentDate) {
-        return -1;
-    } elseif ($dateB == $currentDate) {
-        return 1;
-    } elseif ($dateA < $currentDate && $dateB > $currentDate) {
-        return 1;
-    } elseif ($dateA > $currentDate && $dateB < $currentDate) {
-        return -1;
-    } else {
-        return $dateA <=> $dateB;
+    public function sortList()
+    {
+        $reservas=$this->index()->toArray();
+        $currentDate = new DateTime();
+        $resultado=$this->sortReservation($reservas,$currentDate);
+
+        return $resultado;
     }
-    });
-     return $reservas;
-    }
+
+    public function sortReservation($reservas,$currentDate){
+        usort($reservas, function($a, $b) use ($currentDate) {
+            $dateA = DateTime::createFromFormat('d/m/Y', $a['date']);
+            $dateB = DateTime::createFromFormat('d/m/Y', $b['date']);
+        
+            if ($dateA == $dateB) {
+                $stateOrder = ['ACEPTADO' => 1, 'PENDIENTE' => 2, 'CANCELADO' => 3];
+                $stateA = $a['state']['state'];
+                $stateB = $b['state']['state'];
+                return $stateOrder[$stateA] - $stateOrder[$stateB];
+            }
+        
+            if ($dateA == $currentDate) {
+                return -1;
+            } elseif ($dateB == $currentDate) {
+                return 1;
+            } elseif ($dateA < $currentDate && $dateB > $currentDate) {
+                return 1;
+            } elseif ($dateA > $currentDate && $dateB < $currentDate) {
+                return -1;
+            } else {
+                return $dateA <=> $dateB;
+            }
+            });
+             return $reservas;
+        }
 
     public function refreshNewData(){
         $diaHoy=Carbon::today();
