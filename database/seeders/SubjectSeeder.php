@@ -267,6 +267,38 @@ class SubjectSeeder extends Seeder
                 'name'=>'QUIMICA GENERAL',
                 'departament_id' =>  4
             ],
+            [
+                'name'=>'BIOLOGIA GENERAL',
+                'departament_id' =>  7
+            ],
+            [
+                'name'=>'BIOLOGIA CELULAR Y MOLECULAR',
+                'departament_id' =>  7
+            ],
+            [
+                'name'=>'HISTOLOGIA ANIMAL COMPARADA',
+                'departament_id' =>  7
+            ],
+            [
+                'name'=>'ZOOLOGIA DE INVERTEBRADOS',
+                'departament_id' =>  7
+            ],
+            [
+                'name'=>'RECURSOS NATURALES',
+                'departament_id' =>  4
+            ],
+            [
+                'name'=>'QUIMICA ANALITICA',
+                'departament_id' =>  4
+            ],
+            [
+                'name'=>'EQUILIBRIOS EN DISOLUCION',
+                'departament_id' =>  4
+            ],
+            [
+                'name'=>'QUIMICA ORGANICA',
+                'departament_id' =>  4
+            ],
         ]);
     }
 }

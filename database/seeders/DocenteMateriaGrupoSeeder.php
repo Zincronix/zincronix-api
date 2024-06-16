@@ -19,7 +19,7 @@ class DocenteMateriaGrupoSeeder extends Seeder
         $subjects = [21,63];
         $groupsPerSubject = 4;
 
-        for($i=21;$i<64;$i++){
+        for($i=21;$i<72;$i++){
             for ($j = 2; $j <= $groupsPerSubject + 1; $j++) {
                 DocenteMateriaGrupo::create([
                     'teacher_id' => null,
