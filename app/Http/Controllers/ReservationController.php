@@ -538,7 +538,9 @@ class ReservationController extends Controller
         $reservas=Reservation::where('date','<',$diaHoy)->get();
 
         foreach ($reservas as $reserva) {
-            $reserva->status_reservation_id=1;
+            if($reserva->status_reservation_id==2){
+                $reserva->status_reservation_id=3;
+            }
             $reserva->save();
         }
     }
