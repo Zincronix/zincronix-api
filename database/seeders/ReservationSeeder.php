@@ -21,121 +21,121 @@ class ReservationSeeder extends Seeder
             [
                 "status_reservation_id" => 1,
                 "reason" => "esta es una reserva",
-                "date" => "2024-05-29",
+                "date" => "2024-06-29",
             ],
             [
                 "status_reservation_id" => 2,
-                "date" => "2024-04-29",
+                "date" => "2024-05-29",
                 "reason" => "esta es otra reserva",
             ],
             [
                 "status_reservation_id" => 3,
                 "reason" => "esta es una reserva",
-                "date" => "2024-05-21",
+                "date" => "2024-06-21",
             ],
             [
                 "status_reservation_id" => 2,
-                "date" => "2024-04-26",
+                "date" => "2024-06-26",
                 "reason" => "esta es otra reserva",
             ],
             [
                 "status_reservation_id" => 1,
                 "reason" => "esta es una reserva",
-                "date" => "2024-05-01",
+                "date" => "2024-07-01",
             ],
             [
                 "status_reservation_id" => 3,
-                "date" => "2024-04-12",
+                "date" => "2024-07-12",
                 "reason" => "esta es otra reserva",
             ],
             [
                 "status_reservation_id" => 3,
                 "reason" => "esta es una reserva",
-                "date" => "2024-03-10",
+                "date" => "2024-06-10",
             ],
             [
                 "status_reservation_id" => 2,
-                "date" => "2024-04-29",
+                "date" => "2024-08-29",
                 "reason" => "esta es otra reserva",
             ],
             [
                 "status_reservation_id" => 3,
                 "reason" => "esta es una reserva",
-                "date" => "2024-04-30",
+                "date" => "2024-06-30",
             ],
             [
                 "status_reservation_id" => 1,
-                "date" => "2024-03-21",
-                "reason" => "esta es otra reserva",
-            ],
-            [
-                "status_reservation_id" => 1,
-                "reason" => "esta es una reserva",
-                "date" => "2024-05-29",
-            ],
-            [
-                "status_reservation_id" => 1,
-                "date" => "2024-05-01",
+                "date" => "2024-07-21",
                 "reason" => "esta es otra reserva",
             ],
             [
                 "status_reservation_id" => 1,
                 "reason" => "esta es una reserva",
-                "date" => "2024-05-29",
-            ],
-            [
-                "status_reservation_id" => 2,
-                "date" => "2024-04-29",
-                "reason" => "esta es otra reserva",
-            ],
-            [
-                "status_reservation_id" => 3,
-                "reason" => "esta es una reserva",
-                "date" => "2024-05-05",
+                "date" => "2024-07-29",
             ],
             [
                 "status_reservation_id" => 1,
-                "date" => "2024-04-29",
-                "reason" => "esta es otra reserva",
-            ],
-            [
-                "status_reservation_id" => 2,
-                "reason" => "esta es una reserva",
-                "date" => "2024-05-29",
-            ],
-            [
-                "status_reservation_id" => 2,
-                "date" => "2024-04-29",
-                "reason" => "esta es otra reserva",
-            ],
-            [
-                "status_reservation_id" => 2,
-                "reason" => "esta es una reserva",
-                "date" => "2024-05-29",
-            ],
-            [
-                "status_reservation_id" => 3,
-                "date" => "2024-04-29",
-                "reason" => "esta es otra reserva",
-            ],
-            [
-                "status_reservation_id" => 3,
-                "reason" => "esta es una reserva",
-                "date" => "2024-05-29",
-            ],
-            [
-                "status_reservation_id" => 3,
-                "date" => "2024-04-29",
+                "date" => "2024-07-01",
                 "reason" => "esta es otra reserva",
             ],
             [
                 "status_reservation_id" => 1,
                 "reason" => "esta es una reserva",
-                "date" => "2024-05-29",
+                "date" => "2024-07-29",
             ],
             [
                 "status_reservation_id" => 2,
-                "date" => "2024-04-29",
+                "date" => "2024-07-29",
+                "reason" => "esta es otra reserva",
+            ],
+            [
+                "status_reservation_id" => 3,
+                "reason" => "esta es una reserva",
+                "date" => "2024-07-05",
+            ],
+            [
+                "status_reservation_id" => 1,
+                "date" => "2024-07-29",
+                "reason" => "esta es otra reserva",
+            ],
+            [
+                "status_reservation_id" => 2,
+                "reason" => "esta es una reserva",
+                "date" => "2024-07-29",
+            ],
+            [
+                "status_reservation_id" => 2,
+                "date" => "2024-07-29",
+                "reason" => "esta es otra reserva",
+            ],
+            [
+                "status_reservation_id" => 2,
+                "reason" => "esta es una reserva",
+                "date" => "2024-07-29",
+            ],
+            [
+                "status_reservation_id" => 3,
+                "date" => "2024-07-29",
+                "reason" => "esta es otra reserva",
+            ],
+            [
+                "status_reservation_id" => 3,
+                "reason" => "esta es una reserva",
+                "date" => "2024-07-29",
+            ],
+            [
+                "status_reservation_id" => 3,
+                "date" => "2024-07-29",
+                "reason" => "esta es otra reserva",
+            ],
+            [
+                "status_reservation_id" => 1,
+                "reason" => "esta es una reserva",
+                "date" => "2024-07-29",
+            ],
+            [
+                "status_reservation_id" => 2,
+                "date" => "2024-07-29",
                 "reason" => "esta es otra reserva",
             ]
         ]);
