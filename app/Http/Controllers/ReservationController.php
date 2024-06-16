@@ -65,6 +65,9 @@ class ReservationController extends Controller
 
     public function myReservations($id)
     {
+
+        $this->refreshNewData();
+
         $reservations = Reservation::whereIn('status_reservation_id', [1,2])
         ->whereHas('docenteMateriaGrupos', function ($query) use ($id) {
             $query->where('teacher_id', $id);
@@ -528,6 +531,16 @@ class ReservationController extends Controller
     }
     });
      return $reservas;
+    }
+
+    public function refreshNewData(){
+        $diaHoy=Carbon::today();
+        $reservas=Reservation::where('date','<',$diaHoy)->get();
+
+        foreach ($reservas as $reserva) {
+            $reserva->status_reservation_id=1;
+            $reserva->save();
+        }
     }
 
 }
