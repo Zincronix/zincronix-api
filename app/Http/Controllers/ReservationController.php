@@ -485,19 +485,7 @@ class ReservationController extends Controller
 
     public function sortDate()
     {
-        $reservations = Reservation::with([
-            'periods:hour',
-            'classrooms:name,capacity',
-            'docenteMateriaGrupos.teacher',
-            'statusReservation'
-        ])->get();
-
-        $reservations->transform(function ($reservations) {
-            return $this->transformRservation($reservations);
-        });
-
-        $reservas=$reservations->toArray();
-
+        $reservas=$this->pendingReservation()->toArray();
 
         $currentDate = new DateTime();
 
