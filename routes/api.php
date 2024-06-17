@@ -62,7 +62,7 @@ Route::apiResource('characteristics',CharacteristicController::class);
 
 Route::apiResource('reservations', ReservationController::class);
 Route::get('pending/reservation', [ReservationController::class, 'pendingReservation']);
-Route::get('myReservations', [ReservationController::class, 'myReservations']);
+Route::get('myReservations/{id}', [ReservationController::class, 'myReservations']);
 Route::get('reservationOrderBy', [ReservationController::class, 'orderBy']);
 Route::get('reservations/{classroom_id}/available-periods/{date}', [ReservationController::class, 'periodsForClassroomReservation']);
 Route::get('periods2', [PeriodController::class, 'periodsForFilterByCantidad']);
@@ -80,6 +80,7 @@ Route::post('locations', [LocationController::class, 'store']);
 Route::get('aulaBuild',[BuildingController::class,'aulasHabilitadas']);
 
 Route::get('ordenarUrg',[ReservationController::class,'sortDate']);
+Route::get('ordenarList',[ReservationController::class,'sortList']);
 Route::apiResource('advertisement',AdvertisementController::class);
 
 Route::apiResource('rules',RuleController::class);
