@@ -68,7 +68,7 @@ class ReservationController extends Controller
 
         $this->refreshNewData();
 
-        $reservations = Reservation::whereIn('status_reservation_id', [1,2,3])
+        $reservations = Reservation::whereIn('status_reservation_id', [1,2])
         ->whereHas('docenteMateriaGrupos', function ($query) use ($id) {
             $query->where('teacher_id', $id);
         })
