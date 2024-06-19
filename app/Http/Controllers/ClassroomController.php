@@ -58,7 +58,7 @@ class ClassroomController extends Controller
         $curso->description=$request->input('descripcion');
         if($request->hasFile('imagen')){
         $direccionIMG = $request->file('imagen')->store('classroom', 'public');
-        $origen = "http://127.0.0.1:8000/storage/";
+        $origen = "http://zincronix.tis.cs.umss.edu.bo/storage/";
         $cadenaTotal = $origen . $direccionIMG;
         $curso->image = $cadenaTotal;
         }else{
