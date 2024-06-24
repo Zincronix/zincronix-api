@@ -39,6 +39,8 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::apiResource('teachers', TeacherController::class);
+Route::get('subjectsGroups/{id}', [TeacherController::class, 'subjectsAndGroupsOfTeacher']);
+
 Route::apiResource('materias', SubjectController::class);
 Route::apiResource('grupos', GroupController::class);
 Route::apiResource('subject',SubjectController::class);
