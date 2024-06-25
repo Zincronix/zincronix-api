@@ -37,7 +37,7 @@ class ClassroomController extends Controller
             'imagen' => 'nullable|mimes:jpeg,png,jpg,binary'
         ],[
             'nombre.unique'=>'Ambiente ya registrado.',
-            'imagen.mimes'=>'Solo se permiten imagenes de tipo: jpeg, png, jpg.' 
+            'imagen.mimes'=>'Solo se permiten imagenes de tipo: jpeg, png, jpg.'
         ]);
 
         }else{
@@ -46,7 +46,7 @@ class ClassroomController extends Controller
             'capacidad'=>'required',
         ],[
             'nombre.unique'=>'Ambiente ya registrado.',
-            'imagen.mimes'=>'Solo se permiten imagenes de tipo: jpeg, png, jpg.' 
+            'imagen.mimes'=>'Solo se permiten imagenes de tipo: jpeg, png, jpg.'
         ]);
         }
 
@@ -116,18 +116,23 @@ class ClassroomController extends Controller
         $availableClassrooms = $this->classroomsAvailableForPeriods($periods, $dayWeekNumber, $capacityRange);
 
         $classroomsWithoutReservations = $availableClassrooms->diff($reservedClassrooms);
-        
+
         return $classroomsWithoutReservations;
     }
 
     private function availableClassroomsSuggestionByCapacity($suggestionStates, $capacityRange)
     {
         $pairs = collect();
+        $capacityMap = [];
+
+        foreach ($suggestionStates as $classroom) {
+            $capacityMap[$classroom['id']] = $classroom['capacity'];
+        }
 
         foreach ($suggestionStates as $classroom1) {
             foreach ($suggestionStates as $classroom2) {
-                if ($classroom1['id'] != $classroom2['id']) {
-                    $totalCapacity = $classroom1['capacity'] + $classroom2['capacity'];
+                if ($classroom1['id'] < $classroom2['id']) {
+                    $totalCapacity = $capacityMap[$classroom1['id']] + $capacityMap[$classroom2['id']];
                     if ($totalCapacity >= $capacityRange[0] && $totalCapacity <= $capacityRange[1]) {
                         $pairs->push([$classroom1, $classroom2]);
                     }
@@ -193,9 +198,9 @@ class ClassroomController extends Controller
     }
 
     /**
-     * Esta funcion servirá para sugerencias 
+     * Esta funcion servirá para sugerencias
      * en la vista de filtrar por ambiente
-     */    
+     */
     private function availableClassroomsSuggestion($request)
     {
         $periods = $request->periods;
@@ -207,12 +212,12 @@ class ClassroomController extends Controller
         $availableClassrooms = $this->classroomsAvailableForPeriods($periods, $dayWeekNumber);
 
         $classroomsWithoutReservations = $availableClassrooms->diff($reservedClassrooms);
-        
+
         return $classroomsWithoutReservations;
     }
 
     private function reservedClassroomsForPeriodRange($periods, $date)
-    {        
+    {
         return Classroom::select('id', 'name', 'capacity')
         ->whereHas('reservations', function ($query) use ($periods, $date) {
             $query->whereHas('periods', function ($query) use ($periods){
@@ -229,7 +234,7 @@ class ClassroomController extends Controller
             $query->where('day_id', $dayWeekNumber)
                     ->whereHas('periods', function ($query) use ($periods) {
                         $query->whereIn('periods.id', $periods);
-                    }, '=', count($periods));                
+                    }, '=', count($periods));
         })
         ->orWhereDoesntHave('availabilities')
         ->orWhereHas('availabilities', function ($query) use ($dayWeekNumber, $periods) {
@@ -237,7 +242,7 @@ class ClassroomController extends Controller
                 ->where('day_id', $dayWeekNumber)
                 ->whereHas('periods', function ($query) use ($periods) {
                     $query->whereIn('periods.id', $periods);
-                }, '=', count($periods));                    
+                }, '=', count($periods));
         });
 
         $query = Classroom::fromSub($subQuery, 'sub')
@@ -246,7 +251,7 @@ class ClassroomController extends Controller
         if ($capacityRange) {
             $query->whereBetween('sub.capacity', $capacityRange);
         }
-        
+
         $availableClassrooms = $query->orderBy('capacity', 'desc')->get();
 
         return $availableClassrooms;
