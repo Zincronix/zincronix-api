@@ -81,6 +81,7 @@ Route::get('aulaBuild',[BuildingController::class,'aulasHabilitadas']);
 
 Route::get('ordenarUrg',[ReservationController::class,'sortDate']);
 Route::get('ordenarList',[ReservationController::class,'sortList']);
+Route::get('listaInicio',[ReservationController::class,'listInit']);
 Route::apiResource('advertisement',AdvertisementController::class);
 
 Route::apiResource('rules',RuleController::class);
