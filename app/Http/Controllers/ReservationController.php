@@ -498,13 +498,51 @@ class ReservationController extends Controller
         return $resultado;
     }
 
-    public function sortList()
-    {
-        $reservas=$this->index()->toArray();
-        $currentDate = new DateTime();
-        $resultado=$this->sortReservation($reservas,$currentDate);
+    public function ListLimp(){
+        $reservations = Reservation::with([
+            'periods:hour',
+            'classrooms:name,capacity',
+            'docenteMateriaGrupos.teacher',
+            'statusReservation'
+        ])->orderBy('id','asc')
+        ->get();
+        return $reservations;
+    }
+
+    public function listInit(){
+        $today = now()->format('Y-m-d');
+        $reservations=$this->ListLimp();
+
+        foreach ($reservations as $reserva){
+            if($reserva->date<=$today&&$reserva->status_reservation_id=2){
+                $reserva->status_reservation_id=3;
+                $reserva->save();
+            }
+        }
+        $reservations->transform(function ($reservation) {
+            return $this->transformRservation($reservation);
+        });
+
+        $resultado=$reservations->toArray();
 
         return $resultado;
+    }
+
+    public function sortList()
+    {
+        $today = now()->format('Y-m-d');
+        $reservations=$this->ListLimp();
+
+        $reservations->transform(function ($reservation) {
+            return $this->transformRservation($reservation);
+        });
+
+        $resultado=$reservations->toArray();
+
+        $currentDate = new DateTime();
+        $res=$this->sortReservation($resultado,$currentDate);
+
+        return $res;
     }
 
     public function sortReservation($reservas,$currentDate){

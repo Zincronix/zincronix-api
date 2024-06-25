@@ -153,6 +153,7 @@ class ReservationSeeder extends Seeder
         $reserva1->docenteMateriaGrupos()->attach([$teacherIdAleatorio]);
         $reserva1->classrooms()->attach([$random1]);
         $reserva1->periods()->attach([$random2]);
+        $reserva1->created_at='2024-03-01';
         $reserva1->save();
         }
         
