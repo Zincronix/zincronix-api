@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\CreateTeacherRequest;
 use App\Http\Resources\TeacherResource;
 use App\Models\DocenteMateriaGrupo;
+use App\Models\Subject;
 use App\Models\Teacher;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -28,7 +29,7 @@ class TeacherController extends Controller
      * @return \Illuminate\Http\Response
      * todo
      * Aplicar form request
-     */ 
+     */
     public function store(CreateTeacherRequest $request)
     {
         try {
@@ -50,7 +51,7 @@ class TeacherController extends Controller
                 'message' => 'Error al procesar la solicitud' . $e->getMessage()
             ], 500);
         }
-        
+
     }
 
     private function createTeacher(array $data)
@@ -80,7 +81,7 @@ class TeacherController extends Controller
                 if ($docenteMateriaGrupo->teacher_id !== null){
                     throw new \Exception('El grupo ya tiene docente asignado');
                 }
-                
+
                 $docenteMateriaGrupo->teacher_id = $teacher->id;
                 $docenteMateriaGrupo->save();
             }
@@ -96,6 +97,30 @@ class TeacherController extends Controller
     public function show(Teacher $teacher)
     {
         return new TeacherResource($teacher);
+    }
+
+    public function subjectsAndGroupsOfTeacher(Teacher $teacher)
+    {
+        $teacher = Teacher::with(['subjects.groups' => function ($query) use ($teacher) {
+            $query->select('groups.id', 'groups.name', 'docente_materia_grupos.subject_id as id_subject')
+                ->where('docente_materia_grupos.teacher_id', $teacher->id);
+        }])->find($teacher->id);
+
+        $uniqueSubjects = $teacher->subjects->unique('id');
+
+        $result = [
+            'id' => $teacher->id,
+            'name' => $teacher->name,
+            'subjects' => $uniqueSubjects->map(function ($subject) {
+                return [
+                    'id' => $subject->id,
+                    'name' => $subject->name,
+                    'groups' => $subject->groups,
+                ];
+            }),
+        ];
+
+        return $result;
     }
 
     /**
