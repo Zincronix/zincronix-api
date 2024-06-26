@@ -299,6 +299,10 @@ class SubjectSeeder extends Seeder
                 'name'=>'QUIMICA ORGANICA',
                 'departament_id' =>  4
             ],
+            [
+                'name'=>'PROCESOS INDUSTRIALES',
+                'departament_id' => 12
+            ],
         ]);
     }
 }
