@@ -19,39 +19,45 @@ class ClassroomSeeder extends Seeder
                 'name'=>'690A',
                 'capacity' => 40,
                 'description'=>'esta es una nueva aula',
-                'image'=>'estaes una imagen'
+                'image'=>'esta es una imagen'
             ],
             [
                 'name'=>'691A',
                 'capacity' => 40,
                 'description'=>'esta es una nueva aula',
-                'image'=>'estaes una imagen'
+                'image'=>'esta es una imagen'
             ],
             [
                 'name'=>'692A',
                 'capacity' => 40,
                 'description'=>'esta es una nueva aula',
-                'image'=>'estaes una imagen'
+                'image'=>'esta es una imagen'
                 
             ],
             [
                 'name'=>'693A',
                 'capacity' => 40,
                 'description'=>'esta es una nueva aula',
-                'image'=>'estaes una imagen'
+                'image'=>'esta es una imagen'
             ],
             [
                 'name'=>'691B',
                 'capacity' => 40,
                 'description'=>'esta es una nueva aula',
-                'image'=>'estaes una imagen'
+                'image'=>'esta es una imagen'
             ],
             [
                 'name'=>'691C',
                 'capacity' => 40,
                 'description'=>'esta es una nueva aula',
-                'image'=>'estaes una imagen'
+                'image'=>'esta es una imagen'
             ],
+            [
+                'name'=>'AUDITORIO',
+                'capacity' => 100,
+                'description'=>'esta es una nueva aula',
+                'image'=>'esta es una imagen'
+            ]
         ]);
     }
 }

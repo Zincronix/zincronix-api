@@ -440,6 +440,11 @@ class DocenteMateriaGrupoSeeder extends Seeder
                 'subject_id'=>5,
                 'group_id'=>3,
             ],
+            [
+                'teacher_id'=>6,
+                'subject_id'=>4,
+                'group_id'=>3
+            ],
         ]);
     }
 }

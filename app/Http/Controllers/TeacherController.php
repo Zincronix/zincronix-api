@@ -99,12 +99,12 @@ class TeacherController extends Controller
         return new TeacherResource($teacher);
     }
 
-    public function subjectsAndGroupsOfTeacher(Teacher $teacher)
+    public function subjectsAndGroupsOfTeacher($id)
     {
-        $teacher = Teacher::with(['subjects.groups' => function ($query) use ($teacher) {
+        $teacher = Teacher::with(['subjects.groups' => function ($query) use ($id) {
             $query->select('groups.id', 'groups.name', 'docente_materia_grupos.subject_id as id_subject')
-                ->where('docente_materia_grupos.teacher_id', $teacher->id);
-        }])->find($teacher->id);
+                ->where('docente_materia_grupos.teacher_id', $id);
+        }])->find($id);
 
         $uniqueSubjects = $teacher->subjects->unique('id');
 
